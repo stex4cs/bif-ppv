@@ -32,4 +32,7 @@ RewriteRule ^([^/]+)/?$ $1.html [L]
 
 # PPV routes
 RewriteRule ^watch/?$ watch.html [L]
+
+# Admin security - BLOCK direct access to admin.html, force through ppv_admin.php
+RewriteRule ^admin/admin\.html$ admin/ppv_admin.php [R=302,L]
 RewriteRule ^admin/?$ admin/ppv_admin.php [L]

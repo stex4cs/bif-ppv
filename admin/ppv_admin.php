@@ -10,12 +10,6 @@ Security_Headers::applyAdminCSP();
 
 session_start();
 
-// DEVELOPMENT BYPASS - ukloni u produkciji
-if (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false || 
-    strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false) {
-    $_SESSION['admin_authenticated'] = true;
-}
-
 // ---------- .env loader (ručno, PHP7-kompat) ----------
 function loadEnvFile($path) {
     if (!is_file($path)) return;
