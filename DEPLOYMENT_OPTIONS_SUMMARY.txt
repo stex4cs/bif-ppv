@@ -1,0 +1,206 @@
+═══════════════════════════════════════════════════════════════
+           🚀 BIF PPV - DEPLOYMENT OPTIONS
+═══════════════════════════════════════════════════════════════
+
+IMАŠ 2 OPCIJE:
+═══════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────┐
+│  OPCIJA 1: GITHUB AUTO-DEPLOY (PREPORUČENO) ✨               │
+└─────────────────────────────────────────────────────────────┘
+
+Šta dobijaš:
+✅ Automatski deploy on push to main
+✅ Nema manual FTP upload-a
+✅ Git version control
+✅ Rollback u par klikova
+✅ Deploy history u GitHub Actions
+✅ Staging environment (opciono)
+✅ env/.env automatski zaštićen (.gitignore)
+
+Setup vreme: 5-10 minuta (jednom)
+
+Dokumentacija:
+→ QUICK_START_GITHUB.txt (quick start)
+→ GITHUB_DEPLOY_SETUP.md (detaljno)
+→ GITHUB_CHECKLIST.txt (checklist)
+
+Workflow:
+1. Edit kod lokalno
+2. git push origin main
+3. GitHub automatski deploy-uje!
+4. Check https://bif.events
+
+┌─────────────────────────────────────────────────────────────┐
+│  OPCIJA 2: MANUAL FTP UPLOAD (JEDNOSTAVNO) 📁               │
+└─────────────────────────────────────────────────────────────┘
+
+Šta dobijaš:
+✅ Jednostavno i brzo
+✅ Nema GitHub dependency
+✅ Direktna kontrola
+❌ Manual process svaki put
+❌ Nema version control-a
+❌ Nema rollback-a
+❌ Moraš ručno paziti šta upload-uješ
+
+Setup vreme: 2-3 minuta
+
+Dokumentacija:
+→ UPLOAD_CHECKLIST.txt (quick checklist)
+→ DEPLOYMENT_SIMPLE.md (detaljno)
+→ DO_NOT_UPLOAD.txt (šta ne upload-ovati)
+
+Workflow:
+1. Edit kod lokalno
+2. FTP upload (FileZilla/WinSCP)
+3. Manual provera da nije upload-ovan env/.env
+4. Check https://bif.events
+
+═══════════════════════════════════════════════════════════════
+
+PREPORUKA:
+═══════════════════════════════════════════════════════════════
+
+Ako planiraš da često menjaš kod:
+→ OPCIJA 1: GitHub Auto-Deploy ✨
+
+Ako je ovo "set it and forget it":
+→ OPCIJA 2: Manual FTP Upload 📁
+
+═══════════════════════════════════════════════════════════════
+
+POREĐENJE:
+═══════════════════════════════════════════════════════════════
+
+Feature              │ GitHub Auto  │ Manual FTP
+─────────────────────┼──────────────┼────────────
+Auto deploy          │ ✅ Yes       │ ❌ No
+Version control      │ ✅ Yes       │ ❌ No
+Rollback             │ ✅ Easy      │ ❌ Hard
+Deploy history       │ ✅ Yes       │ ❌ No
+Staging env          │ ✅ Yes       │ ❌ Manual
+Setup time           │ 5-10 min     │ 2-3 min
+Deploy time          │ 3-5 min      │ 1-2 min
+Manual work/deploy   │ 0 min        │ 5-10 min
+env/.env protection  │ ✅ Auto      │ ⚠️ Manual
+Learning curve       │ Medium       │ Easy
+Best for            │ Active dev   │ One-time
+
+═══════════════════════════════════════════════════════════════
+
+OBE OPCIJE SU BEZBEDNE:
+═══════════════════════════════════════════════════════════════
+
+✅ env/.env je zaštićen (.htaccess → 403)
+✅ Log fajlovi su blokirani
+✅ Test fajlovi se ne deploy-uju
+✅ Stripe TEST keys za sada (OK za production)
+
+RAZLIKA:
+- GitHub: .gitignore automatski ignoriše env/.env
+- Manual: Ti moraš paziti da ne upload-uješ env/.env
+
+═══════════════════════════════════════════════════════════════
+
+KAKO ODLUČITI:
+═══════════════════════════════════════════════════════════════
+
+Pitaj sebe:
+
+1. Da li češ često menjati kod?
+   → DA = GitHub
+   → NE = Manual FTP
+
+2. Da li želiš version control?
+   → DA = GitHub
+   → NE = Manual FTP
+
+3. Da li imaš GitHub account?
+   → DA = GitHub
+   → NE = Manual FTP
+
+4. Da li želiš rollback opciju?
+   → DA = GitHub
+   → NE = Manual FTP
+
+5. Da li ti smeta 5 min deploy time?
+   → DA = Manual FTP
+   → NE = GitHub
+
+═══════════════════════════════════════════════════════════════
+
+MOJA PREPORUKA:
+═══════════════════════════════════════════════════════════════
+
+GitHub Auto-Deploy je bolji za:
+✅ Aktivni development
+✅ Tim sa više ljudi
+✅ Česte izmene
+✅ Professional workflow
+
+Manual FTP je bolji za:
+✅ Quick fix jednom mesečno
+✅ Solo rad
+✅ Ne želiš da učiš GitHub
+✅ Hitni hotfix
+
+═══════════════════════════════════════════════════════════════
+
+MOŽE LI I JEDNO I DRUGO?
+═══════════════════════════════════════════════════════════════
+
+DA! ✅
+
+Setup GitHub Auto-Deploy za normalne izmene
++ FTP pristup za hitne emergency fixes
+
+Best of both worlds! 🌍
+
+═══════════════════════════════════════════════════════════════
+
+KOJA JE TRENUTNA SITUACIJA:
+═══════════════════════════════════════════════════════════════
+
+✅ GitHub Auto-Deploy files kreiran:
+   - .github/workflows/deploy.yml
+   - .github/workflows/deploy-staging.yml
+
+✅ Manual FTP dokumentacija kreirana:
+   - DEPLOYMENT_SIMPLE.md
+   - UPLOAD_CHECKLIST.txt
+   - DO_NOT_UPLOAD.txt
+
+✅ env/.env zaštićen:
+   - .htaccess (403 Forbidden)
+   - .gitignore (ignored)
+
+✅ Sve dokumentovano
+
+MOŽEŠ DA IZABEREŠ BILO KOJU OPCIJU! 🎉
+
+═══════════════════════════════════════════════════════════════
+
+PITANJA?
+═══════════════════════════════════════════════════════════════
+
+Pitaj me šta god nije jasno!
+
+Dokumentacija pokriva SVE:
+- Quick start guides
+- Detaljni setup
+- Troubleshooting
+- Security best practices
+
+═══════════════════════════════════════════════════════════════
+
+🎯 SLEDEĆI KORAK - IZABERI:
+═══════════════════════════════════════════════════════════════
+
+Opcija 1: QUICK_START_GITHUB.txt
+         (5 minuta setup, auto-deploy zauvek)
+
+Opcija 2: UPLOAD_CHECKLIST.txt
+         (3 minuta setup, manual svaki put)
+
+═══════════════════════════════════════════════════════════════

@@ -1,0 +1,153 @@
+═══════════════════════════════════════════════════════════════
+              🚀 BIF PPV - UPLOAD CHECKLIST
+═══════════════════════════════════════════════════════════════
+
+📋 PRE UPLOAD-A - OBAVEZNO!
+═══════════════════════════════════════════════════════════════
+
+□ 1. OTVORI env/.env i PROMENI:
+
+    □ SMTP_PASSWORD=NOVA_LOZINKA
+    □ AWS_ACCESS_KEY_ID=NOVI_KEY
+    □ AWS_SECRET_ACCESS_KEY=NOVI_SECRET
+    □ DB_PASS=NOVA_BAZA_LOZINKA (od hosting providera)
+    □ PPV_ADMIN_PASSWORD=NOVA_JAKA_LOZINKA
+
+    □ STRIPE_PUBLISHABLE_KEY=pk_test_NOVI
+    □ STRIPE_SECRET_KEY=sk_test_NOVI
+    □ STRIPE_WEBHOOK_SECRET=whsec_NOVI
+
+    □ STREAM_SIGNING_KEY=32-random-karaktera
+    □ JWT_SECRET=32-random-karaktera
+    □ ENCRYPTION_KEY=32-random-karaktera
+
+    □ RECAPTCHA_SECRET_KEY=NOVI
+    □ RECAPTCHA_SITE_KEY=NOVI
+
+    □ SITE_URL=https://bif.events
+    □ APP_ENV=production
+    □ DEBUG_MODE=false
+
+□ 2. SAČUVAJ env/.env sa NOVIM lozinkama
+
+═══════════════════════════════════════════════════════════════
+
+📤 UPLOAD NA SERVER
+═══════════════════════════════════════════════════════════════
+
+□ Upload SVE fajlove (UKLJUČUJUĆI env/ folder)
+□ .htaccess je upload-ovan (blokira env/ automatski)
+
+═══════════════════════════════════════════════════════════════
+
+🔧 NA SERVERU - POSLE UPLOAD-A
+═══════════════════════════════════════════════════════════════
+
+□ Set file permissions:
+    chmod 755 /public_html
+    chmod 755 data/
+    chmod 600 env/.env
+    chmod 644 .htaccess
+
+□ Composer install (ako vendor/ nije upload-ovan):
+    composer install --no-dev
+
+□ Import database:
+    mysql -u user -p dbname < setup_database.sql
+
+═══════════════════════════════════════════════════════════════
+
+✅ SECURITY TEST
+═══════════════════════════════════════════════════════════════
+
+□ curl -I https://bif.events/env/.env
+  → Trebalo bi: 403 Forbidden ✅
+
+□ curl -I https://bif.events/data/php_errors.log
+  → Trebalo bi: 403 Forbidden ✅
+
+□ curl -I https://bif.events/admin/admin.html
+  → Trebalo bi: Traži autentifikaciju ✅
+
+═══════════════════════════════════════════════════════════════
+
+🧪 FUNCTIONALITY TEST
+═══════════════════════════════════════════════════════════════
+
+□ Main site: https://bif.events
+□ Newsletter signup radi
+□ Admin panel pristup radi (sa novom lozinkom)
+□ Borci stranice: /borci/ime-borca
+□ Vesti stranice: /vesti/slug
+□ PPV watch page: /watch.php
+□ Stripe checkout flow (sa test karticom)
+□ Email notifikacije rade
+
+═══════════════════════════════════════════════════════════════
+
+💳 STRIPE TEST MODE
+═══════════════════════════════════════════════════════════════
+
+✅ Sa test keys RADI:
+   - Ceo payment flow
+   - Checkout process
+   - Webhooks
+   - Admin panel vidi test purchases
+
+❌ Sa test keys NE RADI:
+   - Realne kartice
+   - Pravi novac
+
+Test kartica za testiranje:
+   4242 4242 4242 4242
+   Datum: bilo koji budući
+   CVC: 123
+
+═══════════════════════════════════════════════════════════════
+
+🔄 ZA 2 MESECA - LIVE MODE
+═══════════════════════════════════════════════════════════════
+
+□ Verifikuj business u Stripe Dashboard
+□ Dobij LIVE keys (pk_live_... i sk_live_...)
+□ SSH na server → nano env/.env
+□ Promeni STRIPE keys na LIVE
+□ Postavi LIVE webhook u Stripe Dashboard
+□ Test sa svojom karticom (mali iznos)
+
+═══════════════════════════════════════════════════════════════
+
+📞 HELP
+═══════════════════════════════════════════════════════════════
+
+Detaljni guide:
+   → DEPLOYMENT_SIMPLE.md
+
+Kako generisati random keys:
+   → https://randomkeygen.com/ (256-bit)
+
+Stripe test keys:
+   → Dashboard → Developers → API keys (Test mode)
+
+AWS keys:
+   → IAM Console → Users → Security credentials
+
+reCAPTCHA keys:
+   → https://www.google.com/recaptcha/admin
+
+═══════════════════════════════════════════════════════════════
+
+✅ DONE!
+═══════════════════════════════════════════════════════════════
+
+Kada završiš sve checkboxes, sajt je SPREMAN! 🎉
+
+env/.env je ZAŠTIĆEN sa:
+   - .htaccess (403 Forbidden)
+   - .gitignore (ako koristiš git)
+   - chmod 600 (samo owner može čitati)
+
+MOŽEŠ na live sa Stripe TEST keys! ✅
+Za 2 meseca samo promeniš u env/.env
+
+═══════════════════════════════════════════════════════════════

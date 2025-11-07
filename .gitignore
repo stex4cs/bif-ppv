@@ -1,0 +1,57 @@
+# Environment variables - NIKAD NE COMMIT-UJ!
+.env
+.env.local
+.env.production
+.env.development
+.env.test
+env/.env
+env/.env.*
+env/**
+
+# Newsletter data
+/data/*.json
+/data/*.log
+/data/*.bak
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.tmp
+
+# Logs
+*.log
+error_log
+access_log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Composer
+/vendor/
+composer.lock
+
+# Node modules (if using npm/yarn)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Sensitive data
+/data/ppv_*.json
+/data/security.log
+/data/php_errors.log
+
+# Upload directories
+/uploads/
+/temp/
+
+# Cache
+/cache/
+*.cache

@@ -1,0 +1,18 @@
+RewriteEngine On
+
+# Dynamic news pages - must be BEFORE static .html rules
+# Matches /vesti/slug (but not index, vest.php or other PHP files)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/vesti/(index\.php|vest\.php)$
+RewriteRule ^([a-z0-9\-]+)$ vest.php?slug=$1 [L,QSA]
+
+# Remove .html extension from URLs (for existing static files)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.*)$ $1.html [L]
+
+# Redirect .html URLs to clean URLs
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s([^.]+)\.html [NC]
+RewriteRule ^ %1 [R=301,L]

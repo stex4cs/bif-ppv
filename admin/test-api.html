@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>BIF Admin API Test</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #00ff00;
+        }
+        .test {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+        }
+        .success { color: #00ff00; }
+        .error { color: #ff0000; }
+        pre {
+            background: #000;
+            padding: 10px;
+            border-radius: 3px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>BIF Admin API Test</h1>
+    <div id="results"></div>
+
+    <script>
+        const results = document.getElementById('results');
+
+        async function testEndpoint(name, url) {
+            const div = document.createElement('div');
+            div.className = 'test';
+            div.innerHTML = `<h3>Testing: ${name}</h3><p>Loading...</p>`;
+            results.appendChild(div);
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                div.innerHTML = `
+                    <h3 class="success">✅ ${name}</h3>
+                    <p><strong>Status:</strong> ${response.status}</p>
+                    <p><strong>Response:</strong></p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                div.innerHTML = `
+                    <h3 class="error">❌ ${name}</h3>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                `;
+            }
+        }
+
+        async function runTests() {
+            await testEndpoint('Get Stats', 'ppv_admin.php?action=get_stats');
+            await testEndpoint('Get Events', 'ppv_admin.php?action=get_events');
+            await testEndpoint('Get Purchases', 'ppv_admin.php?action=get_purchases');
+            await testEndpoint('Get Fighters', 'ppv_admin.php?action=get_fighters');
+            await testEndpoint('Get News', 'ppv_admin.php?action=get_news');
+            await testEndpoint('Get Website Events', 'ppv_admin.php?action=get_website_events');
+        }
+
+        runTests();
+    </script>
+</body>
+</html>

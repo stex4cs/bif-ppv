@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Payment Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .result { background: #f5f5f5; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .error { background: #ffebee; color: #c62828; }
+        .success { background: #e8f5e8; color: #2e7d32; }
+        button { padding: 10px 15px; margin: 5px; background: #c41e3a; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        pre { font-size: 12px; overflow: auto; max-height: 400px; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Debug Payment Test</h1>
+    
+    <button onclick="testPaymentDebug()">Test Payment Creation (Debug)</button>
+    <button onclick="testDirectURL()">Test Direct API URL</button>
+    <button onclick="testBasicPHP()">Test Basic PHP</button>
+    <button onclick="testPOST()">Test POST Request</button>
+    <button onclick="checkPHPErrors()">Check PHP Errors</button>
+    
+    <div id="result" class="result"></div>
+
+    <script>
+        async function testPaymentDebug() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing payment creation with debug...';
+            
+            try {
+                const response = await fetch('api/ppv.php?debug=1', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        action: 'create_payment',
+                        event_id: 'bif-1-new-rise',
+                        email: 'test@example.com',
+                        name: 'Test User'
+                    })
+                });
+                
+                console.log('Response status:', response.status);
+                console.log('Response headers:', [...response.headers.entries()]);
+                
+                const text = await response.text();
+                console.log('Raw response:', text);
+                
+                let data;
+                try {
+                    data = JSON.parse(text);
+                } catch (e) {
+                    data = { error: 'Invalid JSON', raw_response: text };
+                }
+                
+                resultDiv.innerHTML = `
+                    <strong>Status:</strong> ${response.status}<br>
+                    <strong>Response:</strong><br>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+                resultDiv.className = response.ok ? 'result success' : 'result error';
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<strong>Network Error:</strong> ${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+        
+        async function testDirectURL() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing direct API access...';
+            
+            try {
+                const response = await fetch('api/ppv.php?action=config&debug=1');
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <strong>Config Test:</strong><br>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+                resultDiv.className = 'result success';
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<strong>Error:</strong> ${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+
+async function testWithHighPrice() {
+    const resultDiv = document.getElementById('result');
+    resultDiv.innerHTML = 'Testing payment with manually set high price...';
+    
+    try {
+        // Prvo ažuriraj event sa višom cenom
+        const updateResponse = await fetch('api/ppv.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'update_event_price',
+                event_id: 'bif-1-new-rise',
+                new_price: 199900 // 1999.00 RSD
+            })
+        });
+        
+        // Zatim testiraj payment
+        const response = await fetch('api/ppv.php?debug=1', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'create_payment',
+                event_id: 'bif-1-new-rise',
+                email: 'test@example.com',
+                name: 'Test User'
+            })
+        });
+        
+        const text = await response.text();
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch (e) {
+            data = { error: 'Invalid JSON', raw_response: text };
+        }
+        
+        resultDiv.innerHTML = `
+            <strong>High Price Test:</strong><br>
+            <strong>Status:</strong> ${response.status}<br>
+            <strong>Response:</strong><br>
+            <pre>${JSON.stringify(data, null, 2)}</pre>
+        `;
+        resultDiv.className = 'result ' + (data.success ? 'success' : 'error');
+        
+    } catch (error) {
+        resultDiv.innerHTML = `<strong>Error:</strong> ${error.message}`;
+        resultDiv.className = 'result error';
+    }
+}
+
+        
+        async function testBasicPHP() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing basic PHP...';
+            
+            try {
+                const response = await fetch('api/ppv.php?test=1');
+                const text = await response.text();
+                
+                let data;
+                try {
+                    data = JSON.parse(text);
+                } catch (e) {
+                    data = { error: 'Not JSON', raw: text };
+                }
+                
+                resultDiv.innerHTML = `
+                    <strong>Basic PHP Test:</strong><br>
+                    <strong>Status:</strong> ${response.status}<br>
+                    <strong>Response:</strong><br>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+                resultDiv.className = 'result ' + (response.ok ? 'success' : 'error');
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<strong>Error:</strong> ${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+        
+        async function testPOST() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing POST to PHP...';
+            
+            try {
+                const response = await fetch('api/ppv.php?test=1', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ test: 'data' })
+                });
+                
+                const text = await response.text();
+                
+                let data;
+                try {
+                    data = JSON.parse(text);
+                } catch (e) {
+                    data = { error: 'Not JSON', raw: text };
+                }
+                
+                resultDiv.innerHTML = `
+                    <strong>POST Test:</strong><br>
+                    <strong>Status:</strong> ${response.status}<br>
+                    <strong>Response:</strong><br>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+                resultDiv.className = 'result ' + (response.ok ? 'success' : 'error');
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<strong>Error:</strong> ${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+        
+        async function checkPHPErrors() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `
+                <strong>Check these locations for PHP errors:</strong><br><br>
+                1. <strong>XAMPP Error Log:</strong> C:\\xampp\\apache\\logs\\error.log<br>
+                2. <strong>PPV Error Log:</strong> C:\\xampp\\htdocs\\bif-PPV\\data\\php_errors.log<br><br>
+                
+                <strong>Or enable error display temporarily:</strong><br>
+                Add this to top of api/ppv.php:<br>
+                <code>ini_set('display_errors', 1);</code><br><br>
+                
+                <strong>Common issues:</strong><br>
+                • Stripe library not installed (composer install)<br>
+                • Missing .env file or wrong Stripe keys<br>
+                • Data directory not writable<br>
+                • PHP memory limit exceeded
+            `;
+            resultDiv.className = 'result';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+RewriteEngine On
+
+# Osnovne sigurnosne postavke
+<Files ".env">
+    Require all denied
+</Files>
+
+# Zaštita env/ foldera i svih .env fajlova
+RedirectMatch 403 ^/bif-PPV/env/
+RedirectMatch 403 /\.env$
+
+<Files "*.log">
+    Require all denied
+</Files>
+
+# CORS headers
+<IfModule mod_headers.c>
+    Header always set Access-Control-Allow-Origin "*"
+    Header always set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+    Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+</IfModule>
+
+# Redirect index.html to index.php (preserve hash fragment)
+RewriteCond %{THE_REQUEST} ^GET\ /([^?]*?)index\.html
+RewriteRule ^(.*)index\.html$ /$1index.php [R=301,L,NE]
+
+# Clean URLs
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^([^/]+)/?$ $1.html [L]
+
+# PPV routes
+RewriteRule ^watch/?$ watch.html [L]
+RewriteRule ^admin/?$ admin/ppv_admin.php [L]

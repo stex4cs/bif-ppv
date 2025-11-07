@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Test Content Management</title>
+    <style>
+        body { font-family: monospace; padding: 20px; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: #c41e3a; color: white; }
+        button { padding: 10px 20px; margin: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Content Management API Test</h1>
+
+    <button onclick="testFighters()">Test Fighters</button>
+    <button onclick="testNews()">Test News</button>
+    <button onclick="testEvents()">Test Events</button>
+
+    <div id="output"></div>
+
+    <script>
+        const output = document.getElementById('output');
+
+        async function testFighters() {
+            output.innerHTML = '<p>Loading fighters...</p>';
+            try {
+                const response = await fetch('ppv_admin.php?action=get_fighters');
+                const data = await response.json();
+
+                if (data.success) {
+                    output.innerHTML = `
+                        <h2>Fighters (${data.fighters.length})</h2>
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Nickname</th>
+                                <th>Record</th>
+                                <th>Status</th>
+                            </tr>
+                            ${data.fighters.map(f => `
+                                <tr>
+                                    <td>${f.name}</td>
+                                    <td>${f.nickname}</td>
+                                    <td>${f.wins}-${f.losses}-${f.draws}</td>
+                                    <td>${f.status}</td>
+                                </tr>
+                            `).join('')}
+                        </table>
+                    `;
+                } else {
+                    output.innerHTML = `<p style="color:red;">Error: ${data.error}</p>`;
+                }
+            } catch (error) {
+                output.innerHTML = `<p style="color:red;">Exception: ${error.message}</p>`;
+            }
+        }
+
+        async function testNews() {
+            output.innerHTML = '<p>Loading news...</p>';
+            try {
+                const response = await fetch('ppv_admin.php?action=get_news');
+                const data = await response.json();
+
+                if (data.success) {
+                    output.innerHTML = `
+                        <h2>News (${data.news.length})</h2>
+                        <table>
+                            <tr>
+                                <th>Title</th>
+                                <th>Slug</th>
+                                <th>Published</th>
+                            </tr>
+                            ${data.news.map(n => `
+                                <tr>
+                                    <td>${n.title}</td>
+                                    <td>${n.slug}</td>
+                                    <td>${n.published_at}</td>
+                                </tr>
+                            `).join('')}
+                        </table>
+                    `;
+                } else {
+                    output.innerHTML = `<p style="color:red;">Error: ${data.error}</p>`;
+                }
+            } catch (error) {
+                output.innerHTML = `<p style="color:red;">Exception: ${error.message}</p>`;
+            }
+        }
+
+        async function testEvents() {
+            output.innerHTML = '<p>Loading events...</p>';
+            try {
+                const response = await fetch('ppv_admin.php?action=get_website_events');
+                const data = await response.json();
+
+                if (data.success) {
+                    output.innerHTML = `
+                        <h2>Website Events (${data.events.length})</h2>
+                        <table>
+                            <tr>
+                                <th>Title</th>
+                                <th>Date</th>
+                                <th>Location</th>
+                                <th>Status</th>
+                            </tr>
+                            ${data.events.map(e => `
+                                <tr>
+                                    <td>${e.title}</td>
+                                    <td>${e.date}</td>
+                                    <td>${e.location}</td>
+                                    <td>${e.status}</td>
+                                </tr>
+                            `).join('')}
+                        </table>
+                    `;
+                } else {
+                    output.innerHTML = `<p style="color:red;">Error: ${data.error}</p>`;
+                }
+            } catch (error) {
+                output.innerHTML = `<p style="color:red;">Exception: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>

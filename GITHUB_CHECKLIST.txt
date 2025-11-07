@@ -1,0 +1,243 @@
+═══════════════════════════════════════════════════════════════
+        ✅ GITHUB AUTO-DEPLOY - FINAL CHECKLIST
+═══════════════════════════════════════════════════════════════
+
+PRE GITHUB PUSH - LOKALNO
+═══════════════════════════════════════════════════════════════
+
+□ Test sajt na localhost
+  → http://localhost/bif-PPV
+
+□ Test sve funkcionalnosti:
+  → Newsletter signup
+  → Admin panel
+  → Borci stranice
+  → Vesti stranice
+  → Language switching
+
+□ Proveri .gitignore blokira env/.env:
+  → git status (ne sme da vidi env/.env)
+
+□ Proveri da nemaš osetljive podatke u kodu:
+  → Grep za "password", "secret", "key"
+
+═══════════════════════════════════════════════════════════════
+
+GITHUB REPO SETUP
+═══════════════════════════════════════════════════════════════
+
+□ Kreiran GitHub repo:
+  → github.com/USERNAME/bif-ppv
+
+□ Dodao remote:
+  → git remote add origin https://github.com/USERNAME/bif-ppv.git
+
+□ Push-ovan initial commit:
+  → git push -u origin main
+
+□ Proveri da env/.env NIJE na GitHub-u:
+  → github.com/USERNAME/bif-ppv → Browse files
+  → env/ folder ne sme da bude vidljiv!
+
+═══════════════════════════════════════════════════════════════
+
+GITHUB SECRETS SETUP
+═══════════════════════════════════════════════════════════════
+
+□ Dobio FTP credentials od Hostinger:
+  Server: _____________________
+  Username: _____________________
+  Password: _____________________
+
+□ Dodao FTP_SERVER secret u GitHub
+□ Dodao FTP_USERNAME secret u GitHub
+□ Dodao FTP_PASSWORD secret u GitHub
+
+Provera:
+→ GitHub → Repo → Settings → Secrets → Actions
+→ Trebalo bi da vidiš 3 секрета
+
+═══════════════════════════════════════════════════════════════
+
+SERVER SETUP (MANUAL - JEDNOM!)
+═══════════════════════════════════════════════════════════════
+
+□ Kreirao env/.env na serveru:
+  Hostinger → File Manager → public_html/env/.env
+
+□ Kopirano iz DEPLOYMENT_SIMPLE.md
+
+□ PROMENJENE SVE LOZINKE u env/.env:
+  □ SMTP_PASSWORD
+  □ AWS_ACCESS_KEY_ID
+  □ AWS_SECRET_ACCESS_KEY
+  □ DB_PASS
+  □ PPV_ADMIN_PASSWORD
+  □ STRIPE_PUBLISHABLE_KEY
+  □ STRIPE_SECRET_KEY
+  □ STREAM_SIGNING_KEY (32 random)
+  □ JWT_SECRET (32 random)
+  □ ENCRYPTION_KEY (32 random)
+  □ RECAPTCHA_SECRET_KEY
+  □ RECAPTCHA_SITE_KEY
+
+□ Set production values:
+  □ SITE_URL=https://bif.events
+  □ APP_ENV=production
+  □ DEBUG_MODE=false
+
+□ File permissions:
+  □ chmod 600 env/.env
+  □ chmod 644 .htaccess
+  □ chmod 755 data/
+
+□ Database import:
+  □ mysql -u user -p dbname < setup_database.sql
+
+□ Composer install (ako vendor/ nije deploy-ovan):
+  □ composer install --no-dev
+
+═══════════════════════════════════════════════════════════════
+
+PRVI DEPLOY TEST
+═══════════════════════════════════════════════════════════════
+
+□ Napravio test izmenu:
+  echo "Test" >> test.txt
+
+□ Git commit & push:
+  git add test.txt
+  git commit -m "Test: GitHub auto-deploy"
+  git push origin main
+
+□ Praćenje GitHub Actions:
+  → GitHub → Actions → "Deploy to Hostinger"
+  → Job status: ✅ (zelena kvačica)
+
+□ Deploy time: ____ minuta
+
+═══════════════════════════════════════════════════════════════
+
+PRODUCTION VERIFICATION
+═══════════════════════════════════════════════════════════════
+
+□ Main site radi:
+  → https://bif.events
+  Status: 200 OK ✅
+
+□ env/.env zaštićen:
+  → curl -I https://bif.events/env/.env
+  Status: 403 Forbidden ✅
+
+□ Log fajlovi zaštićeni:
+  → curl -I https://bif.events/data/php_errors.log
+  Status: 403 Forbidden ✅
+
+□ Admin panel radi:
+  → https://bif.events/admin/admin.html
+  Traži lozinku ✅
+
+□ Newsletter signup radi:
+  → Test email signup
+  → Primljen email ✅
+
+□ Borci stranice rade:
+  → https://bif.events/borci/ime-borca
+  Status: 200 OK ✅
+
+□ Vesti stranice rade:
+  → https://bif.events/vesti/slug
+  Status: 200 OK ✅
+
+□ Language switching radi:
+  → Toggle SR/EN
+  Menja jezik ✅
+
+□ Stripe checkout radi (test mode):
+  → https://bif.events/watch.php
+  → Test sa: 4242 4242 4242 4242
+  Checkout flow radi ✅
+
+═══════════════════════════════════════════════════════════════
+
+MONITORING SETUP (OPCIONO)
+═══════════════════════════════════════════════════════════════
+
+□ Uptime monitoring (UptimeRobot):
+  → https://uptimerobot.com/
+  → Monitor: https://bif.events
+
+□ SSL check (SSL Labs):
+  → https://www.ssllabs.com/ssltest/analyze.html?d=bif.events
+  → Grade: A+ ✅
+
+□ GitHub Actions email notifikacije enabled:
+  → GitHub → Settings → Notifications
+  → Actions: Enabled ✅
+
+═══════════════════════════════════════════════════════════════
+
+FUTURE DEPLOYS - WORKFLOW
+═══════════════════════════════════════════════════════════════
+
+Svaki put:
+
+1. □ Edit fajlove lokalno
+2. □ Test na localhost
+3. □ git add .
+4. □ git commit -m "Opis"
+5. □ git push origin main
+6. □ Check GitHub Actions (zelena kvačica)
+7. □ Test na https://bif.events
+
+Ako menjaš env/.env:
+□ NE push-uj na GitHub!
+□ Manual edit na serveru (SSH/FTP/File Manager)
+
+═══════════════════════════════════════════════════════════════
+
+ROLLBACK PLAN
+═══════════════════════════════════════════════════════════════
+
+Ako deploy pukne:
+
+□ GitHub → Actions → Failed job → View logs
+□ Fix greška lokalno
+□ git commit & push ponovo
+
+Ili rollback na prethodni commit:
+□ git log (nađi commit hash)
+□ git revert <hash>
+□ git push origin main
+
+═══════════════════════════════════════════════════════════════
+
+✅ GOTOVO - AUTO-DEPLOY AKTIVAN!
+═══════════════════════════════════════════════════════════════
+
+Kada završiš SVE checkboxes:
+
+   ✅ GitHub repo setup
+   ✅ FTP secrets dodati
+   ✅ env/.env kreiran na serveru
+   ✅ Prvi deploy uspešan
+   ✅ Production verification passed
+
+AUTOMATSKI DEPLOY JE AKTIVAN! 🚀
+
+Svaki push na main → Auto deploy na https://bif.events
+
+═══════════════════════════════════════════════════════════════
+
+📖 DOKUMENTACIJA:
+═══════════════════════════════════════════════════════════════
+
+→ GITHUB_DEPLOY_SETUP.md (detaljni guide)
+→ QUICK_START_GITHUB.txt (5 min setup)
+→ README.md (project overview)
+
+═══════════════════════════════════════════════════════════════
+
+🎉 SRECNO SA AUTO-DEPLOY-OM!
+
+═══════════════════════════════════════════════════════════════

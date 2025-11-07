@@ -1,0 +1,42 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir /b \"c:\\xampp\\htdocs\\bif-PPV\")",
+      "Bash(dir \"c:\\xampp\\htdocs\\bif-PPV\\borci\")",
+      "Bash(test:*)",
+      "Bash(php -r:*)",
+      "Bash(net stop Apache2.4)",
+      "Bash(net start:*)",
+      "Bash(\"c:\\xampp\\apache\\bin\\httpd.exe\" -k restart)",
+      "Bash(for:*)",
+      "Bash(do sed -i 's/index\\.html/index.php/g' \"$file\")",
+      "Bash(done)",
+      "Bash(do sed -i 's/ onclick=\"\"bifApp\\.switchLanguage([^\"\"]*)\"\"//g' \"$file\")",
+      "Bash(do sed -i '/<li>/,/<\\/li>/ { /<a href=\"\"\\.\\.\\/index\\.php#contact\"\"/,/<\\/li>/ { /<\\/li>/a\\                        <li>\\n                            <a href=\"\"../watch.php\"\" aria-label=\"\"PPV Prenos uživo\"\">\\n                                <span class=\"\"lang-content active\"\" data-lang=\"\"sr\"\">PPV</span>\\n                                <span class=\"\"lang-content\"\" data-lang=\"\"en\"\">PPV</span>\\n                            </a>\\n                        </li> } }' \"$file\")",
+      "Bash(do sed -i '/<!-- Mobile only controls -->/i\\                        <li>\\n                            <a href=\"\"../watch.php\"\" aria-label=\"\"PPV Prenos uživo\"\">\\n                                <span class=\"\"lang-content active\"\" data-lang=\"\"sr\"\">PPV</span>\\n                                <span class=\"\"lang-content\"\" data-lang=\"\"en\"\">PPV</span>\\n                            </a>\\n                        </li>\\n' \"$file\")",
+      "Bash(php integrate-content-management.php:*)",
+      "Bash(curl:*)",
+      "Bash(cat:*)",
+      "Bash(dir \"c:\\xampp\\htdocs\\bif-PPV\\admin\")",
+      "Bash(findstr:*)",
+      "Bash(php:*)",
+      "Bash(nul)",
+      "Bash(dir:*)",
+      "Bash(temp_index.html)",
+      "Bash(del temp_index.html)",
+      "Bash(sc query:*)",
+      "Bash(del \"c:\\xampp\\htdocs\\bif-PPV\\borci\\test-borac.php\")",
+      "Bash(del \"c:\\xampp\\htdocs\\bif-PPV\\admin\\test-news-create.php\")",
+      "Bash(start http://localhost/bif-PPV/admin/admin.html)",
+      "Bash(python fix-news.py:*)",
+      "Bash(start http://localhost/bif-PPV/vesti/bif0)",
+      "Bash(start http://localhost/bif-PPV/vesti/bif1)",
+      "Bash(start http://localhost/bif-PPV/vesti/bif-onama)",
+      "Bash(del:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

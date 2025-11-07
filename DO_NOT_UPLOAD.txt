@@ -1,0 +1,192 @@
+═══════════════════════════════════════════════════════════════
+   ⛔ FAJLOVI KOJE NE TREBA UPLOAD-OVATI NA PRODUCTION SERVER
+═══════════════════════════════════════════════════════════════
+
+🔴 KRITIČNO - SIGURNOSNI RIZIK:
+────────────────────────────────
+env/.env                          ← SADRŽI SVE LOZINKE I KLJUČEVE!
+env/.env.example
+.env
+data/php_errors.log               ← Može sadržati osetljive informacije
+data/security.log
+data/*.log
+
+📁 DEVELOPMENT FAJLOVI:
+────────────────────────────────
+.git/                             ← Git repository
+.gitignore
+.claude/                          ← Claude Code settings
+composer.lock                     ← Generiše se na serveru
+vendor/                           ← Generiše se sa 'composer install'
+
+📝 DOKUMENTACIJA (opciono):
+────────────────────────────────
+PRODUCTION_DEPLOYMENT.md
+DO_NOT_UPLOAD.txt                ← Ovaj fajl
+CSP_FIX_README.md
+SECURITY_IMPROVEMENTS.md
+SECURITY_QUICK_REFERENCE.md
+TESTING_GUIDE.md
+README.md (ako postoji)
+
+🧪 TEST I DEBUG FAJLOVI:
+────────────────────────────────
+test-system.php
+test-medialive.php
+test-medialive-regions.php
+test_api.html
+test_api.php
+test-mysql.sql
+db-test.php
+debug_payment.html
+install.php                       ← Samo ako već imaš database
+tools/                            ← Ceo folder sa dev tools
+tools/debug_ppv.php
+tools/test_ppv.php
+
+🗑️ TEMPORARY I BACKUP FAJLOVI:
+────────────────────────────────
+temp_index.html
+nul
+*.bak
+*.backup
+*.old
+*.tmp
+Thumbs.db
+.DS_Store
+
+📦 NODE/NPM (ako koristiš):
+────────────────────────────────
+node_modules/
+package-lock.json
+yarn.lock
+
+═══════════════════════════════════════════════════════════════
+
+✅ ŠTA TREBA DA UPLOAD-UJEŠ:
+────────────────────────────────
+✓ admin/
+✓ api/
+✓ assets/
+✓ aws/
+✓ borci/
+✓ config/
+✓ css/
+✓ data/ (ALI BEZ .log fajlova!)
+✓ favicon/
+✓ includes/
+✓ js/
+✓ vesti/
+✓ vendor/ (ili uradi 'composer install' na serveru)
+✓ .htaccess
+✓ composer.json
+✓ contact.php
+✓ database.php
+✓ default.php
+✓ fighter-details.html
+✓ fight-preview.html
+✓ index.php
+✓ main.js
+✓ newsletter.php
+✓ setup_database.sql
+✓ watch.php
+
+═══════════════════════════════════════════════════════════════
+
+📋 KAKO UPLOAD-OVATI:
+
+1. METODA 1 - Manual (FTP/SFTP):
+   ─────────────────────────────
+   - Koristi FileZilla ili WinSCP
+   - Poveži se sa serverom
+   - Upload-uj samo fajlove sa ✓ liste
+   - PRESKOČI sve sa ⛔ liste
+
+2. METODA 2 - Git (ako server ima git):
+   ─────────────────────────────────────
+   cd /path/to/server
+   git clone https://github.com/yourusername/bif-ppv.git
+   cd bif-ppv
+   composer install --no-dev
+
+   # Ručno kreiraj .env na serveru
+   nano .env
+   # (kopiraj iz PRODUCTION_DEPLOYMENT.md)
+
+3. METODA 3 - ZIP Upload:
+   ─────────────────────────────────────
+   # Na lokalnom kompu:
+   - Kopiraj ceo folder
+   - Obriši sve fajlove sa ⛔ liste
+   - Zapakovati u ZIP
+   - Upload ZIP na server
+   - Extract na serveru
+   - Kreiraj .env manual
+
+═══════════════════════════════════════════════════════════════
+
+⚠️ POSLE UPLOAD-A NA SERVER:
+
+1. KREIRAJ .env FAJL (manual):
+   ────────────────────────────
+   cd /path/to/bif-PPV
+   nano .env
+   # Kopiraj sadržaj iz PRODUCTION_DEPLOYMENT.md (sekcija 3)
+
+2. POSTAVI PERMISSIONS:
+   ────────────────────────────
+   chmod 755 /path/to/bif-PPV
+   chmod 755 data/
+   chmod 644 data/*.json
+   chmod 600 .env
+   chmod 644 .htaccess
+
+3. INSTALIRAJ DEPENDENCIES:
+   ────────────────────────────
+   composer install --no-dev --optimize-autoloader
+
+4. IMPORT DATABASE:
+   ────────────────────────────
+   mysql -u root -p bif_ppv < setup_database.sql
+
+═══════════════════════════════════════════════════════════════
+
+🔐 SIGURNOSNA PROVERA:
+
+Proveri da .env NIJE pristupačan:
+curl https://bif.events/.env
+→ Trebalo bi: 403 Forbidden
+
+Proveri da admin traži lozinku:
+curl https://bif.events/admin/admin.html
+→ Trebalo bi da traži autentifikaciju
+
+═══════════════════════════════════════════════════════════════
+
+✅ MOŽEŠ LI NA LIVE SA STRIPE TEST KEYS?
+
+DA! ✅
+─────
+- Sajt će raditi normalno
+- Niko neće moći da plati (samo test kartice)
+- Možeš testirati ceo PPV flow
+- Za 2 meseca promeniš na LIVE keys
+
+Kada menjaš na LIVE:
+1. Verifikuj business u Stripe
+2. Dobij LIVE keys
+3. Update .env na serveru
+4. Postavi webhook za production URL
+5. Test sa svojom karticom
+
+═══════════════════════════════════════════════════════════════
+
+📞 PITANJA?
+
+Ako nešto ne radi:
+1. Proveri PHP error log
+2. Proveri data/security.log
+3. Proveri file permissions
+4. Proveri da je .env kreiran i popunjen
+
+═══════════════════════════════════════════════════════════════

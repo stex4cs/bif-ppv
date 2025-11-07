@@ -1,0 +1,745 @@
+<!-- =================================================================
+     BIF ADMIN - CONTENT MANAGEMENT EXTENSION
+     Dodajte ovaj kod u admin.html za upravljanje borcima, vestima i događajima
+     ================================================================= -->
+
+<!-- NAVIGATION ITEMS - Dodati u sidebar nakon postojećih nav items (~line 632) -->
+<div class="nav-group">
+    <div class="nav-group-title">SADRŽAJ</div>
+    <a href="#" class="nav-item" data-section="fighters">
+        <i>🥊</i> Borci
+    </a>
+    <a href="#" class="nav-item" data-section="content-news">
+        <i>📰</i> Vesti
+    </a>
+    <a href="#" class="nav-item" data-section="website-events">
+        <i>🎪</i> Događaji
+    </a>
+</div>
+
+<!-- FIGHTERS SECTION - Dodati nakon access section (~line 990) -->
+<div id="fighters" class="content-section">
+    <div class="section-header">
+        <h2>🥊 Upravljanje Borcima</h2>
+        <button class="btn btn-primary" onclick="openCreateFighterModal()">
+            + Dodaj Borca
+        </button>
+    </div>
+
+    <div class="card">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Slika</th>
+                    <th>Ime</th>
+                    <th>Nadimak</th>
+                    <th>Težina</th>
+                    <th>Visina</th>
+                    <th>Rekord</th>
+                    <th>Status</th>
+                    <th>Akcije</th>
+                </tr>
+            </thead>
+            <tbody id="fighters-table">
+                <tr><td colspan="8" style="text-align:center;padding:40px;">Loading fighters...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- NEWS SECTION - Dodati nakon fighters section -->
+<div id="content-news" class="content-section">
+    <div class="section-header">
+        <h2>📰 Upravljanje Vestima</h2>
+        <button class="btn btn-primary" onclick="openCreateNewsModal()">
+            + Dodaj Vest
+        </button>
+    </div>
+
+    <div class="card">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Naslov</th>
+                    <th>Kategorija</th>
+                    <th>Datum objave</th>
+                    <th>Status</th>
+                    <th>Akcije</th>
+                </tr>
+            </thead>
+            <tbody id="news-table">
+                <tr><td colspan="5" style="text-align:center;padding:40px;">Loading news...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- WEBSITE EVENTS SECTION - Dodati nakon news section -->
+<div id="website-events" class="content-section">
+    <div class="section-header">
+        <h2>🎪 Upravljanje Događajima</h2>
+        <button class="btn btn-primary" onclick="openCreateWebsiteEventModal()">
+            + Dodaj Događaj
+        </button>
+    </div>
+
+    <div class="card">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Naziv</th>
+                    <th>Datum</th>
+                    <th>Lokacija</th>
+                    <th>Status</th>
+                    <th>Akcije</th>
+                </tr>
+            </thead>
+            <tbody id="website-events-table">
+                <tr><td colspan="5" style="text-align:center;padding:40px;">Loading events...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- MODALS - Dodati pre zatvaranja body taga -->
+
+<!-- Create/Edit Fighter Modal -->
+<div id="fighterModal" class="modal">
+    <div class="modal-content" style="max-width: 800px;">
+        <div class="modal-header">
+            <h2 id="fighter-modal-title">Dodaj Borca</h2>
+            <span class="close" onclick="closeFighterModal()">&times;</span>
+        </div>
+        <form id="fighterForm" onsubmit="saveFighter(event)">
+            <input type="hidden" id="fighter-id" name="id">
+
+            <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
+                <div class="form-group">
+                    <label for="fighter-name">Ime i prezime *</label>
+                    <input type="text" id="fighter-name" name="name" required placeholder="Marko Milovanović">
+                </div>
+                <div class="form-group">
+                    <label for="fighter-nickname">Nadimak *</label>
+                    <input type="text" id="fighter-nickname" name="nickname" required placeholder="Jack">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="fighter-slug">URL Slug * (npr: marko-jack)</label>
+                <input type="text" id="fighter-slug" name="slug" required placeholder="marko-jack" pattern="[a-z0-9-]+">
+                <small>Samo mala slova, brojevi i crtice. Koristi se za URL.</small>
+            </div>
+
+            <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px;">
+                <div class="form-group">
+                    <label for="fighter-weight">Težina (kg)</label>
+                    <input type="number" id="fighter-weight" name="weight" placeholder="100">
+                </div>
+                <div class="form-group">
+                    <label for="fighter-height">Visina (cm)</label>
+                    <input type="number" id="fighter-height" name="height" placeholder="180">
+                </div>
+                <div class="form-group">
+                    <label for="fighter-age">Godine</label>
+                    <input type="number" id="fighter-age" name="age" placeholder="33">
+                </div>
+            </div>
+
+            <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px;">
+                <div class="form-group">
+                    <label for="fighter-wins">Pobede</label>
+                    <input type="number" id="fighter-wins" name="wins" placeholder="10" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="fighter-losses">Porazi</label>
+                    <input type="number" id="fighter-losses" name="losses" placeholder="2" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="fighter-draws">Nereseno</label>
+                    <input type="number" id="fighter-draws" name="draws" placeholder="0" value="0">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="fighter-bio">Biografija</label>
+                <textarea id="fighter-bio" name="bio" rows="4" placeholder="Opis borca..."></textarea>
+            </div>
+
+            <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
+                <div class="form-group">
+                    <label for="fighter-image">URL Slike</label>
+                    <input type="url" id="fighter-image" name="image_url" placeholder="/assets/images/fighters/fighter.png">
+                </div>
+                <div class="form-group">
+                    <label for="fighter-status">Status</label>
+                    <select id="fighter-status" name="status">
+                        <option value="active">Aktivan</option>
+                        <option value="inactive">Neaktivan</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-actions" style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
+                <button type="button" class="btn" onclick="closeFighterModal()">Otkaži</button>
+                <button type="submit" class="btn btn-primary">Sačuvaj</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Create/Edit News Modal -->
+<div id="newsModal" class="modal">
+    <div class="modal-content" style="max-width: 800px;">
+        <div class="modal-header">
+            <h2 id="news-modal-title">Dodaj Vest</h2>
+            <span class="close" onclick="closeNewsModal()">&times;</span>
+        </div>
+        <form id="newsForm" onsubmit="saveNews(event)">
+            <input type="hidden" id="news-id" name="id">
+
+            <div class="form-group">
+                <label for="news-title">Naslov *</label>
+                <input type="text" id="news-title" name="title" required placeholder="BIF 2 - Najava događaja">
+            </div>
+
+            <div class="form-group">
+                <label for="news-slug">URL Slug * (npr: bif-2-najava)</label>
+                <input type="text" id="news-slug" name="slug" required placeholder="bif-2-najava" pattern="[a-z0-9-]+">
+                <small>Samo mala slova, brojevi i crtice.</small>
+            </div>
+
+            <div class="form-group">
+                <label for="news-excerpt">Kratak opis</label>
+                <textarea id="news-excerpt" name="excerpt" rows="2" placeholder="Kratak opis vesti..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="news-content">Sadržaj *</label>
+                <textarea id="news-content" name="content" rows="8" required placeholder="Pun sadržaj vesti..."></textarea>
+            </div>
+
+            <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
+                <div class="form-group">
+                    <label for="news-category">Kategorija</label>
+                    <select id="news-category" name="category">
+                        <option value="news">Vesti</option>
+                        <option value="announcement">Najave</option>
+                        <option value="results">Rezultati</option>
+                        <option value="other">Ostalo</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="news-image">URL Slike</label>
+                    <input type="url" id="news-image" name="image_url" placeholder="/assets/images/news/news-1.png">
+                </div>
+            </div>
+
+            <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
+                <div class="form-group">
+                    <label for="news-published-at">Datum objave</label>
+                    <input type="datetime-local" id="news-published-at" name="published_at">
+                </div>
+                <div class="form-group">
+                    <label for="news-status">Status</label>
+                    <select id="news-status" name="status">
+                        <option value="published">Objavljeno</option>
+                        <option value="draft">Draft</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-actions" style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
+                <button type="button" class="btn" onclick="closeNewsModal()">Otkaži</button>
+                <button type="submit" class="btn btn-primary">Sačuvaj</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Create/Edit Website Event Modal -->
+<div id="websiteEventModal" class="modal">
+    <div class="modal-content" style="max-width: 700px;">
+        <div class="modal-header">
+            <h2 id="website-event-modal-title">Dodaj Događaj</h2>
+            <span class="close" onclick="closeWebsiteEventModal()">&times;</span>
+        </div>
+        <form id="websiteEventForm" onsubmit="saveWebsiteEvent(event)">
+            <input type="hidden" id="website-event-id" name="id">
+
+            <div class="form-group">
+                <label for="website-event-title">Naziv događaja *</label>
+                <input type="text" id="website-event-title" name="title" required placeholder="BIF 2: Showdown">
+            </div>
+
+            <div class="form-group">
+                <label for="website-event-slug">URL Slug * (npr: bif-2-showdown)</label>
+                <input type="text" id="website-event-slug" name="slug" required placeholder="bif-2-showdown" pattern="[a-z0-9-]+">
+            </div>
+
+            <div class="form-group">
+                <label for="website-event-description">Opis</label>
+                <textarea id="website-event-description" name="description" rows="4" placeholder="Opis događaja..."></textarea>
+            </div>
+
+            <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
+                <div class="form-group">
+                    <label for="website-event-date">Datum *</label>
+                    <input type="datetime-local" id="website-event-date" name="date" required>
+                </div>
+                <div class="form-group">
+                    <label for="website-event-location">Lokacija</label>
+                    <input type="text" id="website-event-location" name="location" placeholder="Beograd Arena">
+                </div>
+            </div>
+
+            <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
+                <div class="form-group">
+                    <label for="website-event-image">URL Slike</label>
+                    <input type="url" id="website-event-image" name="image_url" placeholder="/assets/images/events/event-1.jpg">
+                </div>
+                <div class="form-group">
+                    <label for="website-event-status">Status</label>
+                    <select id="website-event-status" name="status">
+                        <option value="upcoming">Predstojeći</option>
+                        <option value="live">Uživo</option>
+                        <option value="finished">Završen</option>
+                        <option value="cancelled">Otkazan</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-actions" style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
+                <button type="button" class="btn" onclick="closeWebsiteEventModal()">Otkaži</button>
+                <button type="submit" class="btn btn-primary">Sačuvaj</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- JAVASCRIPT - Dodati pre zatvaranja script taga (na kraju fajla) -->
+<script>
+// ================== CONTENT MANAGEMENT FUNCTIONS ==================
+
+// Global state
+let currentEditingFighter = null;
+let currentEditingNews = null;
+let currentEditingWebsiteEvent = null;
+
+// ========== FIGHTERS ==========
+async function loadFighters() {
+    try {
+        const response = await fetch('?action=get_fighters');
+        const data = await response.json();
+
+        if (data.success) {
+            displayFighters(data.fighters);
+        }
+    } catch (error) {
+        console.error('Error loading fighters:', error);
+    }
+}
+
+function displayFighters(fighters) {
+    const tbody = document.getElementById('fighters-table');
+
+    if (fighters.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;">Nema boraca. Dodajte prvog borca!</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = fighters.map(fighter => `
+        <tr>
+            <td><img src="${fighter.image_url || '/assets/images/fighters/default.png'}" style="width:50px;height:50px;border-radius:50%;object-fit:cover;" alt="${fighter.name}"></td>
+            <td><strong>${fighter.name}</strong></td>
+            <td>${fighter.nickname || '-'}</td>
+            <td>${fighter.weight ? fighter.weight + ' kg' : '-'}</td>
+            <td>${fighter.height ? fighter.height + ' cm' : '-'}</td>
+            <td>${fighter.wins || 0}-${fighter.losses || 0}-${fighter.draws || 0}</td>
+            <td><span class="badge ${fighter.status === 'active' ? 'badge-success' : 'badge-secondary'}">${fighter.status === 'active' ? 'Aktivan' : 'Neaktivan'}</span></td>
+            <td>
+                <button class="btn-icon" onclick='editFighter(${JSON.stringify(fighter)})' title="Izmeni">✏️</button>
+                <button class="btn-icon" onclick="deleteFighter('${fighter.id}')" title="Obriši">🗑️</button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+function openCreateFighterModal() {
+    currentEditingFighter = null;
+    document.getElementById('fighter-modal-title').textContent = 'Dodaj Borca';
+    document.getElementById('fighterForm').reset();
+    document.getElementById('fighter-id').value = '';
+    document.getElementById('fighterModal').style.display = 'flex';
+}
+
+function editFighter(fighter) {
+    currentEditingFighter = fighter;
+    document.getElementById('fighter-modal-title').textContent = 'Izmeni Borca';
+    document.getElementById('fighter-id').value = fighter.id;
+    document.getElementById('fighter-name').value = fighter.name || '';
+    document.getElementById('fighter-nickname').value = fighter.nickname || '';
+    document.getElementById('fighter-slug').value = fighter.slug || '';
+    document.getElementById('fighter-weight').value = fighter.weight || '';
+    document.getElementById('fighter-height').value = fighter.height || '';
+    document.getElementById('fighter-age').value = fighter.age || '';
+    document.getElementById('fighter-wins').value = fighter.wins || 0;
+    document.getElementById('fighter-losses').value = fighter.losses || 0;
+    document.getElementById('fighter-draws').value = fighter.draws || 0;
+    document.getElementById('fighter-bio').value = fighter.bio || '';
+    document.getElementById('fighter-image').value = fighter.image_url || '';
+    document.getElementById('fighter-status').value = fighter.status || 'active';
+    document.getElementById('fighterModal').style.display = 'flex';
+}
+
+function closeFighterModal() {
+    document.getElementById('fighterModal').style.display = 'none';
+    currentEditingFighter = null;
+}
+
+async function saveFighter(event) {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+    const fighterData = Object.fromEntries(formData.entries());
+
+    // Convert numbers
+    ['weight', 'height', 'age', 'wins', 'losses', 'draws'].forEach(field => {
+        if (fighterData[field]) fighterData[field] = parseInt(fighterData[field]);
+    });
+
+    const action = fighterData.id ? 'update_fighter' : 'create_fighter';
+
+    try {
+        const response = await fetch('', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({action, fighter: fighterData})
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            alert(fighterData.id ? 'Borac uspešno ažuriran!' : 'Borac uspešno dodat!');
+            closeFighterModal();
+            loadFighters();
+        } else {
+            alert('Greška: ' + result.error);
+        }
+    } catch (error) {
+        alert('Greška pri čuvanju borca: ' + error.message);
+    }
+}
+
+async function deleteFighter(fighterId) {
+    if (!confirm('Da li ste sigurni da želite da obrišete ovog borca?')) return;
+
+    try {
+        const response = await fetch('', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({action: 'delete_fighter', fighter_id: fighterId})
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            alert('Borac uspešno obrisan!');
+            loadFighters();
+        } else {
+            alert('Greška: ' + result.error);
+        }
+    } catch (error) {
+        alert('Greška pri brisanju borca: ' + error.message);
+    }
+}
+
+// ========== NEWS ==========
+async function loadContentNews() {
+    try {
+        const response = await fetch('?action=get_news');
+        const data = await response.json();
+
+        if (data.success) {
+            displayNews(data.news);
+        }
+    } catch (error) {
+        console.error('Error loading news:', error);
+    }
+}
+
+function displayNews(news) {
+    const tbody = document.getElementById('news-table');
+
+    if (news.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;">Nema vesti. Dodajte prvu vest!</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = news.map(article => `
+        <tr>
+            <td><strong>${article.title}</strong></td>
+            <td>${article.category || 'news'}</td>
+            <td>${new Date(article.published_at).toLocaleDateString('sr-RS')}</td>
+            <td><span class="badge ${article.status === 'published' ? 'badge-success' : 'badge-secondary'}">${article.status === 'published' ? 'Objavljeno' : 'Draft'}</span></td>
+            <td>
+                <button class="btn-icon" onclick='editNews(${JSON.stringify(article).replace(/'/g, "&apos;")})' title="Izmeni">✏️</button>
+                <button class="btn-icon" onclick="deleteNews('${article.id}')" title="Obriši">🗑️</button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+function openCreateNewsModal() {
+    currentEditingNews = null;
+    document.getElementById('news-modal-title').textContent = 'Dodaj Vest';
+    document.getElementById('newsForm').reset();
+    document.getElementById('news-id').value = '';
+    document.getElementById('newsModal').style.display = 'flex';
+}
+
+function editNews(article) {
+    currentEditingNews = article;
+    document.getElementById('news-modal-title').textContent = 'Izmeni Vest';
+    document.getElementById('news-id').value = article.id;
+    document.getElementById('news-title').value = article.title || '';
+    document.getElementById('news-slug').value = article.slug || '';
+    document.getElementById('news-excerpt').value = article.excerpt || '';
+    document.getElementById('news-content').value = article.content || '';
+    document.getElementById('news-category').value = article.category || 'news';
+    document.getElementById('news-image').value = article.image_url || '';
+    document.getElementById('news-status').value = article.status || 'published';
+
+    if (article.published_at) {
+        const date = new Date(article.published_at);
+        document.getElementById('news-published-at').value = date.toISOString().slice(0, 16);
+    }
+
+    document.getElementById('newsModal').style.display = 'flex';
+}
+
+function closeNewsModal() {
+    document.getElementById('newsModal').style.display = 'none';
+    currentEditingNews = null;
+}
+
+async function saveNews(event) {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+    const newsData = Object.fromEntries(formData.entries());
+
+    const action = newsData.id ? 'update_news' : 'create_news';
+
+    try {
+        const response = await fetch('', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({action, news: newsData})
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            alert(newsData.id ? 'Vest uspešno ažurirana!' : 'Vest uspešno dodata!');
+            closeNewsModal();
+            loadContentNews();
+        } else {
+            alert('Greška: ' + result.error);
+        }
+    } catch (error) {
+        alert('Greška pri čuvanju vesti: ' + error.message);
+    }
+}
+
+async function deleteNews(newsId) {
+    if (!confirm('Da li ste sigurni da želite da obrišete ovu vest?')) return;
+
+    try {
+        const response = await fetch('', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({action: 'delete_news', news_id: newsId})
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            alert('Vest uspešno obrisana!');
+            loadContentNews();
+        } else {
+            alert('Greška: ' + result.error);
+        }
+    } catch (error) {
+        alert('Greška pri brisanju vesti: ' + error.message);
+    }
+}
+
+// ========== WEBSITE EVENTS ==========
+async function loadWebsiteEvents() {
+    try {
+        const response = await fetch('?action=get_website_events');
+        const data = await response.json();
+
+        if (data.success) {
+            displayWebsiteEvents(data.events);
+        }
+    } catch (error) {
+        console.error('Error loading website events:', error);
+    }
+}
+
+function displayWebsiteEvents(events) {
+    const tbody = document.getElementById('website-events-table');
+
+    if (events.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;">Nema događaja. Dodajte prvi događaj!</td></tr>';
+        return;
+    }
+
+    const statusBadge = {
+        'upcoming': 'badge-info',
+        'live': 'badge-success',
+        'finished': 'badge-secondary',
+        'cancelled': 'badge-danger'
+    };
+
+    const statusText = {
+        'upcoming': 'Predstojeći',
+        'live': 'Uživo',
+        'finished': 'Završen',
+        'cancelled': 'Otkazan'
+    };
+
+    tbody.innerHTML = events.map(event => `
+        <tr>
+            <td><strong>${event.title}</strong></td>
+            <td>${new Date(event.date).toLocaleDateString('sr-RS')}</td>
+            <td>${event.location || '-'}</td>
+            <td><span class="badge ${statusBadge[event.status] || 'badge-secondary'}">${statusText[event.status] || event.status}</span></td>
+            <td>
+                <button class="btn-icon" onclick='editWebsiteEvent(${JSON.stringify(event).replace(/'/g, "&apos;")})' title="Izmeni">✏️</button>
+                <button class="btn-icon" onclick="deleteWebsiteEvent('${event.id}')" title="Obriši">🗑️</button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+function openCreateWebsiteEventModal() {
+    currentEditingWebsiteEvent = null;
+    document.getElementById('website-event-modal-title').textContent = 'Dodaj Događaj';
+    document.getElementById('websiteEventForm').reset();
+    document.getElementById('website-event-id').value = '';
+    document.getElementById('websiteEventModal').style.display = 'flex';
+}
+
+function editWebsiteEvent(event) {
+    currentEditingWebsiteEvent = event;
+    document.getElementById('website-event-modal-title').textContent = 'Izmeni Događaj';
+    document.getElementById('website-event-id').value = event.id;
+    document.getElementById('website-event-title').value = event.title || '';
+    document.getElementById('website-event-slug').value = event.slug || '';
+    document.getElementById('website-event-description').value = event.description || '';
+    document.getElementById('website-event-location').value = event.location || '';
+    document.getElementById('website-event-image').value = event.image_url || '';
+    document.getElementById('website-event-status').value = event.status || 'upcoming';
+
+    if (event.date) {
+        const date = new Date(event.date);
+        document.getElementById('website-event-date').value = date.toISOString().slice(0, 16);
+    }
+
+    document.getElementById('websiteEventModal').style.display = 'flex';
+}
+
+function closeWebsiteEventModal() {
+    document.getElementById('websiteEventModal').style.display = 'none';
+    currentEditingWebsiteEvent = null;
+}
+
+async function saveWebsiteEvent(event) {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+    const eventData = Object.fromEntries(formData.entries());
+
+    const action = eventData.id ? 'update_website_event' : 'create_website_event';
+
+    try {
+        const response = await fetch('', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({action, event: eventData})
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            alert(eventData.id ? 'Događaj uspešno ažuriran!' : 'Događaj uspešno dodat!');
+            closeWebsiteEventModal();
+            loadWebsiteEvents();
+        } else {
+            alert('Greška: ' + result.error);
+        }
+    } catch (error) {
+        alert('Greška pri čuvanju događaja: ' + error.message);
+    }
+}
+
+async function deleteWebsiteEvent(eventId) {
+    if (!confirm('Da li ste sigurni da želite da obrišete ovaj događaj?')) return;
+
+    try {
+        const response = await fetch('', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({action: 'delete_website_event', event_id: eventId})
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            alert('Događaj uspešno obrisan!');
+            loadWebsiteEvents();
+        } else {
+            alert('Greška: ' + result.error);
+        }
+    } catch (error) {
+        alert('Greška pri brisanju događaja: ' + error.message);
+    }
+}
+
+// Add badge styles if not present
+if (!document.querySelector('style#badge-styles')) {
+    const style = document.createElement('style');
+    style.id = 'badge-styles';
+    style.textContent = `
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+        .badge-success { background: #28a745; color: white; }
+        .badge-info { background: #17a2b8; color: white; }
+        .badge-secondary { background: #6c757d; color: white; }
+        .badge-danger { background: #dc3545; color: white; }
+        .btn-icon { background: none; border: none; cursor: pointer; font-size: 18px; padding: 5px; }
+        .btn-icon:hover { transform: scale(1.2); }
+    `;
+    document.head.appendChild(style);
+}
+
+// Update nav handler to load content management sections
+document.addEventListener('DOMContentLoaded', function() {
+    const originalNavHandler = window.handleNavClick;
+
+    window.handleNavClick = function(section) {
+        if (section === 'fighters') {
+            loadFighters();
+        } else if (section === 'content-news') {
+            loadContentNews();
+        } else if (section === 'website-events') {
+            loadWebsiteEvents();
+        }
+
+        if (originalNavHandler) {
+            originalNavHandler(section);
+        }
+    };
+});
+</script>

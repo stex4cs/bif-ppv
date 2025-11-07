@@ -1,0 +1,296 @@
+═══════════════════════════════════════════════════════════════
+              🚀 DEPLOYMENT FLOW DIAGRAM
+═══════════════════════════════════════════════════════════════
+
+OPCIJA 1: GITHUB AUTO-DEPLOY
+═══════════════════════════════════════════════════════════════
+
+  📝 1. EDIT LOKALNO
+       │
+       │  (Edit fajlove u c:\xampp\htdocs\bif-PPV)
+       │  (Test na localhost)
+       │
+       ▼
+
+  💾 2. GIT COMMIT & PUSH
+       │
+       │  git add .
+       │  git commit -m "Update"
+       │  git push origin main
+       │
+       ▼
+
+  🐙 3. GITHUB PRIMA PUSH
+       │
+       │  GitHub detektuje push na main branch
+       │  Triggeruje GitHub Actions workflow
+       │
+       ▼
+
+  ⚙️  4. GITHUB ACTIONS RADI
+       │
+       ├─► Setup PHP 8.2
+       ├─► Install Composer dependencies
+       ├─► Exclude sensitive files (env/.env)
+       └─► Deploy via FTP
+       │
+       │  Deploy time: ~3-5 minuta
+       │
+       ▼
+
+  🌐 5. HOSTINGER PRIMA FAJLOVE
+       │
+       │  FTP Transfer → /public_html/
+       │  .htaccess blokira env/ (403)
+       │  Apache reload
+       │
+       ▼
+
+  ✅ 6. LIVE NA PRODUCTION!
+       │
+       │  https://bif.events
+       │  env/.env ostao netaknut (nije upload-ovan)
+       │
+       ▼
+
+  ✉️  7. EMAIL NOTIFIKACIJA
+
+       GitHub šalje email:
+       ✅ Deploy successful ili
+       ❌ Deploy failed
+
+═══════════════════════════════════════════════════════════════
+
+OPCIJA 2: MANUAL FTP UPLOAD
+═══════════════════════════════════════════════════════════════
+
+  📝 1. EDIT LOKALNO
+       │
+       │  (Edit fajlove u c:\xampp\htdocs\bif-PPV)
+       │  (Test na localhost)
+       │
+       ▼
+
+  📋 2. PROVERI CHECKLIST
+       │
+       │  □ Proveri DO_NOT_UPLOAD.txt
+       │  □ Nemoj upload-ovati env/.env
+       │  □ Nemoj upload-ovati log fajlove
+       │  □ Nemoj upload-ovati test fajlove
+       │
+       ▼
+
+  📂 3. OTVORI FTP CLIENT
+       │
+       │  FileZilla ili WinSCP
+       │  Connect: srv962-files.hstgr.io
+       │
+       ▼
+
+  ⬆️  4. UPLOAD FAJLOVE
+       │
+       │  Drag & Drop fajlove
+       │  Upload time: ~1-2 minuta
+       │  ⚠️  PAZI: Ne upload-uj env/.env!
+       │
+       ▼
+
+  🌐 5. HOSTINGER PRIMA FAJLOVE
+       │
+       │  FTP Transfer → /public_html/
+       │  .htaccess blokira env/ (403)
+       │  Apache reload (možda treba manual)
+       │
+       ▼
+
+  ✅ 6. LIVE NA PRODUCTION!
+       │
+       │  https://bif.events
+       │
+       ▼
+
+  🧪 7. MANUAL TEST
+
+       Test u browseru:
+       ✅ Sajt radi
+       ✅ env/.env zaštićen (403)
+       ✅ Sve funkcionalnosti rade
+
+═══════════════════════════════════════════════════════════════
+
+FILE FLOW - ŠTA SE DEPLOY-UJE?
+═══════════════════════════════════════════════════════════════
+
+LOKALNO (c:\xampp\htdocs\bif-PPV):
+┌────────────────────────────────────┐
+│ ✅ admin/                          │
+│ ✅ api/                            │
+│ ✅ assets/                         │
+│ ✅ borci/                          │
+│ ✅ css/                            │
+│ ✅ data/ (JSON fajlovi)            │
+│ ❌ data/*.log (blokirano)          │
+│ ✅ includes/                       │
+│ ✅ js/                             │
+│ ✅ vesti/                          │
+│ ✅ .htaccess                       │
+│ ✅ index.php                       │
+│ ✅ watch.php                       │
+│ ✅ composer.json                   │
+│ ❌ env/.env (NIKAD!)               │
+│ ❌ *.log (blokirano)               │
+│ ❌ test-*.php (blokirano)          │
+│ ❌ *.md (dokumentacija)            │
+└────────────────────────────────────┘
+          │
+          │ GitHub Auto-Deploy
+          │    ili
+          │ Manual FTP Upload
+          │
+          ▼
+PRODUCTION (srv962-files.hstgr.io):
+┌────────────────────────────────────┐
+│ ✅ /public_html/admin/             │
+│ ✅ /public_html/api/               │
+│ ✅ /public_html/assets/            │
+│ ✅ /public_html/borci/             │
+│ ✅ /public_html/css/               │
+│ ✅ /public_html/data/              │
+│ ✅ /public_html/includes/          │
+│ ✅ /public_html/js/                │
+│ ✅ /public_html/vesti/             │
+│ ✅ /public_html/.htaccess          │
+│ ✅ /public_html/index.php          │
+│ ✅ /public_html/watch.php          │
+│ ✅ /public_html/env/.env ⚠️        │
+│    (kreiran MANUAL na serveru!)   │
+└────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════
+
+SECURITY FLOW - env/.env ZAŠTITA
+═══════════════════════════════════════════════════════════════
+
+ZAŠTITA LAYER 1: .gitignore
+┌─────────────────────────────┐
+│ env/.env je u .gitignore    │
+│ → GitHub ne vidi fajl       │
+│ → Auto-deploy ne šalje      │
+└─────────────────────────────┘
+              │
+              ▼
+ZAŠTITA LAYER 2: GitHub Actions Exclude
+┌─────────────────────────────┐
+│ deploy.yml exclude list     │
+│ → **/env/.env ignored       │
+│ → FTP ne upload-uje         │
+└─────────────────────────────┘
+              │
+              ▼
+ZAŠTITA LAYER 3: .htaccess
+┌─────────────────────────────┐
+│ RedirectMatch 403 env/      │
+│ → Browser dobija 403        │
+│ → File nije pristupačan     │
+└─────────────────────────────┘
+              │
+              ▼
+ZAŠTITA LAYER 4: File Permissions
+┌─────────────────────────────┐
+│ chmod 600 env/.env          │
+│ → Samo owner može čitati    │
+│ → Apache može, user ne      │
+└─────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════
+
+ROLLBACK FLOW - AKO NEŠTO NE RADI
+═══════════════════════════════════════════════════════════════
+
+GITHUB AUTO-DEPLOY:
+┌─────────────────────────────┐
+│ 1. git log                  │
+│    (nađi prethodni commit)  │
+│                             │
+│ 2. git revert <hash>        │
+│    (rollback izmena)        │
+│                             │
+│ 3. git push origin main     │
+│    (auto-deploy old code)   │
+│                             │
+│ Time: ~5 minuta             │
+└─────────────────────────────┘
+
+MANUAL FTP:
+┌─────────────────────────────┐
+│ 1. Nađi backup fajl         │
+│    (lokalni ili tar.gz)     │
+│                             │
+│ 2. FTP upload old version   │
+│    (manual drag & drop)     │
+│                             │
+│ Time: ~5-10 minuta          │
+└─────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════
+
+TIMELINE COMPARISON
+═══════════════════════════════════════════════════════════════
+
+GITHUB AUTO-DEPLOY:
+0:00 → git push origin main
+0:30 → GitHub Actions start
+1:00 → PHP setup
+1:30 → Composer install
+2:30 → FTP upload starts
+4:30 → FTP upload done
+5:00 → ✅ LIVE on production
+5:01 → Email notification
+
+Total: ~5 minuta (hands-off)
+
+MANUAL FTP:
+0:00 → Open FileZilla
+0:30 → Select files to upload
+1:00 → FTP upload starts
+2:00 → FTP upload done
+2:30 → Test in browser
+3:00 → ✅ LIVE on production
+
+Total: ~3 minuta (hands-on)
+
+═══════════════════════════════════════════════════════════════
+
+WHICH ONE IS FASTER?
+═══════════════════════════════════════════════════════════════
+
+FIRST TIME DEPLOY:
+Manual FTP: ~3 min
+GitHub: ~10 min (initial setup)
+
+SECOND DEPLOY ONWARDS:
+Manual FTP: ~3 min (svaki put!)
+GitHub: ~5 min (automatski)
+
+AFTER 10 DEPLOYS:
+Manual FTP: 3 min × 10 = 30 min
+GitHub: 5 min × 10 = 50 min (ali automatski!)
+
+REAL COST:
+Manual FTP: 30 min YOUR time
+GitHub: 0 min YOUR time (radi dok radiš druge stvari)
+
+═══════════════════════════════════════════════════════════════
+
+🎯 PREPORUKA:
+
+Koristi GitHub Auto-Deploy! ✨
+
+Razlog:
+- 0 minuta tvog vremena po deploy-u
+- Version control
+- Deploy history
+- Rollback u par klikova
+- Ne moraš brinuti o env/.env
+
+═══════════════════════════════════════════════════════════════

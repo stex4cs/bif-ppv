@@ -1,0 +1,60 @@
+name: Deploy to Staging (Optional)
+
+on:
+  push:
+    branches:
+      - dev  # Deploy dev branch na staging
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  deploy-staging:
+    name: Deploy to Staging Environment
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mysqli, curl, mbstring, openssl
+
+      - name: Install Composer dependencies
+        run: |
+          composer install --no-dev --optimize-autoloader --no-interaction
+
+      - name: Deploy to Staging via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: 21
+          protocol: ftp
+          server-dir: /public_html/staging/  # Staging folder
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.github/**
+            **/node_modules/**
+            **/vendor/**
+            **/.env
+            **/.env.*
+            **/env/.env
+            **/env/.env.*
+            **/data/*.log
+            **/*.md
+            **/test-*.php
+            **/debug_*.php
+            **/tools/**
+            **/temp_*.html
+            **/nul
+            **/.DS_Store
+            **/Thumbs.db
+
+      - name: Notify completion
+        run: |
+          echo "✅ Staging deploy completed!"
+          echo "🌐 Check: https://staging.bif.events"

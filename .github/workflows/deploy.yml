@@ -1,0 +1,64 @@
+name: Deploy to Hostinger
+
+on:
+  push:
+    branches:
+      - main  # Deploy kada push-uješ na main branch
+  workflow_dispatch:  # Omogućava manual deploy iz GitHub UI
+
+jobs:
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mysqli, curl, mbstring, openssl
+
+      - name: Install Composer dependencies
+        run: |
+          composer install --no-dev --optimize-autoloader --no-interaction
+
+      - name: Deploy to Hostinger via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: 21
+          protocol: ftp
+          server-dir: /public_html/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.github/**
+            **/node_modules/**
+            **/vendor/**
+            **/.env
+            **/.env.*
+            **/env/.env
+            **/env/.env.*
+            **/data/*.log
+            **/data/php_errors.log
+            **/data/security.log
+            **/*.md
+            **/test-*.php
+            **/debug_*.php
+            **/tools/**
+            **/temp_*.html
+            **/nul
+            **/.DS_Store
+            **/Thumbs.db
+            **/PRODUCTION_DEPLOYMENT.md
+            **/DEPLOYMENT_SIMPLE.md
+            **/DO_NOT_UPLOAD.txt
+            **/UPLOAD_CHECKLIST.txt
+            **/CSP_FIX_README.md
+            **/SECURITY_*.md
+            **/TESTING_GUIDE.md

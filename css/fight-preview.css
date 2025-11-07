@@ -1,0 +1,841 @@
+/* ===== fight-preview.css - Fight Preview Page Styles ===== */
+
+/* ===== FIGHT PREVIEW PAGE BASE ===== */
+.fight-preview-page-body {
+  background: var(--light-bg-primary);
+  color: var(--light-text-primary);
+  padding-top: var(--header-height);
+  min-height: 100vh;
+}
+
+[data-theme="dark"] .fight-preview-page-body {
+  background: var(--dark-bg-primary);
+  color: var(--dark-text-primary);
+}
+
+@media (max-width: 768px) {
+  .fight-preview-page-body {
+    padding-top: var(--header-height-mobile);
+  }
+}
+
+/* ===== FIGHT PREVIEW HEADER SECTION ===== */
+.fight-preview-header-section {
+  background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
+  padding: var(--space-xl) 0;
+  border-bottom: 3px solid var(--primary-red);
+  color: var(--true-white);
+  position: relative;
+  overflow: hidden;
+}
+
+[data-theme="dark"] .fight-preview-header-section {
+  background: linear-gradient(135deg, #111111 0%, #0a0a0a 100%);
+}
+
+.fight-preview-header-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="fight-pattern" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="15" cy="15" r="1" fill="%23ffffff" opacity="0.03"/></pattern></defs><rect width="100%" height="100%" fill="url(%23fight-pattern)"/></svg>');
+}
+
+.fight-header-content {
+  position: relative;
+  z-index: 2;
+}
+
+.fight-title-banner {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+}
+
+.fight-title-banner h1 {
+  color: var(--primary-red);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin-bottom: var(--space-sm);
+  font-family: var(--font-heading);
+}
+
+.fight-title-banner h2 {
+  color: var(--true-white);
+  font-size: clamp(var(--text-2xl), 4vw, var(--text-4xl));
+  font-weight: 700;
+  margin-bottom: var(--space-md);
+}
+
+.fight-matchup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2xl);
+  margin-bottom: var(--space-xl);
+  flex-wrap: wrap;
+}
+
+.fighter-info-preview {
+  text-align: center;
+  flex: 1;
+  min-width: 200px;
+}
+
+.fighter-info-preview h2 {
+  font-size: clamp(var(--text-xl), 3vw, var(--text-3xl));
+  color: var(--true-white);
+  margin-bottom: var(--space-sm);
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+[data-theme="dark"] .fighter-info-preview h2 {
+  color: var(--dark-text-primary);
+}
+
+.fighter-country {
+  color: var(--light-text-muted);
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+}
+
+[data-theme="dark"] .fighter-country {
+  color: var(--dark-text-muted);
+}
+
+.versus {
+  font-size: var(--text-4xl);
+  font-weight: 900;
+  color: var(--light-text-muted);
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .versus {
+  color: var(--dark-text-muted);
+}
+
+.fight-details-bar {
+  background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-lg);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+  color: var(--light-bg-tertiary);
+  margin: 0 auto;
+  max-width: 800px;
+  box-shadow: var(--shadow-inner);
+}
+
+[data-theme="dark"] .fight-details-bar {
+  background: linear-gradient(135deg, #0a0a0a 0%, var(--true-black) 100%);
+  color: var(--dark-text-secondary);
+}
+
+.detail-item {
+  flex: 1;
+  padding: var(--space-sm);
+}
+
+.detail-item .label {
+  font-size: var(--text-xs);
+  color: var(--light-text-muted);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--space-xs);
+}
+
+[data-theme="dark"] .detail-item .label {
+  color: var(--dark-text-muted);
+}
+
+.detail-item .value {
+  font-size: var(--text-lg);
+  color: var(--true-white);
+  font-weight: 700;
+  font-family: var(--font-heading);
+}
+
+[data-theme="dark"] .detail-item .value {
+  color: var(--dark-text-primary);
+}
+
+@media (max-width: 768px) {
+  .fight-matchup {
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+  
+  .versus {
+    order: -1;
+    font-size: var(--text-2xl);
+  }
+  
+  .fight-details-bar {
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+  
+  .detail-item {
+    min-width: 120px;
+  }
+}
+
+/* ===== FIGHT STATS SECTION ===== */
+.fight-stats-section {
+  background: var(--light-bg-primary);
+  padding: var(--space-3xl) 0;
+  min-height: 70vh;
+}
+
+[data-theme="dark"] .fight-stats-section {
+  background: var(--dark-bg-primary);
+}
+
+.fight-stats-section .section-title {
+  color: var(--primary-red);
+  margin-bottom: var(--space-2xl);
+}
+
+/* ===== ROUND TABS NAVIGATION ===== */
+.round-tabs-nav {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--space-2xl);
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  padding: 0 var(--space-md);
+}
+
+.round-tab {
+  background: var(--light-bg-tertiary);
+  color: var(--light-text-secondary);
+  border: none;
+  padding: var(--space-md) var(--space-lg);
+  font-family: var(--font-heading);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: var(--transition-all);
+  border-radius: var(--radius-md);
+  border-bottom: 3px solid transparent;
+  position: relative;
+  min-width: 100px;
+}
+
+[data-theme="dark"] .round-tab {
+  background: #222222;
+  color: var(--dark-text-secondary);
+}
+
+.round-tab:hover {
+  background: var(--light-border);
+  color: var(--light-text-primary);
+  transform: translateY(-2px);
+}
+
+[data-theme="dark"] .round-tab:hover {
+  background: #333333;
+  color: var(--dark-text-primary);
+}
+
+.round-tab.active {
+  background: var(--primary-red);
+  color: var(--true-white);
+  border-bottom-color: var(--accent-gold);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.round-tab.active::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid var(--accent-gold);
+}
+
+/* ===== STATS COMPARISON AREA - DESKTOP ===== */
+.stats-comparison-area {
+  background: var(--light-card-bg);
+  padding: var(--space-2xl);
+  border-radius: var(--radius-2xl);
+  min-height: 600px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--space-xl);
+  color: var(--light-text-primary);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--light-border);
+  position: relative;
+  overflow: hidden;
+}
+
+[data-theme="dark"] .stats-comparison-area {
+  background: #0d0d0d;
+  color: var(--dark-text-primary);
+  border-color: var(--dark-border);
+}
+
+.stats-comparison-area::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="stats-grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="%23e5e5e5" stroke-width="0.5" opacity="0.3"/></pattern></defs><rect width="100%" height="100%" fill="url(%23stats-grid)"/></svg>');
+  pointer-events: none;
+}
+
+[data-theme="dark"] .stats-comparison-area::before {
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="stats-grid-dark" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="%23333333" stroke-width="0.5" opacity="0.3"/></pattern></defs><rect width="100%" height="100%" fill="url(%23stats-grid-dark)"/></svg>');
+}
+
+/* ===== FIGHTER SILHOUETTES - DESKTOP (BEZ KVADRATA) ===== */
+.fighter-silhouette {
+  flex-shrink: 0;
+  width: 200px;
+  height: 400px;
+  background: none;
+  border: none;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-6xl);
+  color: var(--light-text-muted);
+  position: relative;
+  transition: var(--transition-all);
+  box-shadow: none;
+}
+
+[data-theme="dark"] .fighter-silhouette {
+  background: none;
+  border: none;
+  color: var(--dark-text-muted);
+  box-shadow: none;
+}
+
+.fighter-silhouette:hover {
+  transform: scale(1.05);
+  box-shadow: none;
+}
+
+.fighter-silhouette.left,
+.fighter-silhouette.right {
+  background: none;
+  border: none;
+}
+
+[data-theme="dark"] .fighter-silhouette.left,
+[data-theme="dark"] .fighter-silhouette.right {
+  background: none;
+  border: none;
+}
+
+.champion-banner-preview {
+  position: absolute;
+  bottom: var(--space-md);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent-gold);
+  color: var(--true-black);
+  padding: var(--space-sm) var(--space-lg);
+  font-family: var(--font-heading);
+  font-weight: 800;
+  text-transform: uppercase;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  box-shadow: var(--shadow-md);
+  animation: badgePulse 2s infinite;
+}
+
+/* Stats Bars Container */
+.stats-bars-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  position: relative;
+  z-index: 2;
+}
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .stat-row {
+  background: rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.stat-label {
+  font-weight: 600;
+  color: var(--light-text-secondary);
+  text-transform: uppercase;
+  font-size: var(--text-sm);
+  min-width: 120px;
+  text-align: center;
+  font-family: var(--font-heading);
+  letter-spacing: 0.5px;
+}
+
+[data-theme="dark"] .stat-label {
+  color: var(--dark-text-secondary);
+}
+
+.stat-value {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-weight: 700;
+  font-size: var(--text-sm);
+  min-width: 80px;
+}
+
+.stat-value.left {
+  color: var(--fighter1-color);
+  justify-content: flex-end;
+}
+
+.stat-value.right {
+  color: var(--fighter2-color);
+  justify-content: flex-start;
+}
+
+.stat-value .total {
+  color: var(--light-text-muted);
+  font-weight: 500;
+  font-size: var(--text-xs);
+}
+
+[data-theme="dark"] .stat-value .total {
+  color: var(--dark-text-muted);
+}
+
+/* Progress Bars */
+.progress-bar-container {
+  flex: 1;
+  height: 20px;
+  background: var(--light-bg-tertiary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  position: relative;
+  border: 1px solid var(--light-border);
+}
+
+[data-theme="dark"] .progress-bar-container {
+  background: #333333;
+  border-color: var(--dark-border);
+}
+
+.progress-bar-dual {
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
+
+.progress-bar.left {
+  background: linear-gradient(90deg, var(--fighter1-color), rgba(196, 30, 58, 0.8));
+  border-radius: var(--radius-full) 0 0 var(--radius-full);
+  transition: width 1s ease-out;
+}
+
+.progress-bar.right {
+  background: linear-gradient(270deg, var(--fighter2-color), rgba(0, 123, 255, 0.8));
+  border-radius: 0 var(--radius-full) var(--radius-full) 0;
+  transition: width 1s ease-out;
+}
+
+/* Percentage Display */
+.percentage-display {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--true-white);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  z-index: 3;
+}
+
+/* Special Stats (Knockdowns, Submissions) */
+.stat-special {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  background: linear-gradient(90deg, rgba(196, 30, 58, 0.1), rgba(0, 123, 255, 0.1));
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .stat-special {
+  background: linear-gradient(90deg, rgba(229, 51, 84, 0.15), rgba(0, 123, 255, 0.15));
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.stat-special .value {
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  font-family: var(--font-heading);
+}
+
+.stat-special .value.left {
+  color: var(--fighter1-color);
+}
+
+.stat-special .value.right {
+  color: var(--fighter2-color);
+}
+
+/* ===== MOBILNI RESPONSIVE DESIGN ===== */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .stats-comparison-area {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg);
+    min-height: auto;
+    padding: var(--space-xl);
+  }
+  
+  .fighter-silhouette {
+    width: 150px;
+    height: 280px;
+    font-size: var(--text-4xl);
+  }
+  
+  .stats-bars-container {
+    width: 100%;
+    order: -1;
+  }
+}
+
+
+  
+
+
+/* ===== MOBILNI LAYOUT - KOMPLETNO NOVO ===== */
+@media (max-width: 768px) {
+  .fight-stats-section {
+    padding: var(--space-lg) 0;
+  }
+  
+  /* Round tabs navigacija */
+  .round-tabs-nav {
+    gap: var(--space-xs);
+    padding: 0 var(--space-sm);
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .round-tabs-nav::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .round-tab {
+    padding: var(--space-sm) var(--space-md);
+    font-size: var(--text-xs);
+    min-width: 70px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    min-height: 44px;
+  }
+  
+  /* MOBILNI STATS AREA - HORIZONTALNI LAYOUT */
+  .stats-comparison-area {
+    padding: var(--space-lg);
+    background: rgba(0, 0, 0, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-xl);
+    /* HORIZONTALNI layout - borci jedan pored drugog */
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: var(--space-md);
+    min-height: auto;
+  }
+  
+  [data-theme="dark"] .stats-comparison-area {
+    background: rgba(0, 0, 0, 0.9);
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+  
+  /* Levi borac */
+  .fighter-silhouette:first-child {
+    order: 1;
+    width: 80px;
+    height: 120px;
+    font-size: var(--text-xl);
+    flex-shrink: 0;
+  }
+  
+  /* Stats container u sredini */
+  .stats-bars-container {
+    order: 2;
+    flex: 1;
+    gap: var(--space-md);
+  }
+  
+  /* Desni borac */
+  .fighter-silhouette:last-child {
+    order: 3;
+    width: 80px;
+    height: 120px;
+    font-size: var(--text-xl);
+    flex-shrink: 0;
+  }
+  
+  /* Stats redovi - novi dizajn */
+  .stat-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+  
+  [data-theme="dark"] .stat-row {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Layout: Leva vrednost | Progress bar + Label | Desna vrednost */
+  .stat-value.left {
+    order: 1;
+    color: var(--primary-red);
+    font-size: var(--text-base);
+    font-weight: 800;
+    min-width: 40px;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .stat-center {
+    order: 2;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    align-items: center;
+  }
+  
+  .stat-label {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--true-white);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0;
+    min-width: auto;
+  }
+  
+  .progress-bar-container {
+    width: 100%;
+    height: 14px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-full);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+  }
+  
+  .stat-value.right {
+    order: 3;
+    color: var(--fighter2-color);
+    font-size: var(--text-base);
+    font-weight: 800;
+    min-width: 40px;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  /* Progress bars - jasniji za mobilni */
+  .progress-bar.left {
+    background: linear-gradient(90deg, var(--primary-red), rgba(196, 30, 58, 0.9));
+  }
+  
+  .progress-bar.right {
+    background: linear-gradient(270deg, var(--fighter2-color), rgba(0, 123, 255, 0.9));
+  }
+  
+  /* Percentage display */
+  .percentage-display {
+    font-size: 10px;
+    font-weight: 800;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  }
+  
+  /* Champion badge */
+  .champion-banner-preview {
+    bottom: var(--space-sm);
+    padding: var(--space-xs) var(--space-md);
+    font-size: var(--text-xs);
+    font-weight: 800;
+  }
+}
+
+/* MALI MOBILNI */
+@media (max-width: 480px) {
+  .stats-comparison-area {
+    padding: var(--space-md);
+    gap: var(--space-sm);
+  }
+  
+  .fighter-silhouette:first-child,
+  .fighter-silhouette:last-child {
+    width: 70px;
+    height: 100px;
+    font-size: var(--text-lg);
+  }
+  
+  .stat-row {
+    padding: var(--space-sm);
+  }
+  
+  .stat-value.left,
+  .stat-value.right {
+    font-size: var(--text-sm);
+    min-width: 35px;
+  }
+  
+  .stat-label {
+    font-size: 11px;
+  }
+  
+  .progress-bar-container {
+    height: 12px;
+  }
+  
+  .percentage-display {
+    font-size: 9px;
+  }
+}
+
+/* VRLO MALI EKRANI */
+@media (max-width: 360px) {
+  .stats-comparison-area {
+    padding: var(--space-sm);
+    gap: var(--space-xs);
+  }
+  
+  .fighter-silhouette:first-child,
+  .fighter-silhouette:last-child {
+    width: 60px;
+    height: 80px;
+    font-size: var(--text-base);
+  }
+  
+  .stat-value.left,
+  .stat-value.right {
+    font-size: 12px;
+    min-width: 30px;
+  }
+  
+  .stat-label {
+    font-size: 10px;
+  }
+  
+  .progress-bar-container {
+    height: 10px;
+  }
+  
+  .percentage-display {
+    font-size: 8px;
+  }
+}
+
+/* ===== FIGHTERS SECTION ON PREVIEW PAGE ===== */
+.fight-preview-page-body .fighters-section {
+  background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
+  color: var(--true-white);
+  padding: var(--space-2xl) 0;
+}
+
+[data-theme="dark"] .fight-preview-page-body .fighters-section {
+  background: linear-gradient(135deg, #111111 0%, #0a0a0a 100%);
+}
+
+.fight-preview-page-body .fighters-section .section-title {
+  color: var(--primary-red);
+}
+
+.fight-preview-page-body .fighters-section .fighter-card {
+  background: var(--light-text-secondary);
+  border-color: var(--light-text-muted);
+  min-width: 280px;
+}
+
+[data-theme="dark"] .fight-preview-page-body .fighters-section .fighter-card {
+  background: var(--dark-card-bg);
+  border-color: var(--dark-border);
+}
+
+.fight-preview-page-body .fighters-section .fighter-card .fighter-name {
+  color: var(--true-white);
+  font-size: var(--text-lg);
+}
+
+[data-theme="dark"] .fight-preview-page-body .fighters-section .fighter-card .fighter-name {
+  color: var(--dark-text-primary);
+}
+
+.fight-preview-page-body .fighters-section .fighter-card .fighter-nickname {
+  color: var(--primary-red);
+  font-size: var(--text-sm);
+}
+
+.fight-preview-page-body .fighters-section .fighter-card .fighter-category {
+  color: var(--light-bg-tertiary);
+}
+
+[data-theme="dark"] .fight-preview-page-body .fighters-section .fighter-card .fighter-category {
+  color: var(--dark-text-secondary);
+}
+
+.fight-preview-page-body .fighters-section .fighter-info {
+  padding: var(--space-lg);
+  background: linear-gradient(180deg, var(--light-text-secondary) 0%, var(--light-text-muted) 100%);
+}
+
+[data-theme="dark"] .fight-preview-page-body .fighters-section .fighter-info {
+  background: linear-gradient(180deg, var(--dark-card-bg) 0%, var(--dark-bg-secondary) 100%);
+}

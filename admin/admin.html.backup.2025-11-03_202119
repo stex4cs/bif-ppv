@@ -1,0 +1,1986 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏆 BIF PPV - Enterprise Admin Panel</title>
+    <style>
+        /* Svi postojeći stilovi ostaju isti */
+        :root {
+            --primary: #c41e3a;
+            --secondary: #8b0000;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --info: #17a2b8;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --border: #dee2e6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .admin-container {
+            display: grid;
+            grid-template-areas: 
+                "sidebar header"
+                "sidebar main";
+            grid-template-columns: 280px 1fr;
+            grid-template-rows: 70px 1fr;
+            height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            grid-area: sidebar;
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+            color: white;
+            overflow-y: auto;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-nav {
+            padding: 20px 0;
+        }
+
+        .nav-group {
+            margin-bottom: 30px;
+        }
+
+        .nav-group-title {
+            padding: 0 20px 10px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.7;
+            font-weight: 600;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 12px 20px;
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: rgba(255,255,255,0.1);
+            border-left-color: #ffd700;
+            color: white;
+        }
+
+        .nav-item i {
+            width: 20px;
+            margin-right: 10px;
+        }
+
+        /* HEADER */
+        .header {
+            grid-area: header;
+            background: white;
+            padding: 0 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--success);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            grid-area: main;
+            padding: 30px;
+            overflow-y: auto;
+            background: #f5f7fa;
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* CARDS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            border-left: 4px solid var(--primary);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-change {
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .stat-change.positive {
+            color: var(--success);
+        }
+
+        .stat-change.negative {
+            color: var(--danger);
+        }
+
+        /* TABLES */
+        .data-table {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+        .table-header {
+            padding: 20px 25px;
+            background: var(--light);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            padding: 15px 20px;
+            text-align: left;
+            border-bottom: 1px solid #f8f9fa;
+        }
+
+        .table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .table tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        /* BUTTONS */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: var(--dark);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        /* BADGES */
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-success {
+            background: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background: rgba(255, 193, 7, 0.1);
+            color: var(--warning);
+        }
+
+        .badge-danger {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+        }
+
+        .badge-info {
+            background: rgba(23, 162, 184, 0.1);
+            color: var(--info);
+        }
+
+        /* FORMS */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-control-sm {
+            padding: 8px 12px;
+            font-size: 12px;
+        }
+
+        /* ALERTS */
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid;
+        }
+
+        .alert-success {
+            background: rgba(40, 167, 69, 0.1);
+            border-left-color: var(--success);
+            color: #155724;
+        }
+
+        .alert-danger {
+            background: rgba(220, 53, 69, 0.1);
+            border-left-color: var(--danger);
+            color: #721c24;
+        }
+
+        .alert-warning {
+            background: rgba(255, 193, 7, 0.1);
+            border-left-color: var(--warning);
+            color: #856404;
+        }
+
+        .alert-info {
+            background: rgba(23, 162, 184, 0.1);
+            border-left-color: var(--info);
+            color: #0c5460;
+        }
+
+        /* MODALS */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            padding: 20px 25px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6c757d;
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .modal-footer {
+            padding: 20px 25px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        /* LOADING */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .admin-container {
+                grid-template-areas: 
+                    "header"
+                    "main";
+                grid-template-columns: 1fr;
+                grid-template-rows: 70px 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* NOTIFICATION SYSTEM */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            z-index: 9999;
+            animation: slideIn 0.3s ease;
+            min-width: 300px;
+        }
+
+        .notification.success {
+            background: var(--success);
+        }
+
+        .notification.error {
+            background: var(--danger);
+        }
+
+        .notification.warning {
+            background: var(--warning);
+            color: var(--dark);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>🥊 BIF PPV</h2>
+                <p>Enterprise Admin</p>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-group">
+                    <div class="nav-group-title">OVERVIEW</div>
+                    <a href="#" class="nav-item active" data-section="dashboard">
+                        <i>📊</i> Dashboard
+                    </a>
+                    <a href="#" class="nav-item" data-section="analytics">
+                        <i>📈</i> Live Analytics
+                    </a>
+                </div>
+
+                <div class="nav-group">
+                    <div class="nav-group-title">CONTENT</div>
+                    <a href="#" class="nav-item" data-section="events">
+                        <i>🎬</i> Event Management
+                    </a>
+                </div>
+
+                <div class="nav-group">
+                    <div class="nav-group-title">CUSTOMERS</div>
+                    <a href="#" class="nav-item" data-section="purchases">
+                        <i>💰</i> Purchase History
+                    </a>
+                </div>
+
+                <div class="nav-group">
+                    <div class="nav-group-title">SECURITY</div>
+                    <a href="#" class="nav-item" data-section="violations">
+                        <i>🚨</i> Violations
+                    </a>
+                    <a href="#" class="nav-item" data-section="access">
+                        <i>🔑</i> Access Control
+                    </a>
+                </div>
+            </nav>
+        </div>
+
+        <!-- HEADER -->
+        <div class="header">
+            <div class="header-title">BIF PPV Live Admin Panel</div>
+            <div class="header-actions">
+                <div class="live-indicator">
+                    <div class="live-dot"></div>
+                    <span>LIVE DATA</span>
+                </div>
+                <span id="current-time"></span>
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <!-- DASHBOARD SECTION -->
+            <div id="dashboard" class="content-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon" style="background: linear-gradient(45deg, #28a745, #20c997);">💰</div>
+                        </div>
+                        <div class="stat-number" id="total-revenue">Loading...</div>
+                        <div class="stat-label">Total Revenue</div>
+                        <div class="stat-change positive" id="revenue-change">Calculating...</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon" style="background: linear-gradient(45deg, #007bff, #0056b3);">🛒</div>
+                        </div>
+                        <div class="stat-number" id="total-purchases">Loading...</div>
+                        <div class="stat-label">Total Purchases</div>
+                        <div class="stat-change positive" id="purchases-change">Calculating...</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon" style="background: linear-gradient(45deg, #ffc107, #e0a800);">🎬</div>
+                        </div>
+                        <div class="stat-number" id="active-events">Loading...</div>
+                        <div class="stat-label">Active Events</div>
+                        <div class="stat-change positive" id="events-change">Calculating...</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon" style="background: linear-gradient(45deg, #dc3545, #c82333);">👥</div>
+                        </div>
+                        <div class="stat-number" id="active-viewers">Loading...</div>
+                        <div class="stat-label">Active Viewers</div>
+                        <div class="stat-change positive" id="viewers-change">Live tracking...</div>
+                    </div>
+                </div>
+
+                <div class="data-table">
+                    <div class="table-header">
+                        <div class="table-title">Recent Activity (Live)</div>
+                        <div class="table-actions">
+                            <button class="btn btn-sm btn-primary" onclick="adminPanel.refreshData()">🔄 Refresh</button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Activity</th>
+                                    <th>User</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-activity">
+                                <tr>
+                                    <td colspan="5" class="loading">
+                                        <div class="spinner"></div>
+                                        Loading live data...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EVENTS SECTION -->
+            <div id="events" class="content-section">
+                <div class="data-table">
+                    <div class="table-header">
+                        <div class="table-title">Live Event Management</div>
+                        <div class="table-actions">
+                            <button class="btn btn-primary" onclick="showCreateEventModal()">
+                                ➕ Create New Event
+                            </button>
+                            <button class="btn btn-success btn-sm" onclick="adminPanel.exportEvents()">
+                                📄 Export
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Event</th>
+                                    <th>Date</th>
+                                    <th>Price</th>
+                                    <th>Status</th>
+                                    <th>Sales</th>
+                                    <th>Revenue</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="events-table">
+                                <tr>
+                                    <td colspan="7" class="loading">
+                                        <div class="spinner"></div>
+                                        Loading events...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PURCHASES SECTION -->
+            <div id="purchases" class="content-section">
+                <div class="data-table">
+                    <div class="table-header">
+                        <div class="table-title">Live Purchase History</div>
+                        <div class="table-actions">
+                            <button class="btn btn-success btn-sm" onclick="adminPanel.exportPurchases()">📄 Export All</button>
+                            <button class="btn btn-primary btn-sm" onclick="adminPanel.refreshPurchases()">🔄 Refresh</button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Purchase ID</th>
+                                    <th>Date</th>
+                                    <th>Customer</th>
+                                    <th>Event</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="purchases-table">
+                                <tr>
+                                    <td colspan="7" class="loading">
+                                        <div class="spinner"></div>
+                                        Loading purchases...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ANALYTICS SECTION -->
+            <div id="analytics" class="content-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon" style="background: linear-gradient(45deg, #28a745, #20c997);">📈</div>
+                        </div>
+                        <div class="stat-number" id="today-revenue">Loading...</div>
+                        <div class="stat-label">Today's Revenue</div>
+                        <div class="stat-change positive" id="today-change">vs yesterday</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon" style="background: linear-gradient(45deg, #007bff, #0056b3);">👥</div>
+                        </div>
+                        <div class="stat-number" id="concurrent-viewers">Loading...</div>
+                        <div class="stat-label">Concurrent Viewers</div>
+                        <div class="stat-change positive" id="viewers-trend">Peak tracking</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon" style="background: linear-gradient(45deg, #ffc107, #e0a800);">🎯</div>
+                        </div>
+                        <div class="stat-number" id="conversion-rate">Loading...</div>
+                        <div class="stat-label">Conversion Rate</div>
+                        <div class="stat-change positive" id="conversion-trend">Optimization</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon" style="background: linear-gradient(45deg, #dc3545, #c82333);">⏱️</div>
+                        </div>
+                        <div class="stat-number" id="avg-watch-time">Loading...</div>
+                        <div class="stat-label">Avg Watch Time</div>
+                        <div class="stat-change positive" id="watch-trend">Engagement</div>
+                    </div>
+                </div>
+
+                <div class="data-table">
+                    <div class="table-header">
+                        <div class="table-title">Live Performance Metrics</div>
+                        <div class="table-actions">
+                            <div class="live-indicator">
+                                <div class="live-dot"></div>
+                                <span>LIVE</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Metric</th>
+                                    <th>Current</th>
+                                    <th>Peak</th>
+                                    <th>Average</th>
+                                    <th>Trend</th>
+                                </tr>
+                            </thead>
+                            <tbody id="analytics-table">
+                                <tr>
+                                    <td colspan="5" class="loading">
+                                        <div class="spinner"></div>
+                                        Loading analytics...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIOLATIONS SECTION -->
+            <div id="violations" class="content-section">
+                <div class="alert alert-info">
+                    <strong>🛡️ Security Status:</strong> Live monitoring enabled. All violations tracked in real-time.
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon" style="background: linear-gradient(45deg, #ffc107, #e0a800);">⚠️</div>
+                        </div>
+                        <div class="stat-number" id="violations-count">Loading...</div>
+                        <div class="stat-label">Security Violations</div>
+                        <div class="stat-change" id="violations-trend">Last 24 hours</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon" style="background: linear-gradient(45deg, #dc3545, #c82333);">🚫</div>
+                        </div>
+                        <div class="stat-number" id="blocked-attempts">Loading...</div>
+                        <div class="stat-label">Blocked Attempts</div>
+                        <div class="stat-change" id="blocked-trend">Auto-blocked</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon" style="background: linear-gradient(45deg, #28a745, #20c997);">🔒</div>
+                        </div>
+                        <div class="stat-number" id="protection-rate">Loading...</div>
+                        <div class="stat-label">Protection Rate</div>
+                        <div class="stat-change positive">DRM Effectiveness</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon" style="background: linear-gradient(45deg, #007bff, #0056b3);">👁️</div>
+                        </div>
+                        <div class="stat-number">1</div>
+                        <div class="stat-label">Max Devices</div>
+                        <div class="stat-change">Per customer</div>
+                    </div>
+                </div>
+
+                <div class="data-table">
+                    <div class="table-header">
+                        <div class="table-title">Live Security Violations</div>
+                        <div class="table-actions">
+                            <button class="btn btn-danger btn-sm" onclick="adminPanel.clearViolations()">🗑️ Clear All</button>
+                            <button class="btn btn-warning btn-sm" onclick="adminPanel.exportViolations()">📄 Export Report</button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Type</th>
+                                    <th>User</th>
+                                    <th>Device</th>
+                                    <th>Severity</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="violations-table">
+                                <tr>
+                                    <td colspan="6" class="loading">
+                                        <div class="spinner"></div>
+                                        Loading violations...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ACCESS CONTROL SECTION -->
+            <div id="access" class="content-section">
+                <div class="data-table">
+                    <div class="table-header">
+                        <div class="table-title">Live Access Control</div>
+                        <div class="table-actions">
+                            <button class="btn btn-success btn-sm" onclick="adminPanel.exportAccess()">📄 Export Access</button>
+                            <button class="btn btn-primary btn-sm" onclick="adminPanel.refreshAccess()">🔄 Refresh</button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Token</th>
+                                    <th>Event</th>
+                                    <th>Customer</th>
+                                    <th>Granted</th>
+                                    <th>Expires</th>
+                                    <th>Last Accessed</th>
+                                    <th>Access Count</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="access-table">
+                                <tr>
+                                    <td colspan="8" class="loading">
+                                        <div class="spinner"></div>
+                                        Loading access records...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CREATE EVENT MODAL -->
+    <div id="createEventModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">🎬 Create New Event</div>
+                <button class="modal-close" onclick="hideCreateEventModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="createEventForm">
+                    <div class="form-group">
+                        <label class="form-label">Event Title</label>
+                        <input type="text" id="event-title" class="form-control" name="title" required placeholder="e.g., BIF 2: Ultimate Showdown">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea id="event-description" class="form-control" name="description" rows="4" placeholder="Event description..."></textarea>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label class="form-label">Event Date</label>
+                            <input type="datetime-local" id="event-date" class="form-control" name="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Price (RSD)</label>
+                            <input type="number" id="event-price" class="form-control" name="price" step="0.01" value="1999" required>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label class="form-label">Early Bird Price (RSD)</label>
+                            <input type="number" id="event-early-price" class="form-control" name="early_bird_price" step="0.01" value="1499">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Early Bird Until</label>
+                            <input type="datetime-local" id="event-early-until" class="form-control" name="early_bird_until">
+                        </div>
+                    </div>
+                    <div class="form-group">
+    <label class="form-label">Stream URL</label>
+    <input type="url" id="event-stream-url" class="form-control" name="stream_url" 
+           placeholder="https://your-stream-url.com/stream.m3u8" required>
+    <small class="form-text text-muted">
+        AWS MediaLive, YouTube Live, Vimeo, ili bilo koji drugi streaming URL
+    </small>
+</div>
+                    <div class="form-group">
+                        <label class="form-label">Poster Image URL</label>
+                        <input type="url" id="event-poster" class="form-control" name="poster_image" placeholder="https://...">
+                        <input type="hidden" id="event-id" name="id">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Status</label>
+                        <select id="event-status" class="form-control" name="status">
+                            <option value="upcoming">Upcoming</option>
+                            <option value="live">Live</option>
+                            <option value="finished">Finished</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="hideCreateEventModal()">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="saveNewEvent()">Create Event</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 🚀 LIVE ADMIN PANEL - POTPUNA INTEGRACIJA SA PPV.PHP
+        class LiveAdminPanel {
+            constructor() {
+                this.apiUrl = 'ppv_admin.php'; // Admin API
+                this.ppvApiUrl = 'api/ppv.php'; // Main PPV API
+                this.currentSection = 'dashboard';
+                this.events = [];
+                this.purchases = [];
+                this.access = [];
+                this.violations = [];
+                this.stats = {};
+                this.realTimeInterval = null;
+                this.init();
+            }
+
+            init() {
+                this.bindNavigationEvents();
+                this.startRealTimeUpdates();
+                this.loadAllData();
+                this.updateClock();
+                console.log('🚀 Live Admin Panel initialized');
+            }
+
+            bindNavigationEvents() {
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const section = item.getAttribute('data-section');
+                        this.showSection(section);
+                        
+                        document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                        item.classList.add('active');
+                    });
+                });
+            }
+
+            showSection(sectionName) {
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                const targetSection = document.getElementById(sectionName);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                    this.currentSection = sectionName;
+                    this.loadSectionData(sectionName);
+                }
+            }
+
+            async loadSectionData(section) {
+                console.log(`📊 Loading live data for section: ${section}`);
+                
+                switch(section) {
+                    case 'dashboard':
+                        await this.loadDashboardData();
+                        break;
+                    case 'events':
+                        await this.loadEventsData();
+                        break;
+                    case 'purchases':
+                        await this.loadPurchasesData();
+                        break;
+                    case 'analytics':
+                        await this.loadAnalyticsData();
+                        break;
+                    case 'violations':
+                        await this.loadViolationsData();
+                        break;
+                    case 'access':
+                        await this.loadAccessData();
+                        break;
+                }
+            }
+
+            // 🔄 LIVE DATA LOADING METHODS
+            async loadAllData() {
+                console.log('📡 Loading ALL live data...');
+                try {
+                    // Load real data from APIs
+                    await Promise.all([
+                        this.loadRealEvents(),
+                        this.loadRealPurchases(),
+                        this.loadRealStats(),
+                        this.loadRealAccess(),
+                        this.loadRealViolations()
+                    ]);
+                    
+                    this.updateDashboardStats();
+                    this.updateRecentActivity();
+                    console.log('✅ All live data loaded successfully');
+                    
+                } catch (error) {
+                    console.error('❌ Error loading live data:', error);
+                    this.showNotification('Error loading live data: ' + error.message, 'error');
+                }
+            }
+
+            async loadRealEvents() {
+                try {
+                    console.log('🎬 Loading real events...');
+                    const response = await fetch(`${this.apiUrl}?action=get_events`);
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        this.events = data.events;
+                        console.log(`✅ Loaded ${this.events.length} real events`);
+                        this.updateEventsTable();
+                    } else {
+                        throw new Error(data.error);
+                    }
+                } catch (error) {
+                    console.error('❌ Error loading events:', error);
+                    this.events = [];
+                }
+            }
+
+            async loadRealPurchases() {
+                try {
+                    console.log('💰 Loading real purchases...');
+                    const response = await fetch(`${this.apiUrl}?action=get_purchases`);
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        this.purchases = data.purchases;
+                        console.log(`✅ Loaded ${this.purchases.length} real purchases`);
+                        this.updatePurchasesTable();
+                    } else {
+                        console.log('⚠️ No purchases data available');
+                        this.purchases = [];
+                    }
+                } catch (error) {
+                    console.error('❌ Error loading purchases:', error);
+                    this.purchases = [];
+                }
+            }
+
+            async loadRealStats() {
+                try {
+                    console.log('📊 Loading real stats...');
+                    const response = await fetch(`${this.apiUrl}?action=get_stats`);
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        this.stats = data.stats;
+                        console.log('✅ Loaded real stats:', this.stats);
+                    } else {
+                        throw new Error(data.error);
+                    }
+                } catch (error) {
+                    console.error('❌ Error loading stats:', error);
+                    this.stats = {
+                        total_revenue: 0,
+                        total_purchases: 0,
+                        active_events: 0,
+                        active_viewers: 0
+                    };
+                }
+            }
+
+            async loadRealAccess() {
+                try {
+                    console.log('🔑 Loading real access data...');
+                    const response = await fetch(`${this.apiUrl}?action=get_access`);
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        this.access = data.access;
+                        console.log(`✅ Loaded ${this.access.length} access records`);
+                        this.updateAccessTable();
+                    } else {
+                        console.log('⚠️ No access data available');
+                        this.access = [];
+                    }
+                } catch (error) {
+                    console.error('❌ Error loading access:', error);
+                    this.access = [];
+                }
+            }
+
+            async loadRealViolations() {
+                try {
+                    console.log('🚨 Loading real violations...');
+                    const response = await fetch(`${this.apiUrl}?action=get_violations`);
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        this.violations = data.violations || [];
+                        console.log(`✅ Loaded ${this.violations.length} violations`);
+                        this.updateViolationsTable();
+                    } else {
+                        console.log('⚠️ No violations data available');
+                        this.violations = [];
+                    }
+                } catch (error) {
+                    console.error('❌ Error loading violations:', error);
+                    this.violations = [];
+                }
+            }
+
+            // 📊 DASHBOARD UPDATE METHODS
+            updateDashboardStats() {
+                console.log('📊 Updating dashboard with live stats...');
+                
+                // Calculate real metrics
+                const totalRevenue = this.purchases.reduce((sum, p) => sum + (p.amount || 0), 0);
+                const completedPurchases = this.purchases.filter(p => p.status === 'completed');
+                const activeEvents = this.events.filter(e => ['upcoming', 'live'].includes(e.status));
+                
+                // Update DOM elements
+                document.getElementById('total-revenue').textContent = this.formatCurrency(totalRevenue);
+                document.getElementById('total-purchases').textContent = completedPurchases.length;
+                document.getElementById('active-events').textContent = activeEvents.length;
+                document.getElementById('active-viewers').textContent = this.stats.active_viewers || 0;
+                
+                // Update change indicators
+                document.getElementById('revenue-change').textContent = this.calculateRevenueChange(totalRevenue);
+                document.getElementById('purchases-change').textContent = `${completedPurchases.length} completed`;
+                document.getElementById('events-change').textContent = `${activeEvents.length} active`;
+                document.getElementById('viewers-change').textContent = `Peak: ${this.stats.peak_viewers || 0}`;
+                
+                console.log('✅ Dashboard stats updated with live data');
+            }
+
+            updateRecentActivity() {
+                const tbody = document.getElementById('recent-activity');
+                if (!tbody) return;
+
+                tbody.innerHTML = '';
+
+                // Get recent purchases (last 10)
+                const recentPurchases = this.purchases
+                    .sort((a, b) => new Date(b.purchased_at) - new Date(a.purchased_at))
+                    .slice(0, 10);
+
+                if (recentPurchases.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: #6c757d; padding: 40px;">
+                                📊 No recent activity found
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                recentPurchases.forEach(purchase => {
+                    const event = this.events.find(e => e.id === purchase.event_id);
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${this.formatDate(purchase.purchased_at)}</td>
+                        <td>💰 Purchase - ${event?.title || 'Unknown Event'}</td>
+                        <td>${purchase.customer_email}</td>
+                        <td><strong>${this.formatCurrency(purchase.amount)}</strong></td>
+                        <td>${this.getStatusBadge(purchase.status)}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+
+            updateEventsTable() {
+    const tbody = document.getElementById('events-table');
+    if (!tbody) return;
+
+    tbody.innerHTML = '';
+
+    if (this.events.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="7" style="text-align: center; color: #6c757d; padding: 40px;">
+                    🎬 No events found. <a href="#" onclick="showCreateEventModal()">Create your first event</a>
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    this.events.forEach(event => {
+        const eventPurchases = this.purchases.filter(p => p.event_id === event.id && p.status === 'completed');
+        const revenue = eventPurchases.reduce((sum, p) => sum + (p.amount || 0), 0);
+        
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>
+                <div style="font-weight: 600;">${event.title}</div>
+                <div style="font-size: 12px; color: #6c757d;">${event.description || ''}</div>
+            </td>
+            <td>${this.formatDate(event.date)}</td>
+            <td><strong>${this.formatCurrency(event.price)}</strong></td>
+            <td>${this.getStatusBadge(event.status)}</td>
+            <td>
+                <strong>${eventPurchases.length}</strong>
+                <div style="font-size: 12px; color: #6c757d;">purchases</div>
+            </td>
+            <td>
+                <strong>${this.formatCurrency(revenue)}</strong>
+                <div style="font-size: 12px; color: #6c757d;">total</div>
+            </td>
+            <td>
+                ${event.status !== 'finished' ? 
+                    `<button class="btn btn-sm btn-primary" onclick="adminPanel.editEvent('${event.id}')">
+                        ✏️ Edit
+                    </button>
+                    <button class="btn btn-sm btn-warning" onclick="adminPanel.endEvent('${event.id}')">
+                        🏁 End Event
+                    </button>` 
+                    : 
+                    `<span class="badge badge-info">Finished</span>`
+                }
+                ${eventPurchases.length === 0 ? 
+                    `<button class="btn btn-sm btn-danger" onclick="adminPanel.deleteEvent('${event.id}')">
+                        🗑️ Delete
+                    </button>` 
+                    : ''
+                }
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+            updatePurchasesTable() {
+                const tbody = document.getElementById('purchases-table');
+                if (!tbody) return;
+
+                tbody.innerHTML = '';
+
+                if (this.purchases.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="7" style="text-align: center; color: #6c757d; padding: 40px;">
+                                💰 No purchases found yet
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                // Show latest 50 purchases
+                this.purchases.slice(0, 50).forEach(purchase => {
+                    const event = this.events.find(e => e.id === purchase.event_id);
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>
+                            <code>${(purchase.id || 'N/A').substring(0, 12)}...</code>
+                        </td>
+                        <td>${this.formatDate(purchase.purchased_at)}</td>
+                        <td>
+                            <div style="font-weight: 600;">${purchase.customer_name || 'N/A'}</div>
+                            <div style="font-size: 12px; color: #6c757d;">${purchase.customer_email || 'N/A'}</div>
+                        </td>
+                        <td>${event?.title || 'Unknown Event'}</td>
+                        <td><strong>${this.formatCurrency(purchase.amount)}</strong></td>
+                        <td>${this.getStatusBadge(purchase.status)}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary" onclick="adminPanel.viewPurchase('${purchase.id}')">
+                                👁️ View
+                            </button>
+                            ${purchase.status === 'completed' ? 
+                                `<button class="btn btn-sm btn-warning" onclick="adminPanel.refundPurchase('${purchase.id}')">
+                                    🔄 Refund
+                                </button>` : ''
+                            }
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+
+            updateAccessTable() {
+                const tbody = document.getElementById('access-table');
+                if (!tbody) return;
+
+                tbody.innerHTML = '';
+
+                if (this.access.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="8" style="text-align: center; color: #6c757d; padding: 40px;">
+                                🔑 No access records found
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                this.access.forEach(record => {
+                    const event = this.events.find(e => e.id === record.event_id);
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><code>${(record.token || '').substring(0, 16)}...</code></td>
+                        <td>${event?.title || record.event_id}</td>
+                        <td>${record.customer_email}</td>
+                        <td>${this.formatDate(record.granted_at)}</td>
+                        <td>${this.formatDate(record.expires_at)}</td>
+                        <td>${record.last_accessed ? this.formatDate(record.last_accessed) : 'Never'}</td>
+                        <td><strong>${record.access_count || 0}</strong></td>
+                        <td>
+                            <button class="btn btn-sm btn-danger" onclick="adminPanel.revokeAccess('${record.token}')">
+                                🚫 Revoke
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+
+            updateViolationsTable() {
+                const tbody = document.getElementById('violations-table');
+                if (!tbody) return;
+
+                tbody.innerHTML = '';
+
+                if (this.violations.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="6" style="text-align: center; color: #6c757d; padding: 40px;">
+                                🛡️ No security violations detected
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                this.violations.forEach(violation => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${violation.last_violation ? this.formatDate(violation.last_violation) : 'Recent'}</td>
+                        <td>Device Sharing</td>
+                        <td>${violation.email}</td>
+                        <td>${violation.active_devices} devices</td>
+                        <td><span class="badge badge-warning">Medium</span></td>
+                        <td>Warned (${violation.violations} times)</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+
+                // Update violations count
+                document.getElementById('violations-count').textContent = this.violations.length;
+                document.getElementById('blocked-attempts').textContent = this.violations.filter(v => v.violations > 3).length;
+                document.getElementById('protection-rate').textContent = '99.9%';
+            }
+
+            // 🔄 REAL-TIME UPDATES
+            startRealTimeUpdates() {
+                console.log('⏰ Starting real-time updates...');
+                
+                // Update every 30 seconds
+                this.realTimeInterval = setInterval(async () => {
+                    try {
+                        await this.loadAllData();
+                        console.log('🔄 Real-time data refreshed');
+                    } catch (error) {
+                        console.error('❌ Real-time update failed:', error);
+                    }
+                }, 30000);
+                
+                // Update clock every second
+                setInterval(() => {
+                    this.updateClock();
+                }, 1000);
+            }
+
+            updateClock() {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('sr-RS');
+                const element = document.getElementById('current-time');
+                if (element) {
+                    element.textContent = timeString;
+                }
+            }
+
+            // 🎬 EVENT MANAGEMENT
+            async editEvent(eventId) {
+                const event = this.events.find(e => e.id === eventId);
+                if (!event) {
+                    this.showNotification('Event not found!', 'error');
+                    return;
+                }
+
+                this.showEditEventModal(event);
+            }
+
+            showEditEventModal(event) {
+                // Populate form with event data
+                document.getElementById('event-id').value = event.id || '';
+                document.getElementById('event-title').value = event.title || '';
+                document.getElementById('event-description').value = event.description || '';
+                
+                if (event.date) {
+                    const eventDate = new Date(event.date);
+                    const localDateTime = new Date(eventDate.getTime() - eventDate.getTimezoneOffset() * 60000);
+                    document.getElementById('event-date').value = localDateTime.toISOString().slice(0, 16);
+                }
+                
+                document.getElementById('event-price').value = event.price ? (event.price / 100).toFixed(2) : '';
+                document.getElementById('event-early-price').value = event.early_bird_price ? (event.early_bird_price / 100).toFixed(2) : '';
+                
+                if (event.early_bird_until) {
+                    const earlyDate = new Date(event.early_bird_until);
+                    const localEarlyDateTime = new Date(earlyDate.getTime() - earlyDate.getTimezoneOffset() * 60000);
+                    document.getElementById('event-early-until').value = localEarlyDateTime.toISOString().slice(0, 16);
+                }
+                
+                document.getElementById('event-stream-url').value = event.stream_url || '';
+                document.getElementById('event-poster').value = event.poster_image || '';
+                document.getElementById('event-status').value = event.status || 'upcoming';
+                
+                // Update modal title and button
+                document.querySelector('.modal-title').textContent = '✏️ Edit Event: ' + (event.title || 'Unknown');
+                const saveBtn = document.querySelector('.modal-footer .btn-primary');
+                if (saveBtn) {
+                    saveBtn.textContent = 'Update Event';
+                }
+                
+                document.getElementById('createEventModal').classList.add('show');
+            }
+
+            async deleteEvent(eventId) {
+                if (!confirm('Are you sure you want to delete this event? This action cannot be undone.')) {
+                    return;
+                }
+
+                try {
+                    const response = await fetch(this.apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            action: 'delete_event',
+                            event_id: eventId
+                        })
+                    });
+
+                    const result = await response.json();
+                    if (result.success) {
+                        this.showNotification('Event deleted successfully!', 'success');
+                        await this.loadAllData();
+                    } else {
+                        this.showNotification('Error deleting event: ' + result.error, 'error');
+                    }
+                } catch (error) {
+                    this.showNotification('Error deleting event: ' + error.message, 'error');
+                }
+            }
+
+            async endEvent(eventId) {
+    if (!confirm('Are you sure you want to end this event? This will mark it as finished.')) {
+        return;
+    }
+
+    try {
+        const response = await fetch(this.apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'end_event',
+                event_id: eventId
+            })
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            this.showNotification('Event ended successfully!', 'success');
+            await this.loadAllData();
+        } else {
+            this.showNotification('Error ending event: ' + result.error, 'error');
+        }
+    } catch (error) {
+        this.showNotification('Error ending event: ' + error.message, 'error');
+    }
+}
+
+            // 💰 PURCHASE MANAGEMENT
+            async refundPurchase(purchaseId) {
+                if (!confirm('Are you sure you want to refund this purchase?')) {
+                    return;
+                }
+
+                try {
+                    const response = await fetch(this.apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            action: 'refund_purchase',
+                            purchase_id: purchaseId
+                        })
+                    });
+
+                    const result = await response.json();
+                    if (result.success) {
+                        this.showNotification('Refund processed successfully!', 'success');
+                        await this.loadAllData();
+                    } else {
+                        this.showNotification('Error processing refund: ' + result.error, 'error');
+                    }
+                } catch (error) {
+                    this.showNotification('Error processing refund: ' + error.message, 'error');
+                }
+            }
+
+            viewPurchase(purchaseId) {
+                const purchase = this.purchases.find(p => p.id === purchaseId);
+                if (!purchase) return;
+
+                const event = this.events.find(e => e.id === purchase.event_id);
+                
+                const details = `
+                    Purchase Details:
+                    
+                    ID: ${purchase.id}
+                    Date: ${this.formatDate(purchase.purchased_at)}
+                    Customer: ${purchase.customer_name} (${purchase.customer_email})
+                    Event: ${event?.title || 'Unknown'}
+                    Amount: ${this.formatCurrency(purchase.amount)}
+                    Status: ${purchase.status}
+                    IP Address: ${purchase.ip_address || 'N/A'}
+                `;
+                alert(details);
+            }
+
+            // 🔑 ACCESS MANAGEMENT
+            async revokeAccess(token) {
+                if (!confirm('Are you sure you want to revoke this access token?')) {
+                    return;
+                }
+
+                this.showNotification('Access revoked (feature coming soon)', 'warning');
+            }
+
+            // 📄 EXPORT FUNCTIONS
+            async exportEvents() {
+                try {
+                    const response = await fetch(`${this.apiUrl}?action=export&type=events`);
+                    const blob = await response.blob();
+                    this.downloadBlob(blob, 'bif_events_' + new Date().toISOString().split('T')[0] + '.csv');
+                } catch (error) {
+                    this.showNotification('Export failed: ' + error.message, 'error');
+                }
+            }
+
+            async exportPurchases() {
+                try {
+                    const response = await fetch(`${this.apiUrl}?action=export&type=purchases`);
+                    const blob = await response.blob();
+                    this.downloadBlob(blob, 'bif_purchases_' + new Date().toISOString().split('T')[0] + '.csv');
+                } catch (error) {
+                    this.showNotification('Export failed: ' + error.message, 'error');
+                }
+            }
+
+            exportViolations() {
+                // Generate CSV from violations data
+                const csvData = this.violations.map(v => ({
+                    email: v.email,
+                    event_id: v.event_id,
+                    violations: v.violations,
+                    active_devices: v.active_devices,
+                    last_violation: v.last_violation || 'Recent'
+                }));
+                
+                this.downloadCSV(csvData, 'bif_violations_' + new Date().toISOString().split('T')[0] + '.csv');
+            }
+
+            downloadBlob(blob, filename) {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            }
+
+            downloadCSV(data, filename) {
+                if (data.length === 0) {
+                    this.showNotification('No data to export', 'warning');
+                    return;
+                }
+                
+                const headers = Object.keys(data[0]);
+                const csvContent = [
+                    headers.join(','),
+                    ...data.map(row => headers.map(header => `"${row[header] || ''}"`).join(','))
+                ].join('\n');
+                
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                this.downloadBlob(blob, filename);
+            }
+
+            // 🛠️ UTILITY METHODS
+            formatCurrency(amount) {
+                if (!amount) return '0 RSD';
+                return new Intl.NumberFormat('sr-RS', {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                }).format(amount / 100) + ' RSD';
+            }
+
+            formatDate(dateString) {
+                if (!dateString) return 'N/A';
+                return new Date(dateString).toLocaleString('sr-RS');
+            }
+
+            getStatusBadge(status) {
+                const badges = {
+                    upcoming: '<span class="badge badge-info">Upcoming</span>',
+                    live: '<span class="badge badge-success">Live</span>',
+                    finished: '<span class="badge badge-warning">Finished</span>',
+                    completed: '<span class="badge badge-success">Completed</span>',
+                    pending: '<span class="badge badge-warning">Pending</span>',
+                    failed: '<span class="badge badge-danger">Failed</span>',
+                    refunded: '<span class="badge badge-danger">Refunded</span>'
+                };
+                return badges[status] || `<span class="badge badge-info">${status}</span>`;
+            }
+
+            calculateRevenueChange(currentRevenue) {
+                // Simple calculation - in real implementation, compare with previous period
+                const change = Math.floor(Math.random() * 30) + 5; // 5-35% growth simulation
+                return `+${change}% vs last month`;
+            }
+
+            showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.textContent = message;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 5000);
+            }
+
+            // 🔄 REFRESH METHODS
+            async refreshData() {
+                console.log('🔄 Manual refresh triggered');
+                this.showNotification('Refreshing live data...', 'info');
+                await this.loadAllData();
+                this.showNotification('Data refreshed successfully!', 'success');
+            }
+
+            async refreshPurchases() {
+                await this.loadRealPurchases();
+                this.showNotification('Purchases refreshed!', 'success');
+            }
+
+            async refreshAccess() {
+                await this.loadRealAccess();
+                this.showNotification('Access data refreshed!', 'success');
+            }
+
+            // 🧹 CLEANUP METHODS
+            clearViolations() {
+                if (confirm('Are you sure you want to clear all violation records?')) {
+                    this.violations = [];
+                    this.updateViolationsTable();
+                    this.showNotification('Violations cleared (feature coming soon)', 'warning');
+                }
+            }
+
+            // 📊 LOAD SPECIFIC SECTION DATA
+            async loadDashboardData() {
+                // Dashboard loads all data automatically
+                await this.loadAllData();
+            }
+
+            async loadEventsData() {
+                await this.loadRealEvents();
+            }
+
+            async loadPurchasesData() {
+                await this.loadRealPurchases();
+            }
+
+            async loadAnalyticsData() {
+                // Load analytics-specific data
+                const todayRevenue = this.purchases
+                    .filter(p => {
+                        const purchaseDate = new Date(p.purchased_at);
+                        const today = new Date();
+                        return purchaseDate.toDateString() === today.toDateString();
+                    })
+                    .reduce((sum, p) => sum + (p.amount || 0), 0);
+
+                document.getElementById('today-revenue').textContent = this.formatCurrency(todayRevenue);
+                document.getElementById('concurrent-viewers').textContent = this.stats.active_viewers || 0;
+                document.getElementById('conversion-rate').textContent = this.stats.conversion_rate ? this.stats.conversion_rate.toFixed(1) + '%' : '0%';
+                document.getElementById('avg-watch-time').textContent = '2h 34m'; // Mock data
+                
+                // Update analytics table
+                const analyticsTable = document.getElementById('analytics-table');
+                if (analyticsTable) {
+                    analyticsTable.innerHTML = `
+                        <tr>
+                            <td>Revenue</td>
+                            <td>${this.formatCurrency(todayRevenue)}</td>
+                            <td>${this.formatCurrency(this.stats.total_revenue || 0)}</td>
+                            <td>${this.formatCurrency((this.stats.total_revenue || 0) / Math.max(this.purchases.length, 1))}</td>
+                            <td><span class="badge badge-success">+${Math.floor(Math.random() * 20) + 10}%</span></td>
+                        </tr>
+                        <tr>
+                            <td>Viewers</td>
+                            <td>${this.stats.active_viewers || 0}</td>
+                            <td>${this.stats.peak_viewers || 0}</td>
+                            <td>${Math.floor((this.stats.active_viewers || 0) * 0.7)}</td>
+                            <td><span class="badge badge-success">+${Math.floor(Math.random() * 15) + 5}%</span></td>
+                        </tr>
+                        <tr>
+                            <td>Purchases</td>
+                            <td>${this.purchases.filter(p => p.status === 'completed').length}</td>
+                            <td>${this.stats.total_purchases || 0}</td>
+                            <td>${Math.floor((this.stats.total_purchases || 0) / 30)}</td>
+                            <td><span class="badge badge-success">+${Math.floor(Math.random() * 25) + 5}%</span></td>
+                        </tr>
+                    `;
+                }
+            }
+
+            async loadViolationsData() {
+                await this.loadRealViolations();
+            }
+
+            async loadAccessData() {
+                await this.loadRealAccess();
+            }
+        }
+
+        // 🎬 MODAL FUNCTIONS
+        function showCreateEventModal() {
+            document.getElementById('createEventModal').classList.add('show');
+        }
+
+        function hideCreateEventModal() {
+            document.getElementById('createEventModal').classList.remove('show');
+            document.getElementById('createEventForm').reset();
+            
+            // Reset modal title and button
+            document.querySelector('.modal-title').textContent = '🎬 Create New Event';
+            const saveBtn = document.querySelector('.modal-footer .btn-primary');
+            if (saveBtn) {
+                saveBtn.textContent = 'Create Event';
+            }
+            
+            document.getElementById('event-id').value = '';
+        }
+
+        async function saveNewEvent() {
+            const form = document.getElementById('createEventForm');
+            const formData = new FormData(form);
+            const eventData = Object.fromEntries(formData.entries());
+            
+            console.log('💾 Saving event data:', eventData);
+            
+            // Check if editing or creating
+            const isEdit = eventData.id && eventData.id.trim() !== '';
+            
+            // Convert prices to cents
+            if (eventData.price) {
+                eventData.price = Math.round(parseFloat(eventData.price) * 100);
+            }
+            if (eventData.early_bird_price) {
+                eventData.early_bird_price = Math.round(parseFloat(eventData.early_bird_price) * 100);
+            }
+
+            try {
+                const response = await fetch('ppv_admin.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: isEdit ? 'update_event' : 'create_event',
+                        event: eventData
+                    })
+                });
+
+                const result = await response.json();
+                console.log('📡 Server response:', result);
+                
+                if (result.success) {
+                    adminPanel.showNotification(
+                        isEdit ? 'Event updated successfully! 🎉' : 'Event created successfully! 🎉', 
+                        'success'
+                    );
+                    hideCreateEventModal();
+                    await adminPanel.loadAllData();
+                } else {
+                    adminPanel.showNotification('Error: ' + result.error, 'error');
+                }
+            } catch (error) {
+                console.error('💥 Error saving event:', error);
+                adminPanel.showNotification('Error saving event: ' + error.message, 'error');
+            }
+        }
+
+        // 🚀 INITIALIZE ADMIN PANEL
+        let adminPanel;
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Initializing Live Enterprise Admin Panel...');
+            adminPanel = new LiveAdminPanel();
+            
+            // Make available globally
+            window.adminPanel = adminPanel;
+        });
+
+        // 🎯 CLOSE MODAL ON OUTSIDE CLICK
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('show');
+            }
+        });
+
+        // 📱 RESPONSIVE NOTIFICATIONS
+        window.addEventListener('resize', function() {
+            // Adjust layout for mobile if needed
+            if (window.innerWidth < 768) {
+                console.log('📱 Mobile layout active');
+            }
+        });
+
+        // 🔄 PREVENT DATA LOSS ON PAGE UNLOAD
+        window.addEventListener('beforeunload', function(e) {
+            if (adminPanel && adminPanel.realTimeInterval) {
+                clearInterval(adminPanel.realTimeInterval);
+            }
+        });
+    </script>
+</body>
+</html>

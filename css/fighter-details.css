@@ -1,0 +1,711 @@
+/* ===== fighter-details.css - Fighter Details Page Styles ===== */
+
+/* ===== FIGHTER DETAILS PAGE BASE ===== */
+.fighter-details-page {
+  background: var(--light-bg-primary);
+  color: var(--light-text-primary);
+  padding-top: var(--header-height);
+  min-height: 100vh;
+}
+
+[data-theme="dark"] .fighter-details-page {
+  background: var(--dark-bg-primary);
+  color: var(--dark-text-primary);
+}
+
+@media (max-width: 768px) {
+  .fighter-details-page {
+    padding-top: var(--header-height-mobile);
+  }
+}
+
+.fighter-details-page .section-title {
+  color: var(--primary-red);
+}
+
+.fighter-details-page .section-title::after {
+  background: linear-gradient(90deg, var(--accent-gold), var(--gold-hover));
+}
+
+/* ===== FIGHTER PROFILE SECTION ===== */
+.fighter-profile-section {
+  padding-top: var(--space-2xl);
+  padding-bottom: var(--space-2xl);
+  background: var(--light-bg-secondary);
+  position: relative;
+}
+
+[data-theme="dark"] .fighter-profile-section {
+  background: var(--dark-bg-secondary);
+}
+
+.fighter-profile-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="fighter-bg" width="40" height="40" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="1" fill="%23000000" opacity="0.02"/></pattern></defs><rect width="100%" height="100%" fill="url(%23fighter-bg)"/></svg>');
+  pointer-events: none;
+}
+
+[data-theme="dark"] .fighter-profile-section::before {
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="fighter-bg-dark" width="40" height="40" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="1" fill="%23ffffff" opacity="0.02"/></pattern></defs><rect width="100%" height="100%" fill="url(%23fighter-bg-dark)"/></svg>');
+}
+
+.fighter-profile-grid {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: var(--space-3xl);
+  align-items: flex-start;
+  position: relative;
+  z-index: 2;
+}
+
+/* Fighter Image Container */
+.fighter-image-container {
+   position: relative;
+  background: transparent; /* Ukloni pozadinu */
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-2xl);
+  border: none; /* UKLONI BORDER */
+}
+
+[data-theme="dark"] .fighter-image-container {
+   background: transparent; /* Ukloni pozadinu */
+  border: none; /* UKLONI BORDER */
+}
+
+.fighter-image-container img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: var(--transition-all);
+}
+
+.fighter-image-container:hover img {
+  transform: scale(1.02);
+}
+
+.fighter-image-container .champion-banner {
+  position: absolute;
+  bottom: var(--space-lg);
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(45deg, var(--accent-gold), var(--gold-hover)); /* Isti kao champion-badge */
+  color: var(--true-black);
+  padding: var(--space-sm) var(--space-md); /* Manji padding */
+  font-family: var(--font-heading);
+  font-weight: 800;
+  text-transform: uppercase;
+  border-radius: var(--radius-full); /* Zaobljeni uglovi kao champion-badge */
+  font-size: var(--text-xs); /* Manji font */
+  box-shadow: var(--shadow-lg);
+  animation: badgePulse 2s infinite;
+  z-index: 3;
+}
+
+/* Fighter Info Container */
+.fighter-info-container {
+  padding: var(--space-md) 0;
+}
+
+.fighter-info-container h1 {
+  font-size: var(--text-4xl);
+  color: var(--light-text-primary);
+  margin-bottom: var(--space-sm);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+[data-theme="dark"] .fighter-info-container h1 {
+  color: var(--dark-text-primary);
+}
+
+.fighter-age {
+  color: var(--light-text-muted);
+  font-weight: 500;
+  font-size: 0.8em;
+  margin-left: var(--space-sm);
+}
+
+[data-theme="dark"] .fighter-age {
+  color: var(--dark-text-muted);
+}
+
+.fighter-category-details {
+  font-size: var(--text-lg);
+  color: var(--primary-red);
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  margin-bottom: var(--space-xl);
+  display: block;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* Fighter Stats Overview */
+.fighter-stats-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-lg);
+  margin-bottom: var(--space-2xl);
+}
+
+.stat-block {
+  background: var(--light-card-bg);
+  padding: var(--space-lg);
+  border-radius: var(--radius-xl);
+  text-align: center;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--light-border);
+  transition: var(--transition-all);
+  position: relative;
+  overflow: hidden;
+}
+
+[data-theme="dark"] .stat-block {
+  background: var(--dark-card-bg);
+  border-color: var(--dark-border);
+}
+
+.stat-block::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-red), var(--accent-gold));
+  transform: scaleX(0);
+  transition: transform var(--transition-base);
+}
+
+.stat-block:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.stat-block:hover::before {
+  transform: scaleX(1);
+}
+
+.stat-block h3 {
+  font-size: var(--text-xs);
+  color: var(--light-text-secondary);
+  text-transform: uppercase;
+  margin-bottom: var(--space-sm);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+[data-theme="dark"] .stat-block h3 {
+  color: var(--dark-text-secondary);
+}
+
+.stat-block p {
+  font-size: var(--text-xl);
+  color: var(--light-text-primary);
+  font-weight: 800;
+  font-family: var(--font-heading);
+  margin-bottom: 0;
+}
+
+[data-theme="dark"] .stat-block p {
+  color: var(--dark-text-primary);
+}
+
+/* Fighter Attributes */
+.fighter-attributes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm) var(--space-2xl);
+  margin-bottom: var(--space-2xl);
+  padding: var(--space-xl);
+  background: var(--light-card-bg);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--light-border);
+}
+
+[data-theme="dark"] .fighter-attributes {
+  background: var(--dark-card-bg);
+  border-color: var(--dark-border);
+}
+
+.attribute-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-sm) 0;
+  font-size: var(--text-sm);
+  border-bottom: 1px solid var(--light-bg-tertiary);
+}
+
+[data-theme="dark"] .attribute-item {
+  border-bottom-color: var(--dark-bg-tertiary);
+}
+
+.attribute-item:last-child {
+  border-bottom: none;
+}
+
+.attribute-item .label {
+  font-weight: 600;
+  color: var(--light-text-secondary);
+}
+
+[data-theme="dark"] .attribute-item .label {
+  color: var(--dark-text-secondary);
+}
+
+.attribute-item .value {
+  color: var(--light-text-primary);
+  text-align: right;
+  font-weight: 600;
+}
+
+[data-theme="dark"] .attribute-item .value {
+  color: var(--dark-text-primary);
+}
+
+/* Fighter Status */
+.fighter-status {
+  margin-bottom: var(--space-xl);
+}
+
+.champion-status {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--accent-gold);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.05));
+  border-left: 4px solid var(--accent-gold);
+  border-radius: var(--radius-md);
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.champion-status .icon {
+  font-size: 1.3em;
+}
+
+/* Fighter Social Media */
+.fighter-social-media {
+  margin-top: var(--space-xl);
+  margin-bottom: var(--space-xl);
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.fighter-social-media .social-link {
+  width: 45px;
+  height: 45px;
+  font-size: var(--text-base);
+  background: linear-gradient(45deg, var(--primary-red), var(--dark-red));
+  border: 2px solid transparent;
+}
+
+.fighter-social-media .social-link:hover {
+  border-color: var(--accent-gold);
+  transform: translateY(-2px) scale(1.1);
+}
+
+/* Watch Last Fight Button */
+.watch-last-fight {
+  margin-top: var(--space-xl);
+}
+
+.watch-last-fight .btn {
+  width: auto;
+  padding: var(--space-lg) var(--space-2xl);
+  font-size: var(--text-lg);
+}
+
+/* ===== FIGHT HISTORY SECTION ===== */
+.fight-history-section {
+  background: var(--light-bg-primary);
+  padding-bottom: var(--space-4xl);
+}
+
+[data-theme="dark"] .fight-history-section {
+  background: var(--dark-bg-primary);
+}
+
+.fight-history-table-container {
+  overflow-x: auto;
+  background: var(--light-card-bg);
+  padding: var(--space-xl);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--light-border);
+  position: relative;
+}
+
+[data-theme="dark"] .fight-history-table-container {
+  background: var(--dark-card-bg);
+  border-color: var(--dark-border);
+}
+
+.fight-history-table-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-red), var(--accent-gold));
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+.fight-history-table {
+  width: 100%;
+  min-width: 800px;
+  border-collapse: collapse;
+  color: var(--light-text-secondary);
+}
+
+[data-theme="dark"] .fight-history-table {
+  color: var(--dark-text-secondary);
+}
+
+.fight-history-table th,
+.fight-history-table td {
+  padding: var(--space-lg) var(--space-md);
+  text-align: left;
+  border-bottom: 1px solid var(--light-bg-tertiary);
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+[data-theme="dark"] .fight-history-table th,
+[data-theme="dark"] .fight-history-table td {
+  border-bottom-color: var(--dark-bg-tertiary);
+}
+
+.fight-history-table td:nth-child(2),
+.fight-history-table td:nth-child(3) {
+  white-space: normal;
+  max-width: 200px;
+}
+
+.fight-history-table th {
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  font-size: var(--text-xs);
+  color: var(--light-text-muted);
+  font-weight: 700;
+  letter-spacing: 1px;
+  background: var(--light-bg-secondary);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+[data-theme="dark"] .fight-history-table th {
+  color: var(--dark-text-muted);
+  background: var(--dark-bg-secondary);
+}
+
+.fight-history-table td {
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.fight-history-table td small {
+  display: block;
+  font-size: 0.85em;
+  color: var(--light-text-muted);
+  text-transform: uppercase;
+  margin-top: var(--space-xs);
+  font-weight: 600;
+}
+
+[data-theme="dark"] .fight-history-table td small {
+  color: var(--dark-text-muted);
+}
+
+/* Fight Result Styling */
+.fight-result {
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+  display: inline-block;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: var(--text-xs);
+  min-width: 70px;
+  text-align: center;
+  font-family: var(--font-heading);
+  letter-spacing: 0.5px;
+}
+
+.fight-result.win {
+  background: linear-gradient(135deg, rgba(40, 167, 69, 0.2), rgba(40, 167, 69, 0.1));
+  color: var(--success);
+  border: 1px solid rgba(40, 167, 69, 0.3);
+}
+
+.fight-result.loss {
+  background: linear-gradient(135deg, rgba(220, 53, 69, 0.2), rgba(220, 53, 69, 0.1));
+  color: var(--danger);
+  border: 1px solid rgba(220, 53, 69, 0.3);
+}
+
+.fight-result.draw,
+.fight-result.nc {
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 193, 7, 0.1));
+  color: var(--warning);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+/* Fight Links */
+.fight-history-table td a {
+  color: var(--accent-gold);
+  text-decoration: none;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  transition: var(--transition-all);
+}
+
+.fight-history-table td a:hover {
+  color: var(--gold-hover);
+  text-decoration: underline;
+  transform: translateX(2px);
+}
+
+.fight-history-table td a::after {
+  content: '→';
+  font-size: 0.8em;
+  transition: var(--transition-all);
+}
+
+.fight-history-table td a:hover::after {
+  transform: translateX(2px);
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 1200px) {
+  .fighter-profile-grid {
+    grid-template-columns: 300px 1fr;
+    gap: var(--space-2xl);
+  }
+}
+
+@media (max-width: 1024px) {
+  .fighter-profile-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  
+  .fighter-image-container {
+    margin: 0 auto var(--space-xl) auto;
+    max-width: 400px;
+  }
+  
+  .fighter-info-container h1 {
+    text-align: center;
+  }
+  
+  .fighter-category-details {
+    text-align: center;
+  }
+  
+  .fighter-social-media {
+    justify-content: center;
+  }
+  
+  .watch-last-fight {
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .fighter-details-page {
+    padding-top: var(--header-height-mobile);
+  }
+  
+  .fighter-profile-section {
+    padding-top: var(--space-xl);
+    padding-bottom: var(--space-xl);
+  }
+  
+  .fighter-profile-grid {
+    gap: var(--space-xl);
+  }
+  
+  .fighter-image-container {
+    max-width: 320px;
+  }
+  
+  .fighter-info-container h1 {
+    font-size: var(--text-3xl);
+  }
+  
+  .fighter-category-details {
+    font-size: var(--text-base);
+  }
+  
+  .fighter-stats-overview {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+  }
+  
+  .stat-block {
+    padding: var(--space-md);
+  }
+  
+  .stat-block p {
+    font-size: var(--text-lg);
+  }
+  
+  .fighter-attributes {
+    grid-template-columns: 1fr;
+    padding: var(--space-lg);
+    gap: var(--space-xs);
+  }
+  
+  .attribute-item {
+    justify-content: space-between;
+    text-align: left;
+  }
+  
+  .attribute-item .value {
+    text-align: right;
+  }
+  
+  .fighter-social-media,
+  .watch-last-fight {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .fight-history-table-container {
+    padding: var(--space-lg);
+  }
+  
+  .fight-history-table th,
+  .fight-history-table td {
+    padding: var(--space-md) var(--space-sm);
+  }
+}
+
+@media (max-width: 640px) {
+  .fighter-stats-overview {
+    grid-template-columns: 1fr;
+  }
+  
+  .fighter-image-container {
+    max-width: 280px;
+  }
+  
+  .fighter-info-container h1 {
+    font-size: var(--text-2xl);
+  }
+  
+  .champion-status {
+    font-size: var(--text-sm);
+    padding: var(--space-sm) var(--space-md);
+  }
+  
+  .fight-history-table {
+    min-width: 600px;
+  }
+  
+  .fight-history-table th,
+  .fight-history-table td {
+    padding: var(--space-sm);
+    font-size: var(--text-xs);
+  }
+  
+  .fight-result {
+    min-width: 50px;
+    padding: 2px 4px;
+  }
+}
+
+@media (max-width: 480px) {
+  .fighter-profile-section {
+    padding-top: var(--space-lg);
+    padding-bottom: var(--space-lg);
+  }
+  
+  .fighter-image-container {
+    max-width: 250px;
+  }
+  
+  .fighter-attributes {
+    padding: var(--space-md);
+  }
+  
+  .stat-block {
+    padding: var(--space-sm);
+  }
+  
+  .fight-history-table-container {
+    padding: var(--space-md);
+  }
+}
+
+/* ===== LOADING STATES ===== */
+.fighter-details-loading .fighter-image-container {
+  background: linear-gradient(90deg, var(--light-bg-secondary) 25%, var(--light-bg-tertiary) 50%, var(--light-bg-secondary) 75%);
+  background-size: 200% 100%;
+  animation: loading-shimmer 2s infinite;
+}
+
+[data-theme="dark"] .fighter-details-loading .fighter-image-container {
+  background: linear-gradient(90deg, var(--dark-bg-secondary) 25%, var(--dark-bg-tertiary) 50%, var(--dark-bg-secondary) 75%);
+  background-size: 200% 100%;
+}
+
+@keyframes loading-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.fighter-details-loading .stat-block,
+.fighter-details-loading .fighter-attributes {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* ===== PRINT STYLES ===== */
+@media print {
+  .fighter-details-page {
+    padding-top: 0;
+  }
+  
+  .fighter-profile-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+  
+  .fighter-image-container {
+    max-width: 300px;
+    margin: 0 auto;
+  }
+  
+  .fighter-social-media,
+  .watch-last-fight {
+    display: none;
+  }
+  
+  .fight-history-table {
+    min-width: auto;
+  }
+  
+  .fight-history-table th,
+  .fight-history-table td {
+    white-space: normal;
+  }
+}
