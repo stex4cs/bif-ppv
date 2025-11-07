@@ -1,0 +1,16 @@
+🚀 AUTO-DEPLOY TEST
+
+This file was created to test the Hostinger auto-deployment webhook.
+
+Timestamp: 2025-11-07 (current time)
+
+If you see this file on https://bif.events/AUTO_DEPLOY_TEST.txt after pushing to GitHub,
+then auto-deployment is working! 🎉
+
+Workflow:
+1. Push to GitHub (main branch)
+2. GitHub sends webhook to Hostinger
+3. Hostinger automatically pulls latest code
+4. Changes go live immediately!
+
+No manual pull needed! ✅
