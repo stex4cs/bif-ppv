@@ -25,16 +25,16 @@ jobs:
         run: |
           composer install --no-dev --optimize-autoloader --no-interaction
 
-      - name: Deploy to Hostinger via SFTP
+      - name: Deploy to Hostinger via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          port: 22
-          protocol: ftps
-          server-dir: /public_html/
-          dangerous-skip-ssl-check: true
+          port: 21
+          protocol: ftp
+          server-dir: /domains/bif.events/public_html/
+          security: loose
           exclude: |
             **/.git*
             **/.git*/**
