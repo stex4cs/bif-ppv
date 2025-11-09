@@ -2697,17 +2697,28 @@ function editNews(article) {
     document.getElementById('news-title-en').value = article.title_en || article.title || '';
     document.getElementById('news-excerpt-en').value = article.excerpt_en || article.excerpt || '';
 
-    // Set TinyMCE editor content
-    if (typeof tinymce !== 'undefined') {
-        const contentSr = article.content_sr || article.content || '';
-        const contentEn = article.content_en || article.content || '';
+    // Set TinyMCE editor content - wait for editors to be ready
+    const contentSr = article.content_sr || article.content || '';
+    const contentEn = article.content_en || article.content || '';
 
-        tinymce.get('news-content-sr')?.setContent(contentSr);
-        tinymce.get('news-content-en')?.setContent(contentEn);
-    } else {
-        // Fallback if TinyMCE not loaded
-        document.getElementById('news-content-sr').value = article.content_sr || article.content || '';
-        document.getElementById('news-content-en').value = article.content_en || article.content || '';
+    // Set textarea values first (fallback)
+    document.getElementById('news-content-sr').value = contentSr;
+    document.getElementById('news-content-en').value = contentEn;
+
+    // Then try to set TinyMCE content (will override textarea if editor is ready)
+    if (typeof tinymce !== 'undefined') {
+        // Use setTimeout to ensure editors are fully initialized
+        setTimeout(() => {
+            const editorSr = tinymce.get('news-content-sr');
+            const editorEn = tinymce.get('news-content-en');
+
+            if (editorSr) {
+                editorSr.setContent(contentSr);
+            }
+            if (editorEn) {
+                editorEn.setContent(contentEn);
+            }
+        }, 100);
     }
 
     if (article.published_at) {
