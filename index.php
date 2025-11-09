@@ -180,6 +180,21 @@ function formatNewsDate($dateString) {
             }
         })();
     </script>
+    <script>
+        // BifApp placeholder - will be populated by js/main.js
+        window.bifApp = window.bifApp || {
+            previousSlide: function() { console.log('bifApp loading...'); },
+            nextSlide: function() { console.log('bifApp loading...'); },
+            showSlide: function() { console.log('bifApp loading...'); },
+            openJerseyModal: function() { console.log('bifApp loading...'); },
+            openOrderForm: function() { console.log('bifApp loading...'); },
+            closeOrderModal: function() { console.log('bifApp loading...'); },
+            switchLanguage: function() { console.log('bifApp loading...'); },
+            handleOrderSubmit: function(e) { e.preventDefault(); console.log('bifApp loading...'); },
+            handleContactSubmit: function(e) { e.preventDefault(); console.log('bifApp loading...'); },
+            handleNewsletterSubmit: function(e) { e.preventDefault(); console.log('bifApp loading...'); }
+        };
+    </script>
     <meta name="description" content="BIF - Balkan Influence Fighting, najveći balkanski fight-show sa influenserima">
     <meta name="keywords" content="BIF, MMA, борбе, борци, Балкан, спорт">
     <meta name="author" content="BIF - Balkan Influence Fighting">
