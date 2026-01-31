@@ -1,0 +1,28 @@
+# Robots.txt za BIF - Balkan Influence Fighting
+# https://bif.events
+
+User-agent: *
+Allow: /
+
+# Blokirane putanje
+Disallow: /admin/
+Disallow: /tools/
+Disallow: /vendor/
+Disallow: /data/
+Disallow: /env/
+Disallow: /config/
+Disallow: /includes/
+Disallow: /*.php$
+Allow: /index.php
+Allow: /watch.php
+Allow: /contact.php
+
+# Test i debug fajlovi
+Disallow: /test-system.php
+Disallow: /db-test.php
+Disallow: /debug_payment.html
+Disallow: /test_api.html
+Disallow: /install.php
+
+# Sitemap lokacija
+Sitemap: https://bif.events/sitemap.xml
