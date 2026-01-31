@@ -99,6 +99,12 @@ function switchLanguage(lang) {
 
     // Update HTML lang attribute
     document.documentElement.setAttribute('lang', lang);
+
+    // Update page title if data attributes are present
+    const titleAttr = document.documentElement.getAttribute('data-title-' + lang);
+    if (titleAttr) {
+        document.title = titleAttr;
+    }
 }
 
 // ========================================

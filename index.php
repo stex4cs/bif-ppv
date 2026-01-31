@@ -162,7 +162,7 @@ function formatNewsDate($dateString) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="sr">
+<html lang="sr" data-title-sr="BIF - Balkan Influence Fighting" data-title-en="BIF - Balkan Influence Fighting">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
