@@ -1,9 +1,9 @@
 {
     "require": {
-        "php": ">=7.4",
+        "php": ">=8.0",
         "stripe/stripe-php": "^17.0",
         "aws/aws-sdk-php": "^3.200",
-        "firebase/php-jwt": "^6.10 || ^7.0",
+        "firebase/php-jwt": "^7.0",
         "phpmailer/phpmailer": "^6.5"
     },
     "config": {
@@ -11,7 +11,7 @@
         "platform-check": false,
         "audit": {
             "abandoned": "report",
-            "block-insecure": false
+            "ignore": ["PKSA-y2cr-5h3j-g3ys", "GHSA-2x45-7fc3-mxwq", "CVE-2025-45769"]
         }
     },
     "minimum-stability": "stable"
