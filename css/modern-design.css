@@ -186,6 +186,13 @@ header.scrolled {
     transform: none !important;
 }
 
+.logo-img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
 .nav-menu {
     display: flex;
     list-style: none;

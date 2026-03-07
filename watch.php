@@ -340,7 +340,7 @@ if (!$recaptchaSiteKey) {
             <div class="header-content">
                 <div class="logo">
                     <a href="index.php" style="color: inherit; text-decoration: none; display: flex; align-items: center; gap: var(--space-md);">
-                        <div class="logo-text">BIF</div>
+                        <img src="assets/images/logo/biflogo.png" alt="BIF Logo" class="logo-img" width="48" height="48">
                         <span class="lang-content active" data-lang="sr">Balkan Influence Fighting</span>
                         <span class="lang-content" data-lang="en">Balkan Influence Fighting</span>
                     </a>
