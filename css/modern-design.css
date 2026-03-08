@@ -343,6 +343,7 @@ header.scrolled {
     overflow: hidden;
     background: linear-gradient(135deg, var(--dark) 0%, var(--primary-dark) 100%) !important;
     margin-top: 0 !important;
+    padding-top: var(--header-height) !important;
 }
 
 [data-theme="light"] .hero {
@@ -1234,10 +1235,10 @@ footer::before {
         border: 1px solid rgba(0, 0, 0, 0.1);
     }
 
-    /* Hero section - add margin-top to prevent navbar overlap */
+    /* Hero section - padding for fixed navbar */
     .hero {
-        margin-top: 70px !important;
-        min-height: calc(100vh - 70px) !important;
+        margin-top: 0 !important;
+        padding-top: var(--header-height-mobile) !important;
     }
 
     .hero h1 {
