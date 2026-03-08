@@ -32,26 +32,28 @@ $activeFighters = loadActiveFighters();
 
 // Weight class helpers (same as in borac.php)
 function getWeightClassByWeight($weight) {
-    if ($weight <= 57) return ['sr' => 'Mušičja', 'en' => 'Flyweight'];
-    if ($weight <= 61) return ['sr' => 'Pijevčija', 'en' => 'Bantamweight'];
-    if ($weight <= 66) return ['sr' => 'Perjana', 'en' => 'Featherweight'];
-    if ($weight <= 70) return ['sr' => 'Laka', 'en' => 'Lightweight'];
-    if ($weight <= 77) return ['sr' => 'Polu-srednja', 'en' => 'Welterweight'];
-    if ($weight <= 84) return ['sr' => 'Srednja', 'en' => 'Middleweight'];
-    if ($weight <= 93) return ['sr' => 'Polu-teška', 'en' => 'Light Heavyweight'];
-    if ($weight <= 120) return ['sr' => 'Teška', 'en' => 'Heavyweight'];
+    if ($weight <= 49) return ['sr' => 'Muha', 'en' => 'Flyweight'];
+    if ($weight <= 52) return ['sr' => 'Bantam', 'en' => 'Bantamweight'];
+    if ($weight <= 56) return ['sr' => 'Perolaka', 'en' => 'Featherweight'];
+    if ($weight <= 60) return ['sr' => 'Laka', 'en' => 'Lightweight'];
+    if ($weight <= 64) return ['sr' => 'Poluvelter', 'en' => 'Light Welterweight'];
+    if ($weight <= 69) return ['sr' => 'Velter', 'en' => 'Welterweight'];
+    if ($weight <= 75) return ['sr' => 'Srednja', 'en' => 'Middleweight'];
+    if ($weight <= 81) return ['sr' => 'Poluteška', 'en' => 'Light Heavyweight'];
+    if ($weight <= 91) return ['sr' => 'Teška', 'en' => 'Heavyweight'];
     return ['sr' => 'Superteška', 'en' => 'Super Heavyweight'];
 }
 
 function getWeightClassLabels($weightClassKey) {
     $weightClasses = [
-        'flyweight' => ['sr' => 'Mušičja', 'en' => 'Flyweight'],
-        'bantamweight' => ['sr' => 'Pijevčija', 'en' => 'Bantamweight'],
-        'featherweight' => ['sr' => 'Perjana', 'en' => 'Featherweight'],
+        'flyweight' => ['sr' => 'Muha', 'en' => 'Flyweight'],
+        'bantamweight' => ['sr' => 'Bantam', 'en' => 'Bantamweight'],
+        'featherweight' => ['sr' => 'Perolaka', 'en' => 'Featherweight'],
         'lightweight' => ['sr' => 'Laka', 'en' => 'Lightweight'],
-        'welterweight' => ['sr' => 'Polu-srednja', 'en' => 'Welterweight'],
+        'light-welterweight' => ['sr' => 'Poluvelter', 'en' => 'Light Welterweight'],
+        'welterweight' => ['sr' => 'Velter', 'en' => 'Welterweight'],
         'middleweight' => ['sr' => 'Srednja', 'en' => 'Middleweight'],
-        'light-heavyweight' => ['sr' => 'Polu-teška', 'en' => 'Light Heavyweight'],
+        'light-heavyweight' => ['sr' => 'Poluteška', 'en' => 'Light Heavyweight'],
         'heavyweight' => ['sr' => 'Teška', 'en' => 'Heavyweight'],
         'super-heavyweight' => ['sr' => 'Superteška', 'en' => 'Super Heavyweight']
     ];
