@@ -153,14 +153,18 @@ window.bifApp = {
         });
     },
 
-    // How many cards visible at once
+    // How many cards actually fit in the visible area
     getVisibleCount() {
         const carousel = document.querySelector('.fighters-carousel');
-        if (!carousel) return 1;
-        const carouselWidth = carousel.clientWidth;
-        if (carouselWidth >= 1024) return 3;
-        if (carouselWidth >= 680) return 2;
-        return 1;
+        const container = document.getElementById('fightersContainer');
+        if (!carousel || !container) return 1;
+        const cards = container.querySelectorAll('.fighter-card');
+        if (cards.length === 0) return 1;
+        const card = cards[0];
+        const gap = parseFloat(getComputedStyle(container).gap) || 0;
+        const cardWidth = card.offsetWidth + gap;
+        if (cardWidth <= 0) return 1;
+        return Math.max(1, Math.floor((carousel.clientWidth + gap) / cardWidth));
     },
 
     // Max valid slide index
@@ -212,15 +216,18 @@ window.bifApp = {
         this.currentSlide = index;
 
         const container = document.getElementById('fightersContainer');
-        if (container) {
+        const carousel = document.querySelector('.fighters-carousel');
+        if (container && carousel) {
             const cards = container.querySelectorAll('.fighter-card');
             if (cards.length === 0) return;
-            // Calculate offset based on actual card width + gap
             const card = cards[0];
-            const style = getComputedStyle(container);
-            const gap = parseFloat(style.gap) || 0;
+            const gap = parseFloat(getComputedStyle(container).gap) || 0;
             const cardWidth = card.offsetWidth + gap;
-            container.style.transform = `translateX(-${index * cardWidth}px)`;
+            // Cap scroll so we never scroll past the last card
+            const maxScroll = Math.max(0, container.scrollWidth - carousel.clientWidth);
+            const desiredScroll = index * cardWidth;
+            const scroll = Math.min(desiredScroll, maxScroll);
+            container.style.transform = `translateX(-${Math.max(0, scroll)}px)`;
         }
 
         // Update navigation dots
