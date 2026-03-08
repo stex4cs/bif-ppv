@@ -126,8 +126,8 @@ function loadHeroSettings() {
 }
 
 $heroSettings = loadHeroSettings();
-$heroTitleSr = $heroSettings['countdown_title_sr'] ?? 'Balkan Influence Fighting';
-$heroTitleEn = $heroSettings['countdown_title_en'] ?? 'Balkan Influence Fighting';
+$countdownTitleSr = $heroSettings['countdown_title_sr'] ?? 'Do BIF 1';
+$countdownTitleEn = $heroSettings['countdown_title_en'] ?? 'Until BIF 1';
 
 // Helper function to extract excerpt from content
 function extractExcerpt($content, $length = 150) {
@@ -331,8 +331,8 @@ if (!$recaptchaSiteKey) {
             <div class="container">
                 <div class="hero-content">
                     <h1>
-                        <span class="lang-content active" data-lang="sr"><?php echo htmlspecialchars($heroTitleSr); ?></span>
-                        <span class="lang-content" data-lang="en"><?php echo htmlspecialchars($heroTitleEn); ?></span>
+                        <span class="lang-content active" data-lang="sr">Balkan Influence Fighting</span>
+                        <span class="lang-content" data-lang="en">Balkan Influence Fighting</span>
                     </h1>
                     
                     <p>
@@ -369,6 +369,12 @@ if (!$recaptchaSiteKey) {
     allowfullscreen>
   </iframe>
     </div>
+
+    <!-- Countdown title from admin -->
+    <h2 class="countdown-title">
+        <span class="lang-content active" data-lang="sr"><?php echo htmlspecialchars($countdownTitleSr); ?></span>
+        <span class="lang-content" data-lang="en"><?php echo htmlspecialchars($countdownTitleEn); ?></span>
+    </h2>
 
     <!-- Countdown -->
     <div id="countdown" class="countdown">

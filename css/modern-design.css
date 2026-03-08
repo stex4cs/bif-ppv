@@ -3083,6 +3083,16 @@ a:hover {
     width: 100%;
 }
 
+.countdown-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text);
+    margin-bottom: var(--space-lg);
+}
+
 .video-preview {
     position: relative;
     width: 100%;
