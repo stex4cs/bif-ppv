@@ -18,7 +18,7 @@
         })();
     </script>
     <meta name="description" content="Detalji o borcu: Dejan Rančev - Rančev - BIF Borac">
-    <meta name="keywords" content="BIF, MMA, borac, Dejan Rančev, Rančev, statistika, borbe">
+    <meta name="keywords" content="BIF, boks, borac, Dejan Rančev, Rančev, statistika, borbe">
     <meta name="author" content="BIF - Balkan Influence Fighting">
 
     <!-- Open Graph Meta Tags -->
@@ -52,7 +52,7 @@
         "@type": "Person",
         "name": "Dejan Rančev",
         "alternateName": "Rančev",
-        "jobTitle": "MMA Fighter",
+        "jobTitle": "Boxer",
         "worksFor": {
             "@type": "SportsOrganization",
             "name": "BIF - Balkan Influence Fighting"

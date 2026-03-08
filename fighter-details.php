@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Update meta tags for specific fighter -->
     <meta name="description" content="Detalji o borcu: Tomislav Batinic - BIF Borac">
-    <meta name="keywords" content="BIF, MMA, borac, Tomislav Batinic, statistika, borbe">
+    <meta name="keywords" content="BIF, boks, borac, Tomislav Batinic, statistika, borbe">
     <meta name="author" content="BIF - Balkan Influence Fighting">
 
     <!-- Open Graph Meta Tags -->
@@ -52,7 +52,7 @@
         "@type": "Person",
         "name": "Tomislav Batinic",
         "alternateName": "The Beast",
-        "jobTitle": "MMA Fighter",
+        "jobTitle": "Boxer",
         "worksFor": {
             "@type": "SportsOrganization",
             "name": "BIF - Balkan Influence Fighting"

@@ -18,7 +18,7 @@
         })();
     </script>
     <meta name="description" content="Detalji o borcu: Dušan Novičić - Nole - BIF Borac">
-    <meta name="keywords" content="BIF, MMA, borac, Dušan Novičić, Nole, statistika, borbe">
+    <meta name="keywords" content="BIF, boks, borac, Dušan Novičić, Nole, statistika, borbe">
     <meta name="author" content="BIF - Balkan Influence Fighting">
 
     <!-- Open Graph Meta Tags -->
@@ -52,7 +52,7 @@
         "@type": "Person",
         "name": "Dušan Novičić",
         "alternateName": "Nole",
-        "jobTitle": "MMA Fighter",
+        "jobTitle": "Boxer",
         "worksFor": {
             "@type": "SportsOrganization",
             "name": "BIF - Balkan Influence Fighting"
@@ -123,7 +123,7 @@
                             </div>
                             <div class="attribute-item">
                                 <span class="label"><span class="lang-content active" data-lang="sr">Disciplina</span><span class="lang-content" data-lang="en">Discipline</span></span>
-                                <span class="value">MMA</span>
+                                <span class="value">Boks</span>
                             </div>
                             <div class="attribute-item">
                                 <span class="label"><span class="lang-content active" data-lang="sr">Država</span><span class="lang-content" data-lang="en">Country</span></span>

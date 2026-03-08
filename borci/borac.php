@@ -133,7 +133,7 @@ $pageUrl = 'https://bif.events/borci/' . $slug;
         })();
     </script>
     <meta name="description" content="<?php echo $metaDescription; ?>">
-    <meta name="keywords" content="BIF, MMA, borac, <?php echo $name; ?>, <?php echo $nickname; ?>, statistika, borbe">
+    <meta name="keywords" content="BIF, boks, borac, <?php echo $name; ?>, <?php echo $nickname; ?>, statistika, borbe">
     <meta name="author" content="BIF - Balkan Influence Fighting">
 
     <!-- Open Graph Meta Tags -->
@@ -166,7 +166,7 @@ $pageUrl = 'https://bif.events/borci/' . $slug;
         "@type": "Person",
         "name": "<?php echo $name; ?>",
         <?php if ($nickname): ?>"alternateName": "<?php echo $nickname; ?>",<?php endif; ?>
-        "jobTitle": "MMA Fighter",
+        "jobTitle": "Boxer",
         "worksFor": {
             "@type": "SportsOrganization",
             "name": "BIF - Balkan Influence Fighting"
@@ -243,7 +243,7 @@ $pageUrl = 'https://bif.events/borci/' . $slug;
                             </div>
                             <div class="attribute-item">
                                 <span class="label"><span class="lang-content active" data-lang="sr">Disciplina</span><span class="lang-content" data-lang="en">Discipline</span></span>
-                                <span class="value">MMA</span>
+                                <span class="value">Boks</span>
                             </div>
                             <div class="attribute-item">
                                 <span class="label"><span class="lang-content active" data-lang="sr">Država</span><span class="lang-content" data-lang="en">Country</span></span>

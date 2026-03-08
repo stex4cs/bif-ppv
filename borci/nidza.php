@@ -18,7 +18,7 @@
         })();
     </script>
     <meta name="description" content="Detalji o borcu: Nikola Belička - Nidza - BIF Borac">
-    <meta name="keywords" content="BIF, MMA, borac, Nikola Belička, Nidza, statistika, borbe">
+    <meta name="keywords" content="BIF, boks, borac, Nikola Belička, Nidza, statistika, borbe">
     <meta name="author" content="BIF - Balkan Influence Fighting">
 
     <!-- Open Graph Meta Tags -->
@@ -53,7 +53,7 @@
         "@type": "Person",
         "name": "Nikola Belička",
         "alternateName": "Nidza",
-        "jobTitle": "MMA Fighter",
+        "jobTitle": "Boxer",
         "worksFor": {
             "@type": "SportsOrganization",
             "name": "BIF - Balkan Influence Fighting"

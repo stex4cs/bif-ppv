@@ -181,7 +181,7 @@ function formatNewsDate($dateString) {
         })();
     </script>
     <meta name="description" content="BIF - Balkan Influence Fighting, najveći balkanski fight-show sa influenserima">
-    <meta name="keywords" content="BIF, MMA, борбе, борци, Балкан, спорт">
+    <meta name="keywords" content="BIF, boks, borbe, borci, Balkan, sport, spektakl">
     <meta name="author" content="BIF - Balkan Influence Fighting">
     
     <!-- Open Graph Meta Tags -->
@@ -240,7 +240,7 @@ function formatNewsDate($dateString) {
         "@context": "https://schema.org",
         "@type": "SportsOrganization",
         "name": "BIF - Balkan Influence Fighting",
-        "description": "Najveći balkanski fight-show sa influenserima",
+        "description": "Najveci balkanski boks spektakl sa influenserima",
         "url": "https://bif-fighting.com",
         "logo": "https://bif-fighting.com/assets/images/news/news-1.png",
         "sameAs": [
@@ -760,8 +760,8 @@ if (!$recaptchaSiteKey) {
                 
                 <div class="sponsor-description">
                     <p class="lead-text">
-                        <span class="lang-content active" data-lang="sr">Želite da budete sponzor najbrže rastuće MMA organizacije na Balkanu?</span>
-                        <span class="lang-content" data-lang="en">Want to sponsor the fastest growing MMA organization in the Balkans?</span>
+                        <span class="lang-content active" data-lang="sr">Zelite da budete sponzor najveceg boks spektakla na Balkanu?</span>
+                        <span class="lang-content" data-lang="en">Want to sponsor the biggest boxing spectacle in the Balkans?</span>
                     </p>
                     
                     <p>

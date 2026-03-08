@@ -18,7 +18,7 @@
         })();
     </script>
     <meta name="description" content="Detalji o borcu: Ivan Mitrović - Don Biza - BIF Borac">
-    <meta name="keywords" content="BIF, MMA, borac, Ivan Mitrović, Don Biza, statistika, borbe">
+    <meta name="keywords" content="BIF, boks, borac, Ivan Mitrović, Don Biza, statistika, borbe">
     <meta name="author" content="BIF - Balkan Influence Fighting">
 
     <!-- Open Graph Meta Tags -->
@@ -51,7 +51,7 @@
         "@type": "Person",
         "name": "Ivan Mitrović",
         "alternateName": "Don Biza",
-        "jobTitle": "MMA Fighter",
+        "jobTitle": "Boxer",
         "worksFor": {
             "@type": "SportsOrganization",
             "name": "BIF - Balkan Influence Fighting"

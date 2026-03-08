@@ -127,7 +127,7 @@ foreach ($allNews as $n) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="<?php echo htmlspecialchars($metaDescription); ?>">
-    <meta name="keywords" content="BIF, MMA, vesti, <?php echo htmlspecialchars($titleSr); ?>">
+    <meta name="keywords" content="BIF, boks, vesti, <?php echo htmlspecialchars($titleSr); ?>">
     <meta name="author" content="BIF - Balkan Influence Fighting">
 
     <!-- Open Graph Meta Tags -->

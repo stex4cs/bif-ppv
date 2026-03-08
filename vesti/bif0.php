@@ -18,7 +18,7 @@
         })();
     </script>
     <meta name="description" content="BIF 0: Prvi udarac u srce Balkana - Jul 2025, predstavljanje pokreta">
-    <meta name="keywords" content="BIF, MMA, vest, BIF 0, pokret, jul 2025, borbe">
+    <meta name="keywords" content="BIF, boks, vest, BIF 0, pokret, jul 2025, borbe">
     <meta name="author" content="BIF - Balkan Influence Fighting">
 
     <!-- Open Graph Meta Tags -->

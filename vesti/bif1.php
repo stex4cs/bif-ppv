@@ -18,7 +18,7 @@
         })();
     </script>
     <meta name="description" content="BIF 1: Najveći influenser događaj u istoriji regiona - Rat svetova na Balkanu">
-    <meta name="keywords" content="BIF, MMA, vest, BIF 1, influenseri, rat svetova, Balkan">
+    <meta name="keywords" content="BIF, boks, vest, BIF 1, influenseri, rat svetova, Balkan">
     <meta name="author" content="BIF - Balkan Influence Fighting">
 
     <!-- Open Graph Meta Tags -->

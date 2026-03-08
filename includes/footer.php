@@ -7,8 +7,8 @@
                     <span class="lang-content" data-lang="en">About Us</span>
                 </h3>
                 <p>
-                    <span class="lang-content active" data-lang="sr">Balkan Influence Fighting je najjaca MMA organizacija na Balkanu, posvecena promociji vrhunskih borilackih vestina i sportskog duha.</span>
-                    <span class="lang-content" data-lang="en">Balkan Influence Fighting is the strongest MMA organization in the Balkans, dedicated to promoting top-tier martial arts and sportsmanship.</span>
+                    <span class="lang-content active" data-lang="sr">Balkan Influence Fighting je najveci boks spektakl na Balkanu, posvecen promociji vrhunskog boksa i sportskog duha.</span>
+                    <span class="lang-content" data-lang="en">Balkan Influence Fighting is the biggest boxing spectacle in the Balkans, dedicated to promoting top-tier boxing and sportsmanship.</span>
                 </p>
             </div>
 

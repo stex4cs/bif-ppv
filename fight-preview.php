@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="BIF - Pregled Borbe: Matej Batinic vs Gadzhimurad Khebdeev">
-    <meta name="keywords" content="BIF, MMA, pregled borbe, statistika, Matej Batinic, Gadzhimurad Khebdeev">
+    <meta name="keywords" content="BIF, boks, pregled borbe, statistika, Matej Batinic, Gadzhimurad Khebdeev">
     <meta name="author" content="BIF - Balkan Influence Fighting">
 
     <meta property="og:title" content="BIF Pregled Borbe - Batinic vs Khebdeev">

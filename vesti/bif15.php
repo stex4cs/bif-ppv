@@ -18,7 +18,7 @@
         })();
     </script>
     <meta name="description" content="BIF 15: Najavljeni novi mečevi - Spektakularni događaj BIF 15">
-    <meta name="keywords" content="BIF, MMA, vest, BIF 15, mečevi, borbe">
+    <meta name="keywords" content="BIF, boks, vest, BIF 15, mečevi, borbe">
     <meta name="author" content="BIF - Balkan Influence Fighting">
 
     <!-- Open Graph Meta Tags -->
@@ -132,13 +132,13 @@
                     <!-- Article Content -->
                     <div class="article-content">
                         <div class="lang-content active" data-lang="sr">
-                            <p>Balkan Influence Fighting ponosno najavljuje BIF 15, događaj koji će obeležiti ovu godinu u svetu mixed martial arts-a na Balkanu. Ovaj spektakularni turnir će se održati <strong>15. juna 2025. godine u Štark Areni</strong>, gde će se najbolji regionalni borci suočiti u borbi za titule i slavu.</p>
+                            <p>Balkan Influence Fighting ponosno najavljuje BIF 15, događaj koji će obeležiti ovu godinu u svetu borilačkih sportova na Balkanu. Ovaj spektakularni turnir će se održati <strong>15. juna 2025. godine u Štark Areni</strong>, gde će se najbolji regionalni borci suočiti u borbi za titule i slavu.</p>
 
                             <h2>Glavne borbe večeri</h2>
                             <p>Program večeri će biti otvoren sa nekoliko uzbudljivih mečeva u različitim kategorijama, a vrhunac će predstavljati borba za titulu prvaka u lakoj kategoriji između aktuelnog šampiona <em>Marka Bojkovića</em> i pretendenta <em>Francisca Barria</em>.</p>
 
                             <blockquote>
-                                <p>"Ovo će biti najveći događaj u istoriji BIF-a. Pripremili smo nezaboravnu noć za sve ljubitelje MMA sporta."</p>
+                                <p>"Ovo će biti najveći događaj u istoriji BIF-a. Pripremili smo nezaboravnu noć za sve ljubitelje boksa."</p>
                                 <cite>- Direktor BIF organizacije</cite>
                             </blockquote>
 
@@ -158,13 +158,13 @@
                         </div>
 
                         <div class="lang-content" data-lang="en">
-                            <p>Balkan Influence Fighting proudly announces BIF 15, an event that will mark this year in the world of mixed martial arts in the Balkans. This spectacular tournament will be held on <strong>June 15, 2025 at Štark Arena</strong>, where the best regional fighters will face each other in the fight for titles and glory.</p>
+                            <p>Balkan Influence Fighting proudly announces BIF 15, an event that will mark this year in the world of combat sports in the Balkans. This spectacular tournament will be held on <strong>June 15, 2025 at Štark Arena</strong>, where the best regional fighters will face each other in the fight for titles and glory.</p>
 
                             <h2>Main Fights of the Evening</h2>
                             <p>The evening's program will open with several exciting matches in different categories, and the climax will be the fight for the lightweight champion title between the current champion <em>Marko Bojković</em> and challenger <em>Francisco Barrio</em>.</p>
 
                             <blockquote>
-                                <p>"This will be the biggest event in BIF's history. We have prepared an unforgettable night for all MMA fans."</p>
+                                <p>"This will be the biggest event in BIF's history. We have prepared an unforgettable night for all boxing fans."</p>
                                 <cite>- BIF Organization Director</cite>
                             </blockquote>
 
@@ -200,7 +200,7 @@
                                 <span class="lang-content active" data-lang="sr">Štark Arena</span>
                                 <span class="lang-content" data-lang="en">Štark Arena</span>
                             </span>
-                            <span class="tag">MMA</span>
+                            <span class="tag">Boks</span>
                         </div>
 
                         <div class="article-share">

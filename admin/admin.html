@@ -1179,18 +1179,43 @@
                 </div>
             </div>
 
-            <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px;">
-                <div class="form-group">
-                    <label for="fighter-wins">Pobede</label>
-                    <input type="number" id="fighter-wins" name="wins" placeholder="10" value="0">
+            <div style="background: #f0f7ff; padding: 15px; border-radius: 5px; margin-bottom: 15px;">
+                <h4 style="margin-top: 0; font-size: 14px; color: #333;">BIF Skor (W-L-D)</h4>
+                <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px;">
+                    <div class="form-group">
+                        <label for="fighter-wins">Pobede (W)</label>
+                        <input type="number" id="fighter-wins" name="wins" placeholder="0" value="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="fighter-losses">Porazi (L)</label>
+                        <input type="number" id="fighter-losses" name="losses" placeholder="0" value="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="fighter-draws">Nereseno (D)</label>
+                        <input type="number" id="fighter-draws" name="draws" placeholder="0" value="0" min="0">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="fighter-losses">Porazi</label>
-                    <input type="number" id="fighter-losses" name="losses" placeholder="2" value="0">
-                </div>
-                <div class="form-group">
-                    <label for="fighter-draws">Nereseno</label>
-                    <input type="number" id="fighter-draws" name="draws" placeholder="0" value="0">
+            </div>
+
+            <div style="background: #fff7e6; padding: 15px; border-radius: 5px; margin-bottom: 15px;">
+                <h4 style="margin-top: 0; font-size: 14px; color: #333;">Overall Skor (Ukupna karijera)</h4>
+                <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:15px;">
+                    <div class="form-group">
+                        <label for="fighter-overall-wins">Pobede</label>
+                        <input type="number" id="fighter-overall-wins" name="overall_wins" placeholder="0" value="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="fighter-overall-losses">Porazi</label>
+                        <input type="number" id="fighter-overall-losses" name="overall_losses" placeholder="0" value="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="fighter-overall-draws">Nereseno</label>
+                        <input type="number" id="fighter-overall-draws" name="overall_draws" placeholder="0" value="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="fighter-overall-ko">KO/TKO</label>
+                        <input type="number" id="fighter-overall-ko" name="overall_ko" placeholder="0" value="0" min="0">
+                    </div>
                 </div>
             </div>
 
@@ -2490,7 +2515,7 @@ function displayFighters(fighters) {
             <td>${fighter.weight ? fighter.weight + ' kg' : '-'}</td>
             <td>${fighter.height ? fighter.height + ' cm' : '-'}</td>
             <td><small>${weightClass}</small></td>
-            <td>${fighter.wins || 0}-${fighter.losses || 0}-${fighter.draws || 0}</td>
+            <td><strong>BIF:</strong> ${fighter.wins || 0}-${fighter.losses || 0}-${fighter.draws || 0}<br><small style="color:#888;">Overall: ${fighter.overall_wins || 0}-${fighter.overall_losses || 0}-${fighter.overall_draws || 0} (${fighter.overall_ko || 0} KO)</small></td>
             <td><span class="badge ${fighter.status === 'active' ? 'badge-success' : 'badge-secondary'}">${fighter.status === 'active' ? 'Aktivan' : 'Neaktivan'}</span></td>
             <td>
                 <button class="btn-icon" onclick='editFighter(${JSON.stringify(fighter)})' title="Izmeni">✏️</button>
@@ -2522,6 +2547,10 @@ function editFighter(fighter) {
     document.getElementById('fighter-wins').value = fighter.wins || 0;
     document.getElementById('fighter-losses').value = fighter.losses || 0;
     document.getElementById('fighter-draws').value = fighter.draws || 0;
+    document.getElementById('fighter-overall-wins').value = fighter.overall_wins || 0;
+    document.getElementById('fighter-overall-losses').value = fighter.overall_losses || 0;
+    document.getElementById('fighter-overall-draws').value = fighter.overall_draws || 0;
+    document.getElementById('fighter-overall-ko').value = fighter.overall_ko || 0;
     document.getElementById('fighter-weight-class').value = fighter.weight_class || '';
     document.getElementById('fighter-bio').value = fighter.bio || '';
     document.getElementById('fighter-image').value = fighter.image_url || '';
@@ -2541,7 +2570,7 @@ async function saveFighter(event) {
     const fighterData = Object.fromEntries(formData.entries());
 
     // Convert numbers
-    ['weight', 'height', 'age', 'wins', 'losses', 'draws'].forEach(field => {
+    ['weight', 'height', 'age', 'wins', 'losses', 'draws', 'overall_wins', 'overall_losses', 'overall_draws', 'overall_ko'].forEach(field => {
         if (fighterData[field]) fighterData[field] = parseInt(fighterData[field]);
     });
 
