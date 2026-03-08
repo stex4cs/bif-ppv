@@ -23,6 +23,10 @@
     --bg-primary: #0a0a0a;
     --bg-secondary: #1a1a1a;
     --bg-card: #2a2a2a;
+
+    /* Header */
+    --header-height: 80px;
+    --header-height-mobile: 70px;
 }
 
 /* Light Mode */
@@ -143,7 +147,7 @@ header.scrolled {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.25rem 0;
+    padding: 0.5rem 0;
     max-width: 1400px;
     margin: 0 auto;
     padding-left: var(--spacing-md);
@@ -187,8 +191,8 @@ header.scrolled {
 }
 
 .logo-img {
-    width: 72px;
-    height: 72px;
+    width: 56px;
+    height: 56px;
     object-fit: contain;
     flex-shrink: 0;
 }
