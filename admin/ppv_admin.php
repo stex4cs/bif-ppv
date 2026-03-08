@@ -10,6 +10,17 @@ Security_Headers::applyAdminCSP();
 
 session_start();
 
+// DEVELOPMENT BYPASS - samo localhost (NIKADA na produkciji!)
+$isLocalhost = (
+    strpos($_SERVER['HTTP_HOST'], 'localhost') !== false ||
+    strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false ||
+    strpos($_SERVER['SERVER_ADDR'], '127.0.0.1') !== false ||
+    strpos($_SERVER['SERVER_ADDR'], '::1') !== false
+);
+if ($isLocalhost) {
+    $_SESSION['admin_authenticated'] = true;
+}
+
 // ---------- .env loader (ručno, PHP7-kompat) ----------
 function loadEnvFile($path) {
     if (!is_file($path)) return;
@@ -997,6 +1008,8 @@ if (empty($_SESSION['admin_authenticated'])) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['admin_password'])) {
         if (hash_equals((string)$admin_password, (string)$_POST['admin_password'])) {
             $_SESSION['admin_authenticated'] = true;
+            header('Location: ' . $_SERVER['PHP_SELF']);
+            exit;
         } else {
             header('Content-Type: application/json; charset=UTF-8');
             http_response_code(401);
