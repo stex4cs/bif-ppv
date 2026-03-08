@@ -70,28 +70,30 @@ $heightIn = round(($height % 30.48) / 2.54);
 
 // Odredi kategoriju težine (weight class)
 function getWeightClassByWeight($weight) {
-    if ($weight <= 57) return ['sr' => 'MUŠIČJA TEŽINA', 'en' => 'FLYWEIGHT'];
-    if ($weight <= 61) return ['sr' => 'PIJEVČIJA TEŽINA', 'en' => 'BANTAMWEIGHT'];
-    if ($weight <= 66) return ['sr' => 'PERJANA TEŽINA', 'en' => 'FEATHERWEIGHT'];
-    if ($weight <= 70) return ['sr' => 'LAKA TEŽINA', 'en' => 'LIGHTWEIGHT'];
-    if ($weight <= 77) return ['sr' => 'POLU-SREDNJA TEŽINA', 'en' => 'WELTERWEIGHT'];
-    if ($weight <= 84) return ['sr' => 'SREDNJA TEŽINA', 'en' => 'MIDDLEWEIGHT'];
-    if ($weight <= 93) return ['sr' => 'POLU-TEŠKA TEŽINA', 'en' => 'LIGHT HEAVYWEIGHT'];
-    if ($weight <= 120) return ['sr' => 'TEŠKA TEŽINA', 'en' => 'HEAVYWEIGHT'];
-    return ['sr' => 'SUPERTEŠKA KATEGORIJA', 'en' => 'SUPER HEAVYWEIGHT'];
+    if ($weight <= 49) return ['sr' => 'MUHA', 'en' => 'FLYWEIGHT'];
+    if ($weight <= 52) return ['sr' => 'BANTAM', 'en' => 'BANTAMWEIGHT'];
+    if ($weight <= 56) return ['sr' => 'PEROLAKA', 'en' => 'FEATHERWEIGHT'];
+    if ($weight <= 60) return ['sr' => 'LAKA', 'en' => 'LIGHTWEIGHT'];
+    if ($weight <= 64) return ['sr' => 'POLUVELTER', 'en' => 'LIGHT WELTERWEIGHT'];
+    if ($weight <= 69) return ['sr' => 'VELTER', 'en' => 'WELTERWEIGHT'];
+    if ($weight <= 75) return ['sr' => 'SREDNJA', 'en' => 'MIDDLEWEIGHT'];
+    if ($weight <= 81) return ['sr' => 'POLUTEŠKA', 'en' => 'LIGHT HEAVYWEIGHT'];
+    if ($weight <= 91) return ['sr' => 'TEŠKA', 'en' => 'HEAVYWEIGHT'];
+    return ['sr' => 'SUPERTEŠKA', 'en' => 'SUPER HEAVYWEIGHT'];
 }
 
 function getWeightClassLabels($weightClassKey) {
     $weightClasses = [
-        'flyweight' => ['sr' => 'MUŠIČJA TEŽINA', 'en' => 'FLYWEIGHT'],
-        'bantamweight' => ['sr' => 'PIJEVČIJA TEŽINA', 'en' => 'BANTAMWEIGHT'],
-        'featherweight' => ['sr' => 'PERJANA TEŽINA', 'en' => 'FEATHERWEIGHT'],
-        'lightweight' => ['sr' => 'LAKA TEŽINA', 'en' => 'LIGHTWEIGHT'],
-        'welterweight' => ['sr' => 'POLU-SREDNJA TEŽINA', 'en' => 'WELTERWEIGHT'],
-        'middleweight' => ['sr' => 'SREDNJA TEŽINA', 'en' => 'MIDDLEWEIGHT'],
-        'light-heavyweight' => ['sr' => 'POLU-TEŠKA TEŽINA', 'en' => 'LIGHT HEAVYWEIGHT'],
-        'heavyweight' => ['sr' => 'TEŠKA TEŽINA', 'en' => 'HEAVYWEIGHT'],
-        'super-heavyweight' => ['sr' => 'SUPERTEŠKA KATEGORIJA', 'en' => 'SUPER HEAVYWEIGHT']
+        'flyweight' => ['sr' => 'MUHA', 'en' => 'FLYWEIGHT'],
+        'bantamweight' => ['sr' => 'BANTAM', 'en' => 'BANTAMWEIGHT'],
+        'featherweight' => ['sr' => 'PEROLAKA', 'en' => 'FEATHERWEIGHT'],
+        'lightweight' => ['sr' => 'LAKA', 'en' => 'LIGHTWEIGHT'],
+        'light-welterweight' => ['sr' => 'POLUVELTER', 'en' => 'LIGHT WELTERWEIGHT'],
+        'welterweight' => ['sr' => 'VELTER', 'en' => 'WELTERWEIGHT'],
+        'middleweight' => ['sr' => 'SREDNJA', 'en' => 'MIDDLEWEIGHT'],
+        'light-heavyweight' => ['sr' => 'POLUTEŠKA', 'en' => 'LIGHT HEAVYWEIGHT'],
+        'heavyweight' => ['sr' => 'TEŠKA', 'en' => 'HEAVYWEIGHT'],
+        'super-heavyweight' => ['sr' => 'SUPERTEŠKA', 'en' => 'SUPER HEAVYWEIGHT']
     ];
     return $weightClasses[$weightClassKey] ?? null;
 }

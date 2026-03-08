@@ -1223,15 +1223,16 @@
                 <label for="fighter-weight-class">Kategorija težine</label>
                 <select id="fighter-weight-class" name="weight_class">
                     <option value="">Auto (prema težini)</option>
-                    <option value="flyweight">Mušičja težina / Flyweight (do 57kg)</option>
-                    <option value="bantamweight">Pijevčija težina / Bantamweight (do 61kg)</option>
-                    <option value="featherweight">Perjana težina / Featherweight (do 66kg)</option>
-                    <option value="lightweight">Laka težina / Lightweight (do 70kg)</option>
-                    <option value="welterweight">Polu-srednja težina / Welterweight (do 77kg)</option>
-                    <option value="middleweight">Srednja težina / Middleweight (do 84kg)</option>
-                    <option value="light-heavyweight">Polu-teška težina / Light Heavyweight (do 93kg)</option>
-                    <option value="heavyweight">Teška težina / Heavyweight (do 120kg)</option>
-                    <option value="super-heavyweight">Superteška kategorija / Super Heavyweight (120kg+)</option>
+                    <option value="flyweight">Muha / Flyweight (46-49kg)</option>
+                    <option value="bantamweight">Bantam / Bantamweight (49-52kg)</option>
+                    <option value="featherweight">Perolaka / Featherweight (52-56kg)</option>
+                    <option value="lightweight">Laka / Lightweight (56-60kg)</option>
+                    <option value="light-welterweight">Poluvelter / Light Welterweight (60-64kg)</option>
+                    <option value="welterweight">Velter / Welterweight (64-69kg)</option>
+                    <option value="middleweight">Srednja / Middleweight (69-75kg)</option>
+                    <option value="light-heavyweight">Poluteška / Light Heavyweight (75-81kg)</option>
+                    <option value="heavyweight">Teška / Heavyweight (81-91kg)</option>
+                    <option value="super-heavyweight">Superteška / Super Heavyweight (91kg+)</option>
                 </select>
                 <small>Ako nije izabrano, kategorija se automatski određuje prema težini.</small>
             </div>
@@ -2484,13 +2485,14 @@ async function loadFighters() {
 
 function getWeightClassDisplayName(weightClass) {
     const weightClasses = {
-        'flyweight': 'Mušičja',
-        'bantamweight': 'Pijevčija',
-        'featherweight': 'Perjana',
+        'flyweight': 'Muha',
+        'bantamweight': 'Bantam',
+        'featherweight': 'Perolaka',
         'lightweight': 'Laka',
-        'welterweight': 'Polu-srednja',
+        'light-welterweight': 'Poluvelter',
+        'welterweight': 'Velter',
         'middleweight': 'Srednja',
-        'light-heavyweight': 'Polu-teška',
+        'light-heavyweight': 'Poluteška',
         'heavyweight': 'Teška',
         'super-heavyweight': 'Superteška'
     };
