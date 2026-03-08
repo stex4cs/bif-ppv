@@ -4,7 +4,7 @@
         <div class="header-content">
             <div class="logo">
                 <a href="/#home" style="color: inherit; text-decoration: none; display: flex; align-items: center; gap: var(--space-md);">
-                    <img src="/assets/images/logo/biflogo.png" alt="BIF Logo" class="logo-img" width="96" height="96">
+                    <img src="/assets/images/logo/biflogo.png" alt="BIF Logo" class="logo-img" width="72" height="72">
                     <span class="lang-content active" data-lang="sr">Balkan Influence Fighting</span>
                     <span class="lang-content" data-lang="en">Balkan Influence Fighting</span>
                 </a>
