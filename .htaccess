@@ -24,15 +24,29 @@ RedirectMatch 403 /\.env$
 RewriteCond %{THE_REQUEST} ^GET\ /([^?]*?)index\.html
 RewriteRule ^(.*)index\.html$ /$1index.php [R=301,L,NE]
 
-# Clean URLs
+# Redirect .html to .php for converted pages (301 permanent)
+RewriteCond %{THE_REQUEST} \s/+(.*?)\.html[\s?] [NC]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{DOCUMENT_ROOT}/%1.php -f
+RewriteRule ^(.+)\.html$ /$1.php [R=301,L]
+
+# Internal rewrite: serve .php for .html requests (borci/vesti static pages)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.+)$ $1.php [L]
+
+# Clean URLs - try .php then .html
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^([^/]+)/?$ $1.php [L]
+
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME}.html -f
 RewriteRule ^([^/]+)/?$ $1.html [L]
 
-# PPV routes
-RewriteRule ^watch/?$ watch.html [L]
-
-# Admin security - BLOCK direct access to admin.html, force through ppv_admin.php
-RewriteRule ^admin/admin\.html$ admin/ppv_admin.php [R=302,L]
+# Admin security - Force all admin access through ppv_admin.php (internal rewrite, no redirect)
+RewriteRule ^admin/admin\.html$ admin/ppv_admin.php [L]
 RewriteRule ^admin/?$ admin/ppv_admin.php [L]

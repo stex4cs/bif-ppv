@@ -187,94 +187,7 @@ foreach ($allNews as $n) {
     <a href="#main-content" class="sr-only">Skip to main content</a>
 
     <!-- Header -->
-    <header role="banner">
-        <div class="container">
-            <div class="header-content">
-                <button class="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false">
-                    <span class="hamburger-icon">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </span>
-                </button>
-
-                <div class="logo">
-                    <a href="../index.php" style="color: inherit; text-decoration: none; display: flex; align-items: center; gap: var(--space-md);">
-                        <img src="../assets/images/logo/biflogo.png" alt="BIF Logo" class="logo-img" width="96" height="96">
-                        <span class="lang-content active" data-lang="sr">Balkan Influence Fighting</span>
-                        <span class="lang-content" data-lang="en">Balkan Influence Fighting</span>
-                    </a>
-                </div>
-
-                <nav role="navigation" aria-label="Main navigation">
-                    <ul class="nav-menu">
-                        <li>
-                            <a href="../index.php#home" aria-label="Početna stranica">
-                                <span class="lang-content active" data-lang="sr">Početna</span>
-                                <span class="lang-content" data-lang="en">Home</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="../index.php#fighters" aria-label="Naši borci">
-                                <span class="lang-content active" data-lang="sr">Borci</span>
-                                <span class="lang-content" data-lang="en">Fighters</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="../index.php#news" aria-label="Najnovije vesti">
-                                <span class="lang-content active" data-lang="sr">Vesti</span>
-                                <span class="lang-content" data-lang="en">News</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="../index.php#events" aria-label="Događaji">
-                                <span class="lang-content active" data-lang="sr">Događaji</span>
-                                <span class="lang-content" data-lang="en">Events</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="../index.php#contact" aria-label="Kontakt informacije">
-                                <span class="lang-content active" data-lang="sr">Kontakt</span>
-                                <span class="lang-content" data-lang="en">Contact</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="../watch.php" aria-label="PPV Prenos uživo">
-                                <span class="lang-content active" data-lang="sr">PPV</span>
-                                <span class="lang-content" data-lang="en">PPV</span>
-                            </a>
-                        </li>
-
-                        <!-- Mobile only controls -->
-                        <li class="mobile-only-controls">
-                            <div class="mobile-theme-language">
-                                <button class="theme-toggle-mobile" aria-label="Toggle dark mode">
-                                    <span class="theme-icon-mobile">🌙</span>
-                                    <span class="lang-content active" data-lang="sr">Tema</span>
-                                    <span class="lang-content" data-lang="en">Theme</span>
-                                </button>
-
-                                <div class="language-switch-mobile">
-                                    <button class="lang-btn active" data-lang="sr" aria-label="Srpski jezik">SR</button>
-                                    <button class="lang-btn" data-lang="en" aria-label="English language">EN</button>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </nav>
-
-                <div class="header-controls">
-                    <button class="theme-toggle" aria-label="Toggle dark mode">
-                        <span class="theme-icon">🌙</span>
-                    </button>
-                    <div class="language-switch" role="group" aria-label="Language selection">
-                        <button class="lang-btn active" data-lang="sr" aria-label="Srpski jezik">SR</button>
-                        <button class="lang-btn" data-lang="en" aria-label="English language">EN</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
+    <?php include dirname(__DIR__) . '/includes/navbar.php'; ?>
 
     <main id="main-content" class="news-page">
         <!-- Breadcrumb Navigation -->
@@ -409,49 +322,7 @@ foreach ($allNews as $n) {
         </article>
     </main>
 
-    <!-- Footer -->
-    <footer id="contact" role="contentinfo">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>
-                        <span class="lang-content active" data-lang="sr">O Nama</span>
-                        <span class="lang-content" data-lang="en">About Us</span>
-                    </h3>
-                    <p>
-                        <span class="lang-content active" data-lang="sr">Balkan Influence Fighting je najjača MMA organizacija na Balkanu.</span>
-                        <span class="lang-content" data-lang="en">Balkan Influence Fighting is the strongest MMA organization in the Balkans.</span>
-                    </p>
-                </div>
-
-                <div class="footer-section">
-                    <h3>
-                        <span class="lang-content active" data-lang="sr">Pratite Nas</span>
-                        <span class="lang-content" data-lang="en">Follow Us</span>
-                    </h3>
-                    <div class="social-links">
-                        <a href="https://www.tiktok.com/@bif_balkan_influence" aria-label="TikTok" target="_blank" rel="noopener"><i class="fab fa-tiktok"></i></a>
-                        <a href="https://www.instagram.com/bif_balkan_influence" aria-label="Instagram" target="_blank" rel="noopener"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-
-                <div class="footer-section">
-                    <h3>
-                        <span class="lang-content active" data-lang="sr">Kontakt</span>
-                        <span class="lang-content" data-lang="en">Contact</span>
-                    </h3>
-                    <p>Email: <a href="mailto:bif.balkan.influence@gmail.com">bif.balkan.influence@gmail.com</a></p>
-                </div>
-            </div>
-
-            <div class="footer-bottom">
-                <p>&copy; 2025 BIF - Balkan Influence Fighting.
-                    <span class="lang-content active" data-lang="sr">Sva prava zadržana.</span>
-                    <span class="lang-content" data-lang="en">All rights reserved.</span>
-                </p>
-            </div>
-        </div>
-    </footer>
+    <?php include dirname(__DIR__) . '/includes/footer.php'; ?>
 
     <!-- JavaScript -->
     <script src="../js/main.js"></script>
