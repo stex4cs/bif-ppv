@@ -126,6 +126,8 @@ function loadHeroSettings() {
 }
 
 $heroSettings = loadHeroSettings();
+$heroTitleSr = $heroSettings['countdown_title_sr'] ?? 'Balkan Influence Fighting';
+$heroTitleEn = $heroSettings['countdown_title_en'] ?? 'Balkan Influence Fighting';
 
 // Helper function to extract excerpt from content
 function extractExcerpt($content, $length = 150) {
@@ -329,8 +331,8 @@ if (!$recaptchaSiteKey) {
             <div class="container">
                 <div class="hero-content">
                     <h1>
-                        <span class="lang-content active" data-lang="sr">Balkan Influence Fighting</span>
-                        <span class="lang-content" data-lang="en">Balkan Influence Fighting</span>
+                        <span class="lang-content active" data-lang="sr"><?php echo htmlspecialchars($heroTitleSr); ?></span>
+                        <span class="lang-content" data-lang="en"><?php echo htmlspecialchars($heroTitleEn); ?></span>
                     </h1>
                     
                     <p>
