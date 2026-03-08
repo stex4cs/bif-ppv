@@ -124,6 +124,8 @@ window.bifApp = {
         const cards = container.querySelectorAll('.fighter-card');
         this.totalSlides = cards.length;
 
+        if (this.totalSlides === 0) return;
+
         // Add touch event listeners for swipe
         container.addEventListener('touchstart', (e) => {
             this.touchStartX = e.changedTouches[0].screenX;
@@ -136,6 +138,29 @@ window.bifApp = {
 
         // Initialize first slide
         this.showSlide(0);
+        this.updateArrows();
+
+        // Recalculate on resize
+        window.addEventListener('resize', () => {
+            this.showSlide(this.currentSlide);
+            this.updateArrows();
+        });
+    },
+
+    // How many cards visible at once
+    getVisibleCount() {
+        const carousel = document.querySelector('.fighters-carousel');
+        if (!carousel) return 1;
+        const carouselWidth = carousel.clientWidth;
+        if (carouselWidth >= 1024) return 3;
+        if (carouselWidth >= 680) return 2;
+        return 1;
+    },
+
+    // Max valid slide index
+    getMaxSlide() {
+        const visible = this.getVisibleCount();
+        return Math.max(0, this.totalSlides - visible);
     },
 
     // Handle swipe gesture
@@ -145,10 +170,8 @@ window.bifApp = {
 
         if (Math.abs(diff) > swipeThreshold) {
             if (diff > 0) {
-                // Swipe left - next slide
                 this.nextSlide();
             } else {
-                // Swipe right - previous slide
                 this.previousSlide();
             }
         }
@@ -158,25 +181,42 @@ window.bifApp = {
     showSlide(index) {
         if (this.totalSlides === 0) return;
 
-        // Wrap around
-        if (index >= this.totalSlides) index = 0;
-        if (index < 0) index = this.totalSlides - 1;
+        const maxSlide = this.getMaxSlide();
+
+        // Clamp - no wrapping
+        if (index < 0) index = 0;
+        if (index > maxSlide) index = maxSlide;
 
         this.currentSlide = index;
 
         const container = document.getElementById('fightersContainer');
         if (container) {
-            container.style.transform = `translateX(-${index * 100}%)`;
+            const cards = container.querySelectorAll('.fighter-card');
+            if (cards.length === 0) return;
+            // Calculate offset based on actual card width + gap
+            const card = cards[0];
+            const style = getComputedStyle(container);
+            const gap = parseFloat(style.gap) || 0;
+            const cardWidth = card.offsetWidth + gap;
+            container.style.transform = `translateX(-${index * cardWidth}px)`;
         }
 
         // Update navigation dots
         document.querySelectorAll('.nav-dot').forEach((dot, i) => {
-            if (i === index) {
-                dot.classList.add('active');
-            } else {
-                dot.classList.remove('active');
-            }
+            dot.classList.toggle('active', i === index);
         });
+
+        this.updateArrows();
+    },
+
+    // Update arrow visibility
+    updateArrows() {
+        const prevBtn = document.querySelector('.carousel-arrow.prev');
+        const nextBtn = document.querySelector('.carousel-arrow.next');
+        if (prevBtn) prevBtn.style.opacity = this.currentSlide <= 0 ? '0.3' : '1';
+        if (nextBtn) nextBtn.style.opacity = this.currentSlide >= this.getMaxSlide() ? '0.3' : '1';
+        if (prevBtn) prevBtn.style.pointerEvents = this.currentSlide <= 0 ? 'none' : 'auto';
+        if (nextBtn) nextBtn.style.pointerEvents = this.currentSlide >= this.getMaxSlide() ? 'none' : 'auto';
     },
 
     // Next slide
