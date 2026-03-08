@@ -660,7 +660,9 @@
                     <div class="live-dot"></div>
                     <span>LIVE DATA</span>
                 </div>
+                <span id="auth-status" style="font-size:13px;color:#28a745;font-weight:600;">✓ Ulogovan</span>
                 <span id="current-time"></span>
+                <button onclick="adminLogout()" style="background:#dc3545;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600;font-size:13px;">Logout</button>
             </div>
         </div>
 
@@ -1498,6 +1500,55 @@
     </div>
 
     <script>
+        // ========== AUTH CHECK & LOGOUT ==========
+        function adminLogout() {
+            if (confirm('Da li ste sigurni da želite da se izlogujete?')) {
+                window.location.href = 'ppv_admin.php?action=logout';
+            }
+        }
+
+        async function checkAuth() {
+            try {
+                const res = await fetch('ppv_admin.php?action=check_auth');
+                const data = await res.json();
+                const statusEl = document.getElementById('auth-status');
+                if (!data.authenticated) {
+                    if (statusEl) { statusEl.textContent = '✗ Sesija istekla'; statusEl.style.color = '#dc3545'; }
+                    alert('Sesija je istekla. Bićete preusmereni na login.');
+                    window.location.href = 'ppv_admin.php';
+                    return false;
+                }
+                if (statusEl) { statusEl.textContent = '✓ Ulogovan'; statusEl.style.color = '#28a745'; }
+                return true;
+            } catch(e) {
+                console.error('Auth check failed:', e);
+                return true; // don't block on network errors
+            }
+        }
+
+        // Check auth on load and every 2 minutes
+        checkAuth();
+        setInterval(checkAuth, 120000);
+
+        // Wrap all fetch calls to detect auth expiry
+        const _originalFetch = window.fetch;
+        window.fetch = async function(...args) {
+            const response = await _originalFetch.apply(this, args);
+            if (response.status === 401) {
+                const clone = response.clone();
+                try {
+                    const data = await clone.json();
+                    if (data.auth_expired) {
+                        const statusEl = document.getElementById('auth-status');
+                        if (statusEl) { statusEl.textContent = '✗ Sesija istekla'; statusEl.style.color = '#dc3545'; }
+                        alert('Sesija je istekla. Bićete preusmereni na login.');
+                        window.location.href = 'ppv_admin.php';
+                    }
+                } catch(e) {}
+            }
+            return response;
+        };
+
         // ========== TINYMCE INITIALIZATION ==========
         let tinyMCEInitialized = false;
 

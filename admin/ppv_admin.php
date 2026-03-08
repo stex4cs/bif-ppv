@@ -1004,6 +1004,25 @@ $event['current_price'] = $currentPrice;
 /* ---------- Auth / Login ---------- */
 
 
+// ---------- Logout handler (pre auth check) ----------
+if (isset($_GET['action']) && $_GET['action'] === 'logout') {
+    $_SESSION = [];
+    if (ini_get('session.use_cookies')) {
+        $p = session_get_cookie_params();
+        setcookie(session_name(), '', time() - 42000, $p['path'], $p['domain'], $p['secure'], $p['httponly']);
+    }
+    session_destroy();
+    header('Location: ' . $_SERVER['PHP_SELF']);
+    exit;
+}
+
+// ---------- Auth check endpoint ----------
+if (isset($_GET['action']) && $_GET['action'] === 'check_auth') {
+    header('Content-Type: application/json; charset=UTF-8');
+    echo json_encode(['authenticated' => !empty($_SESSION['admin_authenticated'])]);
+    exit;
+}
+
 if (empty($_SESSION['admin_authenticated'])) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['admin_password'])) {
         if (hash_equals((string)$admin_password, (string)$_POST['admin_password'])) {
@@ -1022,7 +1041,8 @@ if (empty($_SESSION['admin_authenticated'])) {
             exit;
         }
         header('Content-Type: application/json; charset=UTF-8');
-        echo json_encode(['success'=>false,'error'=>'Authentication required'], JSON_UNESCAPED_UNICODE);
+        http_response_code(401);
+        echo json_encode(['success'=>false,'error'=>'Authentication required','auth_expired'=>true], JSON_UNESCAPED_UNICODE);
         exit;
     }
 }
