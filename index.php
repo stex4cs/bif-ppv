@@ -477,13 +477,7 @@ if (!$recaptchaSiteKey) {
             </div>
         </div>
 
-        <div class="carousel-nav" role="group" aria-label="Carousel navigation">
-            <?php for ($i = 0; $i < count($activeFighters); $i++): ?>
-            <button class="nav-dot <?php echo $i === 0 ? 'active' : ''; ?>"
-                    onclick="bifApp.showSlide(<?php echo $i; ?>)"
-                    aria-label="Go to slide <?php echo $i + 1; ?>">
-            </button>
-            <?php endfor; ?>
+        <div class="carousel-nav" id="carouselNav" role="group" aria-label="Carousel navigation">
         </div>
     </div>
 </section>

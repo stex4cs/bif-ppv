@@ -136,14 +136,20 @@ window.bifApp = {
             this.handleSwipe();
         }, { passive: true });
 
-        // Initialize first slide
+        // Build dots and show first slide
+        this.buildDots();
         this.showSlide(0);
         this.updateArrows();
 
         // Recalculate on resize
+        let resizeTimer;
         window.addEventListener('resize', () => {
-            this.showSlide(this.currentSlide);
-            this.updateArrows();
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                this.buildDots();
+                this.showSlide(this.currentSlide);
+                this.updateArrows();
+            }, 150);
         });
     },
 
@@ -161,6 +167,22 @@ window.bifApp = {
     getMaxSlide() {
         const visible = this.getVisibleCount();
         return Math.max(0, this.totalSlides - visible);
+    },
+
+    // Build navigation dots dynamically based on positions
+    buildDots() {
+        const nav = document.getElementById('carouselNav');
+        if (!nav) return;
+        const maxSlide = this.getMaxSlide();
+        const dotCount = maxSlide + 1;
+        nav.innerHTML = '';
+        for (let i = 0; i < dotCount; i++) {
+            const dot = document.createElement('button');
+            dot.className = 'nav-dot' + (i === this.currentSlide ? ' active' : '');
+            dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+            dot.addEventListener('click', () => this.showSlide(i));
+            nav.appendChild(dot);
+        }
     },
 
     // Handle swipe gesture
