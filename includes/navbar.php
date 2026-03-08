@@ -3,7 +3,7 @@
     <div class="container">
         <div class="header-content">
             <div class="logo">
-                <a href="/index.php#home" style="color: inherit; text-decoration: none; display: flex; align-items: center; gap: var(--space-md);">
+                <a href="/#home" style="color: inherit; text-decoration: none; display: flex; align-items: center; gap: var(--space-md);">
                     <img src="/assets/images/logo/biflogo.png" alt="BIF Logo" class="logo-img" width="96" height="96">
                     <span class="lang-content active" data-lang="sr">Balkan Influence Fighting</span>
                     <span class="lang-content" data-lang="en">Balkan Influence Fighting</span>
@@ -22,37 +22,37 @@
             <nav role="navigation" aria-label="Main navigation">
                 <ul class="nav-menu">
                     <li>
-                        <a href="/index.php#home" aria-label="Pocetna stranica">
+                        <a href="/#home" aria-label="Pocetna stranica">
                             <span class="lang-content active" data-lang="sr">Pocetna</span>
                             <span class="lang-content" data-lang="en">Home</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/index.php#fighters" aria-label="Nasi borci">
+                        <a href="/#fighters" aria-label="Nasi borci">
                             <span class="lang-content active" data-lang="sr">Borci</span>
                             <span class="lang-content" data-lang="en">Fighters</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/index.php#news" aria-label="Najnovije vesti">
+                        <a href="/#news" aria-label="Najnovije vesti">
                             <span class="lang-content active" data-lang="sr">Vesti</span>
                             <span class="lang-content" data-lang="en">News</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/index.php#events" aria-label="Dogadjaji">
+                        <a href="/#events" aria-label="Dogadjaji">
                             <span class="lang-content active" data-lang="sr">Dogadjaji</span>
                             <span class="lang-content" data-lang="en">Events</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/index.php#contact" aria-label="Kontakt informacije">
+                        <a href="/#contact" aria-label="Kontakt informacije">
                             <span class="lang-content active" data-lang="sr">Kontakt</span>
                             <span class="lang-content" data-lang="en">Contact</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/watch.php" aria-label="PPV Prenos uzivo">
+                        <a href="/watch" aria-label="PPV Prenos uzivo">
                             <span class="lang-content active" data-lang="sr">PPV</span>
                             <span class="lang-content" data-lang="en">PPV</span>
                         </a>

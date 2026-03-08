@@ -24,6 +24,10 @@ RedirectMatch 403 /\.env$
 RewriteCond %{THE_REQUEST} ^GET\ /([^?]*?)index\.html
 RewriteRule ^(.*)index\.html$ /$1index.php [R=301,L,NE]
 
+# Hide index.php from URL (redirect /index.php to /)
+RewriteCond %{THE_REQUEST} \s/+index\.php[?\s] [NC]
+RewriteRule ^index\.php$ / [R=301,L]
+
 # Redirect .html to .php for converted pages (301 permanent)
 RewriteCond %{THE_REQUEST} \s/+(.*?)\.html[\s?] [NC]
 RewriteCond %{REQUEST_FILENAME} !-f

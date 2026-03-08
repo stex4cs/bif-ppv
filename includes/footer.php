@@ -59,15 +59,15 @@
                     <span class="lang-content active" data-lang="sr">Brzi Linkovi</span>
                     <span class="lang-content" data-lang="en">Quick Links</span>
                 </h3>
-                <a href="/index.php#fighters">
+                <a href="/#fighters">
                     <span class="lang-content active" data-lang="sr">Borci</span>
                     <span class="lang-content" data-lang="en">Fighters</span>
                 </a>
-                <a href="/index.php#news">
+                <a href="/#news">
                     <span class="lang-content active" data-lang="sr">Vesti</span>
                     <span class="lang-content" data-lang="en">News</span>
                 </a>
-                <a href="/index.php#events">
+                <a href="/#events">
                     <span class="lang-content active" data-lang="sr">Dogadjaji</span>
                     <span class="lang-content" data-lang="en">Events</span>
                 </a>
