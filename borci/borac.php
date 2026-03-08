@@ -54,6 +54,10 @@ $weight = (int)($fighter['weight'] ?? 0);
 $wins = (int)($fighter['wins'] ?? 0);
 $losses = (int)($fighter['losses'] ?? 0);
 $draws = (int)($fighter['draws'] ?? 0);
+$overallWins = (int)($fighter['overall_wins'] ?? 0);
+$overallLosses = (int)($fighter['overall_losses'] ?? 0);
+$overallDraws = (int)($fighter['overall_draws'] ?? 0);
+$overallKo = (int)($fighter['overall_ko'] ?? 0);
 $bio = htmlspecialchars($fighter['bio'] ?? '');
 
 // Image URL handling
@@ -222,7 +226,7 @@ $pageUrl = 'https://bif.events/borci/' . $slug;
                                     <span class="lang-content active" data-lang="sr">UKUPNI SKOR</span>
                                     <span class="lang-content" data-lang="en">OVERALL SCORE</span>
                                 </h3>
-                                <p><?php echo $wins; ?>-<?php echo $losses; ?>-<?php echo $draws; ?> <span style="font-size: 0.6em; color: var(--gray-400);">(W-L-D)</span></p>
+                                <p><?php echo $overallWins; ?>-<?php echo $overallLosses; ?>-<?php echo $overallDraws; ?> <span style="font-size: 0.6em; color: var(--gray-400);">(W-L-D)</span><?php if ($overallKo > 0): ?> <span style="font-size: 0.7em; color: #c41e3a; font-weight: 700;"><?php echo $overallKo; ?> KO/TKO</span><?php endif; ?></p>
                             </div>
                         </div>
 
