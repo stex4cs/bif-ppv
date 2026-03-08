@@ -3,14 +3,15 @@
 <html lang="sr" data-title-sr="Ko je BIF? — Nova era zabave | BIF Vesti" data-title-en="Who is BIF? — A New Era of Entertainment | BIF News">
 <head>
     <script>
-        // Theme initialization - must run before page renders to prevent flash
         (function() {
-            const savedTheme = localStorage.getItem('theme');
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            const theme = savedTheme || (prefersDark ? 'dark' : 'light');
-
-            if (theme === 'dark') {
+            try {
+                var savedTheme = localStorage.getItem('bif-theme');
+                var theme = savedTheme || 'dark';
+                document.documentElement.setAttribute('data-theme', theme);
+                document.documentElement.style.colorScheme = theme;
+            } catch (err) {
                 document.documentElement.setAttribute('data-theme', 'dark');
+                document.documentElement.style.colorScheme = 'dark';
             }
         })();
     </script>

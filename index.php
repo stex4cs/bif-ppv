@@ -172,8 +172,7 @@ function formatNewsDate($dateString) {
         (function() {
             try {
                 var savedTheme = localStorage.getItem('bif-theme');
-                var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-                var theme = savedTheme || (prefersDark ? 'dark' : 'light');
+                var theme = savedTheme || 'dark';
                 document.documentElement.setAttribute('data-theme', theme);
                 document.documentElement.style.colorScheme = theme;
             } catch (err) {

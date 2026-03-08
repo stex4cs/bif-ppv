@@ -117,9 +117,8 @@ foreach ($allNews as $n) {
 <head>
     <script>
         (function() {
-            const savedTheme = localStorage.getItem('bif-theme');
-            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-            const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+            var savedTheme = localStorage.getItem('bif-theme');
+            var theme = savedTheme || 'dark';
             document.documentElement.setAttribute('data-theme', theme);
             document.documentElement.style.colorScheme = theme;
         })();
