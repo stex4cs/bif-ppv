@@ -962,6 +962,9 @@ $event['current_price'] = $currentPrice;
 
     private function saveHeroSettings($settings) {
         $file = PPV_DATA_DIR . '/hero_settings.json';
+        if (!is_dir(PPV_DATA_DIR)) {
+            @mkdir(PPV_DATA_DIR, 0755, true);
+        }
         $json = json_encode($settings, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         return file_put_contents($file, $json) !== false;
     }
@@ -996,6 +999,21 @@ $event['current_price'] = $currentPrice;
         if ($this->saveHeroSettings($settings)) {
             return ['success' => true, 'message' => 'Hero settings updated successfully', 'settings' => $settings];
         }
+        // Diagnostic error when save fails
+        $file = PPV_DATA_DIR . '/hero_settings.json';
+        $dirExists = is_dir(PPV_DATA_DIR);
+        $dirWritable = $dirExists ? is_writable(PPV_DATA_DIR) : false;
+        return [
+            'success' => false,
+            'error' => 'Save failed',
+            'diagnostics' => [
+                'data_dir' => PPV_DATA_DIR,
+                'dir_exists' => $dirExists,
+                'dir_writable' => $dirWritable,
+                'file_exists' => file_exists($file),
+                'last_error' => error_get_last()['message'] ?? null,
+            ],
+        ];
 
         return ['success' => false, 'error' => 'Failed to save hero settings'];
     }
