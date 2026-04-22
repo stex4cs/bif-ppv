@@ -802,17 +802,17 @@ if (!$recaptchaSiteKey) {
         <!-- STATS ROW -->
         <div class="sponsor-stats sponsor-stats--standalone">
             <div class="stat-item">
-                <div class="stat-number">500K+</div>
+                <div class="stat-number">10M+</div>
                 <div class="stat-label">
-                    <span class="lang-content active" data-lang="sr">Gledalaca po događaju</span>
-                    <span class="lang-content" data-lang="en">Viewers per event</span>
+                    <span class="lang-content active" data-lang="sr">Pregleda na platformama</span>
+                    <span class="lang-content" data-lang="en">Views across platforms</span>
                 </div>
             </div>
             <div class="stat-item">
-                <div class="stat-number">15+</div>
+                <div class="stat-number">20+</div>
                 <div class="stat-label">
-                    <span class="lang-content active" data-lang="sr">Uspešnih događaja</span>
-                    <span class="lang-content" data-lang="en">Successful events</span>
+                    <span class="lang-content active" data-lang="sr">Angažovanih influensera</span>
+                    <span class="lang-content" data-lang="en">Engaged influencers</span>
                 </div>
             </div>
             <div class="stat-item">
