@@ -115,10 +115,18 @@ if (!empty($customWeightClass)) {
     $weightClass = getWeightClassByWeight($weight);
 }
 
-// Meta podaci
-$metaTitle = $name . ($nickname ? ' - ' . $nickname : '') . ' - Detalji Borca | BIF';
-$metaDescription = 'Detalji o borcu: ' . $name . ($nickname ? ' - ' . $nickname : '') . ' - BIF Borac';
+// Meta podaci - SEO optimized
+$recordShort = $wins . '-' . $losses . ($draws > 0 ? '-' . $draws : '');
+$metaTitle = $name . ($nickname ? ' "' . $nickname . '"' : '') . ' — BIF Borac | ' . $weightClass['sr'] . ' | Rekord ' . $recordShort;
+$metaDescription = 'Zvanični profil BIF borca ' . $name . ($nickname ? ' "' . $nickname . '"' : '') . '. Težinska kategorija: ' . $weightClass['sr'] . '. BIF rekord: ' . $wins . ' pobeda, ' . $losses . ' poraza' . ($draws > 0 ? ', ' . $draws . ' nerešeno' : '') . '. Statistike, istorija borbi i video snimci.';
+$metaDescription = mb_substr($metaDescription, 0, 160);
 $pageUrl = 'https://bif.events/borci/' . $slug;
+// Absolute image URL for social sharing
+$absImageUrl = $fighter['image_url'] ?? '/assets/images/fighters/default.png';
+$absImageUrl = str_replace('\\/', '/', $absImageUrl);
+if (substr($absImageUrl, 0, 4) !== 'http') {
+    $absImageUrl = 'https://bif.events' . (substr($absImageUrl, 0, 1) === '/' ? '' : '/') . $absImageUrl;
+}
 ?><!DOCTYPE html>
 <html lang="sr">
 <head>
@@ -137,16 +145,28 @@ $pageUrl = 'https://bif.events/borci/' . $slug;
             }
         })();
     </script>
-    <meta name="description" content="<?php echo $metaDescription; ?>">
-    <meta name="keywords" content="BIF, boks, borac, <?php echo $name; ?>, <?php echo $nickname; ?>, statistika, borbe">
+    <meta name="description" content="<?php echo htmlspecialchars($metaDescription); ?>">
     <meta name="author" content="BIF - Balkan Influence Fighting">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="<?php echo $pageUrl; ?>">
 
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="<?php echo $metaTitle; ?>">
-    <meta property="og:description" content="<?php echo $metaDescription; ?>">
+    <meta property="og:site_name" content="BIF - Balkan Influence Fighting">
+    <meta property="og:locale" content="sr_RS">
+    <meta property="og:locale:alternate" content="en_US">
+    <meta property="og:title" content="<?php echo htmlspecialchars($metaTitle); ?>">
+    <meta property="og:description" content="<?php echo htmlspecialchars($metaDescription); ?>">
     <meta property="og:type" content="profile">
     <meta property="og:url" content="<?php echo $pageUrl; ?>">
-    <meta property="og:image" content="<?php echo $imageUrl; ?>">
+    <meta property="og:image" content="<?php echo htmlspecialchars($absImageUrl); ?>">
+    <meta property="og:image:alt" content="<?php echo htmlspecialchars($name . ($nickname ? ' - ' . $nickname : '')); ?>">
+    <meta property="profile:first_name" content="<?php echo htmlspecialchars(explode(' ', $name)[0]); ?>">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<?php echo htmlspecialchars($metaTitle); ?>">
+    <meta name="twitter:description" content="<?php echo htmlspecialchars($metaDescription); ?>">
+    <meta name="twitter:image" content="<?php echo htmlspecialchars($absImageUrl); ?>">
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/favicon/favicon.ico">
@@ -174,21 +194,42 @@ $pageUrl = 'https://bif.events/borci/' . $slug;
     <title><?php echo $metaTitle; ?></title>
 
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "<?php echo $name; ?>",
-        <?php if ($nickname): ?>"alternateName": "<?php echo $nickname; ?>",<?php endif; ?>
-        "jobTitle": "Boxer",
-        "worksFor": {
-            "@type": "SportsOrganization",
-            "name": "BIF - Balkan Influence Fighting"
-        },
-        "image": "<?php echo $pageUrl; ?>",
-        "url": "<?php echo $pageUrl; ?>",
-        "height": "<?php echo $height; ?> cm",
-        "weight": "<?php echo $weight; ?> kg"
-    }
+    <?php
+    $personSchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'Person',
+        'name' => $name,
+        'url' => $pageUrl,
+        'image' => $absImageUrl,
+        'jobTitle' => 'Professional Boxer',
+        'worksFor' => [
+            '@type' => 'SportsOrganization',
+            'name' => 'BIF - Balkan Influence Fighting',
+            'url' => 'https://bif.events',
+        ],
+    ];
+    if ($nickname) $personSchema['alternateName'] = $nickname;
+    if ($height > 0) $personSchema['height'] = ['@type' => 'QuantitativeValue', 'value' => $height, 'unitCode' => 'CMT'];
+    if ($weight > 0) $personSchema['weight'] = ['@type' => 'QuantitativeValue', 'value' => $weight, 'unitCode' => 'KGM'];
+    if (!empty($fighter['bio'])) $personSchema['description'] = mb_substr(strip_tags($fighter['bio']), 0, 300);
+    echo json_encode($personSchema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+    ?>
+    </script>
+
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+    <?php
+    $breadcrumbs = [
+        '@context' => 'https://schema.org',
+        '@type' => 'BreadcrumbList',
+        'itemListElement' => [
+            ['@type' => 'ListItem', 'position' => 1, 'name' => 'Početna', 'item' => 'https://bif.events/'],
+            ['@type' => 'ListItem', 'position' => 2, 'name' => 'Borci', 'item' => 'https://bif.events/#fighters'],
+            ['@type' => 'ListItem', 'position' => 3, 'name' => $name, 'item' => $pageUrl],
+        ],
+    ];
+    echo json_encode($breadcrumbs, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+    ?>
     </script>
 </head>
 <body>

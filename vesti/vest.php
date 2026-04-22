@@ -92,9 +92,18 @@ $categoryLabels = [
 $categoryLabel = $categoryLabels[$category] ?? ['sr' => 'VESTI', 'en' => 'NEWS'];
 
 // Meta podaci
-$metaTitle = $titleSr . ' | BIF';
-$metaDescription = $excerptSr ?: substr(strip_tags($contentSr), 0, 160);
+$metaTitle = $titleSr . ' | BIF - Balkan Influence Fighting';
+$metaDescription = $excerptSr ?: mb_substr(strip_tags($contentSr), 0, 160);
+$metaDescription = mb_substr($metaDescription, 0, 160);
 $pageUrl = 'https://bif.events/vesti/' . $slug;
+
+// Absolute image URL for SEO/social (schema.org requires absolute URLs)
+$absImageUrl = $news['image_url'] ?? '/assets/images/news/default.png';
+$absImageUrl = str_replace('\\/', '/', $absImageUrl);
+if (substr($absImageUrl, 0, 4) !== 'http') {
+    $absImageUrl = 'https://bif.events' . (substr($absImageUrl, 0, 1) === '/' ? '' : '/') . $absImageUrl;
+}
+$modifiedAt = $news['updated_at'] ?? $publishedAt;
 
 // Process content - basic HTML support
 function processContent($content) {
@@ -129,21 +138,29 @@ foreach ($allNews as $n) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="<?php echo htmlspecialchars($metaDescription); ?>">
-    <meta name="keywords" content="BIF, boks, vesti, <?php echo htmlspecialchars($titleSr); ?>">
     <meta name="author" content="BIF - Balkan Influence Fighting">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="<?php echo $pageUrl; ?>">
 
     <!-- Open Graph Meta Tags -->
+    <meta property="og:site_name" content="BIF - Balkan Influence Fighting">
+    <meta property="og:locale" content="sr_RS">
+    <meta property="og:locale:alternate" content="en_US">
     <meta property="og:title" content="<?php echo htmlspecialchars($titleSr); ?>">
     <meta property="og:description" content="<?php echo htmlspecialchars($metaDescription); ?>">
     <meta property="og:type" content="article">
     <meta property="og:url" content="<?php echo $pageUrl; ?>">
-    <meta property="og:image" content="<?php echo $imageUrl; ?>">
+    <meta property="og:image" content="<?php echo htmlspecialchars($absImageUrl); ?>">
+    <meta property="og:image:alt" content="<?php echo htmlspecialchars($titleSr); ?>">
+    <meta property="article:published_time" content="<?php echo htmlspecialchars($publishedAt); ?>">
+    <meta property="article:modified_time" content="<?php echo htmlspecialchars($modifiedAt); ?>">
+    <meta property="article:section" content="<?php echo htmlspecialchars($categoryLabel['sr']); ?>">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="<?php echo htmlspecialchars($titleSr); ?>">
     <meta name="twitter:description" content="<?php echo htmlspecialchars($metaDescription); ?>">
-    <meta name="twitter:image" content="<?php echo $imageUrl; ?>">
+    <meta name="twitter:image" content="<?php echo htmlspecialchars($absImageUrl); ?>">
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="../favicon/favicon.ico">
@@ -164,25 +181,52 @@ foreach ($allNews as $n) {
     <title><?php echo htmlspecialchars($metaTitle); ?></title>
 
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "NewsArticle",
-        "headline": "<?php echo htmlspecialchars($titleSr); ?>",
-        "image": "<?php echo $imageUrl; ?>",
-        "datePublished": "<?php echo $publishedAt; ?>",
-        "author": {
-            "@type": "Organization",
-            "name": "BIF - Balkan Influence Fighting"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "BIF",
-            "logo": {
-                "@type": "ImageObject",
-                "url": "https://bif.events/assets/images/logo.png"
-            }
-        }
-    }
+    <?php
+    $articleSchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'NewsArticle',
+        'mainEntityOfPage' => ['@type' => 'WebPage', '@id' => $pageUrl],
+        'headline' => $titleSr,
+        'description' => $metaDescription,
+        'image' => [$absImageUrl],
+        'datePublished' => $publishedAt,
+        'dateModified' => $modifiedAt,
+        'inLanguage' => 'sr-RS',
+        'url' => $pageUrl,
+        'articleSection' => $categoryLabel['sr'],
+        'author' => [
+            '@type' => 'Organization',
+            'name' => 'BIF - Balkan Influence Fighting',
+            'url' => 'https://bif.events',
+        ],
+        'publisher' => [
+            '@type' => 'Organization',
+            'name' => 'BIF - Balkan Influence Fighting',
+            'url' => 'https://bif.events',
+            'logo' => [
+                '@type' => 'ImageObject',
+                'url' => 'https://bif.events/assets/images/logo/biflogo.png',
+            ],
+        ],
+    ];
+    echo json_encode($articleSchema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+    ?>
+    </script>
+
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+    <?php
+    $newsBreadcrumbs = [
+        '@context' => 'https://schema.org',
+        '@type' => 'BreadcrumbList',
+        'itemListElement' => [
+            ['@type' => 'ListItem', 'position' => 1, 'name' => 'Početna', 'item' => 'https://bif.events/'],
+            ['@type' => 'ListItem', 'position' => 2, 'name' => 'Vesti', 'item' => 'https://bif.events/#news'],
+            ['@type' => 'ListItem', 'position' => 3, 'name' => $titleSr, 'item' => $pageUrl],
+        ],
+    ];
+    echo json_encode($newsBreadcrumbs, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+    ?>
     </script>
 </head>
 <body class="news-page-body">

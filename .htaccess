@@ -54,3 +54,6 @@ RewriteRule ^([^/]+)/?$ $1.html [L]
 # Admin security - Force all admin access through ppv_admin.php (internal rewrite, no redirect)
 RewriteRule ^admin/admin\.html$ admin/ppv_admin.php [L]
 RewriteRule ^admin/?$ admin/ppv_admin.php [L]
+
+# Dynamic sitemap.xml (serves sitemap.php with all fighters/news from JSON)
+RewriteRule ^sitemap\.xml$ sitemap.php [L]
