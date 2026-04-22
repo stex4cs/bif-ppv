@@ -1262,6 +1262,25 @@
                 </div>
             </div>
 
+            <!-- CHAMPION SETTINGS -->
+            <div style="margin-top:16px;padding:14px;background:linear-gradient(135deg,#fffbea,#fef3c7);border:1px solid #fcd34d;border-radius:8px;">
+                <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-weight:600;margin-bottom:10px;">
+                    <input type="checkbox" id="fighter-is-champion" name="is_champion" style="width:auto;" onchange="document.getElementById('champion-title-row').style.display=this.checked?'grid':'none';">
+                    <span>🏆 Borac je ŠAMPION (prikazuje značku na kartici)</span>
+                </label>
+                <div id="champion-title-row" class="form-row" style="display:none;grid-template-columns:1fr 1fr;gap:12px;">
+                    <div class="form-group">
+                        <label>Titula (SR)</label>
+                        <input type="text" id="fighter-champion-title-sr" name="champion_title_sr" placeholder="ŠAMPION (default)" maxlength="40">
+                    </div>
+                    <div class="form-group">
+                        <label>Titula (EN)</label>
+                        <input type="text" id="fighter-champion-title-en" name="champion_title_en" placeholder="CHAMPION (default)" maxlength="40">
+                    </div>
+                </div>
+                <small style="color:#92400e;">Ostavi titule prazne za default "ŠAMPION/CHAMPION" ili unesi custom (npr. "BIF Pero Šampion").</small>
+            </div>
+
             <!-- FIGHT HISTORY -->
             <div id="fight-history-section" style="margin-top:24px;padding:16px;background:#f8f9fa;border-radius:8px;border:1px solid #e0e0e0;display:none;">
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
@@ -2730,6 +2749,8 @@ function openCreateFighterModal() {
     document.getElementById('fighter-modal-title').textContent = 'Dodaj Borca';
     document.getElementById('fighterForm').reset();
     document.getElementById('fighter-id').value = '';
+    document.getElementById('fighter-is-champion').checked = false;
+    document.getElementById('champion-title-row').style.display = 'none';
     document.getElementById('fighterModal').style.display = 'flex';
 }
 
@@ -2754,6 +2775,12 @@ function editFighter(fighter) {
     document.getElementById('fighter-bio').value = fighter.bio || '';
     document.getElementById('fighter-image').value = fighter.image_url || '';
     document.getElementById('fighter-status').value = fighter.status || 'active';
+    // Champion settings
+    const isChampion = !!fighter.is_champion;
+    document.getElementById('fighter-is-champion').checked = isChampion;
+    document.getElementById('champion-title-row').style.display = isChampion ? 'grid' : 'none';
+    document.getElementById('fighter-champion-title-sr').value = fighter.champion_title_sr || '';
+    document.getElementById('fighter-champion-title-en').value = fighter.champion_title_en || '';
     // Show fight history section only when editing (need fighter id)
     document.getElementById('fight-history-section').style.display = 'block';
     renderFightHistory(fighter.fights || []);
@@ -2929,7 +2956,9 @@ async function editFight(fight) {
     populateOpponentDropdown(fight.opponent || '');
     populateEventDropdown(fight.event || '');
     document.getElementById('fight-date').value = fight.date || '';
-    document.getElementById('fight-result').value = fight.result || 'win';
+    const resultVal = fight.result || 'win';
+    const resultRadio = document.querySelector(`input[name="fight-result"][value="${resultVal}"]`);
+    if (resultRadio) resultRadio.checked = true;
     document.getElementById('fight-method').value = fight.method || '';
     document.getElementById('fight-round').value = fight.round || '';
     document.getElementById('fight-time').value = fight.time || '';
@@ -3029,6 +3058,13 @@ async function saveFighter(event) {
     ['weight', 'height', 'age', 'wins', 'losses', 'draws', 'overall_wins', 'overall_losses', 'overall_draws', 'overall_ko'].forEach(field => {
         if (fighterData[field]) fighterData[field] = parseInt(fighterData[field]);
     });
+
+    // Convert champion checkbox to boolean
+    fighterData.is_champion = document.getElementById('fighter-is-champion').checked;
+    if (!fighterData.is_champion) {
+        fighterData.champion_title_sr = '';
+        fighterData.champion_title_en = '';
+    }
 
     const action = fighterData.id ? 'update_fighter' : 'create_fighter';
 

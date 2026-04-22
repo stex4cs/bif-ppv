@@ -462,10 +462,10 @@ if (!$recaptchaSiteKey) {
                 <?php foreach ($activeFighters as $fighter): ?>
                 <a href="borci/<?php echo htmlspecialchars($fighter['slug']); ?>" class="fighter-card" aria-label="Detalji o borcu <?php echo htmlspecialchars($fighter['name']); ?>">
                     <div class="fighter-image">
-                        <?php if (($fighter['wins'] ?? 0) > 0): ?>
+                        <?php if (!empty($fighter['is_champion'])): ?>
                         <div class="champion-badge">
-                            <span class="lang-content active" data-lang="sr">ŠAMPION</span>
-                            <span class="lang-content" data-lang="en">CHAMPION</span>
+                            <span class="lang-content active" data-lang="sr"><?php echo htmlspecialchars($fighter['champion_title_sr'] ?? 'ŠAMPION'); ?></span>
+                            <span class="lang-content" data-lang="en"><?php echo htmlspecialchars($fighter['champion_title_en'] ?? 'CHAMPION'); ?></span>
                         </div>
                         <?php endif; ?>
                         <?php
