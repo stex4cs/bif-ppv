@@ -3821,14 +3821,9 @@ a:hover {
 }
 
 .general-sponsor__logo {
-    background: #fff;
-    border-radius: 16px;
-    padding: 2rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    aspect-ratio: 1;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     transition: transform 0.3s ease;
 }
 
