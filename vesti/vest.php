@@ -63,6 +63,9 @@ if (substr($imageUrl, 0, 1) === '/') {
 } elseif (substr($imageUrl, 0, 6) !== 'http://' && substr($imageUrl, 0, 7) !== 'https://') {
     $imageUrl = '../' . $imageUrl;
 }
+// Cache busting - dodaj timestamp fajla da browser uvek ucita novu sliku
+$absPath = dirname(__DIR__) . '/' . ltrim($news['image_url'] ?? '', '/');
+$imageUrl .= '?v=' . (file_exists($absPath) ? filemtime($absPath) : time());
 
 // Formatiraj datum
 $dateTime = strtotime($publishedAt);
