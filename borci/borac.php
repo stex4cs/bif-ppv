@@ -332,61 +332,49 @@ $pageUrl = 'https://bif.events/borci/' . $slug;
                             $dateTime = strtotime($f['date'] ?? '');
                             $dateFormatted = $dateTime ? date('d.m.Y', $dateTime) : '';
                         ?>
-                        <article class="fight-card<?php echo !empty($f['is_bif']) ? ' fight-card--bif' : ''; ?>">
-                            <?php if ($poster): ?>
-                            <div class="fight-card__poster" style="background-image:url('<?php echo htmlspecialchars($poster); ?>');"></div>
-                            <?php endif; ?>
-                            <div class="fight-card__overlay"></div>
-
-                            <div class="fight-card__body">
-                                <div class="fight-card__left">
-                                    <div class="fight-card__result fight-card__result--<?php echo $res['cls']; ?>">
-                                        <span class="result-label">
-                                            <span class="lang-content active" data-lang="sr"><?php echo $res['sr']; ?></span>
-                                            <span class="lang-content" data-lang="en"><?php echo $res['en']; ?></span>
-                                        </span>
-                                        <?php if ($method): ?>
-                                        <span class="result-method">
-                                            <span class="lang-content active" data-lang="sr"><?php echo $method['sr']; ?></span>
-                                            <span class="lang-content" data-lang="en"><?php echo $method['en']; ?></span>
-                                        </span>
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
-
-                                <div class="fight-card__center">
-                                    <?php if (!empty($f['is_bif'])): ?>
-                                    <div class="fight-card__badge">🥊 BIF EVENT</div>
-                                    <?php endif; ?>
-                                    <div class="fight-card__vs"><span class="vs-label">vs</span></div>
-                                    <h3 class="fight-card__opponent"><?php echo htmlspecialchars($f['opponent'] ?? ''); ?></h3>
-                                    <p class="fight-card__event"><?php echo htmlspecialchars($f['event'] ?? ''); ?></p>
-                                    <div class="fight-card__meta">
-                                        <?php if ($dateFormatted): ?>
-                                            <span class="fight-meta-item"><span class="meta-icon">📅</span> <?php echo $dateFormatted; ?></span>
-                                        <?php endif; ?>
-                                        <?php if (!empty($f['round'])): ?>
-                                            <span class="fight-meta-item">
-                                                <span class="meta-icon">⏱</span>
-                                                <span class="lang-content active" data-lang="sr"><?php echo (int)$f['round']; ?>. runda<?php echo !empty($f['time']) ? ' ('.htmlspecialchars($f['time']).')' : ''; ?></span>
-                                                <span class="lang-content" data-lang="en">Round <?php echo (int)$f['round']; ?><?php echo !empty($f['time']) ? ' ('.htmlspecialchars($f['time']).')' : ''; ?></span>
-                                            </span>
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
-
-                                <?php if (!empty($f['youtube_url'])): ?>
-                                <div class="fight-card__right">
-                                    <a href="<?php echo htmlspecialchars($f['youtube_url']); ?>" target="_blank" rel="noopener noreferrer" class="fight-watch-btn">
-                                        <svg class="yt-icon" viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
-                                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136C4.495 20.455 12 20.455 12 20.455s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                                        </svg>
-                                        <span class="lang-content active" data-lang="sr">Gledaj Borbu</span>
-                                        <span class="lang-content" data-lang="en">Watch Fight</span>
-                                    </a>
-                                </div>
+                        <article class="fight-card fight-card--<?php echo $res['cls']; ?><?php echo !empty($f['is_bif']) ? ' fight-card--bif' : ''; ?>">
+                            <div class="fight-card__result-box">
+                                <span class="fight-card__result-label">
+                                    <span class="lang-content active" data-lang="sr"><?php echo $res['sr']; ?></span>
+                                    <span class="lang-content" data-lang="en"><?php echo $res['en']; ?></span>
+                                </span>
+                                <?php if ($method): ?>
+                                <span class="fight-card__result-method">
+                                    <span class="lang-content active" data-lang="sr"><?php echo $method['sr']; ?></span>
+                                    <span class="lang-content" data-lang="en"><?php echo $method['en']; ?></span>
+                                </span>
                                 <?php endif; ?>
                             </div>
+
+                            <div class="fight-card__info">
+                                <h3 class="fight-card__title">
+                                    vs <?php echo htmlspecialchars($f['opponent'] ?? ''); ?>
+                                    <?php if (!empty($f['is_bif'])): ?>
+                                    <span class="fight-card__bif-badge">BIF</span>
+                                    <?php endif; ?>
+                                </h3>
+                                <p class="fight-card__event"><?php echo htmlspecialchars($f['event'] ?? ''); ?></p>
+                                <div class="fight-card__meta">
+                                    <?php if ($dateFormatted): ?>
+                                        <span class="fight-meta-item">📅 <?php echo $dateFormatted; ?></span>
+                                    <?php endif; ?>
+                                    <?php if (!empty($f['round'])): ?>
+                                        <span class="fight-meta-item">
+                                            <span class="lang-content active" data-lang="sr">⏱ <?php echo (int)$f['round']; ?>. runda<?php echo !empty($f['time']) ? ' ('.htmlspecialchars($f['time']).')' : ''; ?></span>
+                                            <span class="lang-content" data-lang="en">⏱ Round <?php echo (int)$f['round']; ?><?php echo !empty($f['time']) ? ' ('.htmlspecialchars($f['time']).')' : ''; ?></span>
+                                        </span>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+
+                            <?php if (!empty($f['youtube_url'])): ?>
+                            <div class="fight-card__action">
+                                <a href="<?php echo htmlspecialchars($f['youtube_url']); ?>" target="_blank" rel="noopener noreferrer" class="btn btn-primary fight-watch-btn">
+                                    <span class="lang-content active" data-lang="sr">▶ Gledaj Borbu</span>
+                                    <span class="lang-content" data-lang="en">▶ Watch Fight</span>
+                                </a>
+                            </div>
+                            <?php endif; ?>
                         </article>
                         <?php endforeach; ?>
                     </div>
