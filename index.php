@@ -20,8 +20,11 @@ function loadActiveFighters() {
         return isset($fighter['status']) && $fighter['status'] === 'active';
     });
 
-    // Sort by created_at (newest first)
+    // Sort by display_order (ASC), fall back to created_at (newest first)
     usort($activeFighters, function($a, $b) {
+        $ao = $a['display_order'] ?? PHP_INT_MAX;
+        $bo = $b['display_order'] ?? PHP_INT_MAX;
+        if ($ao !== $bo) return $ao <=> $bo;
         return ($b['created_at'] ?? '') <=> ($a['created_at'] ?? '');
     });
 

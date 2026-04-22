@@ -1062,9 +1062,13 @@
     </div>
 
     <div class="card">
+        <p style="color:#888;font-size:13px;margin-bottom:10px;">
+            ℹ️ Koristi strelice <strong>↑ ↓</strong> da promeniš redosled prikazivanja boraca sleva udesno na početnoj stranici.
+        </p>
         <table class="data-table">
             <thead>
                 <tr>
+                    <th style="width:80px;">Redosled</th>
                     <th>Slika</th>
                     <th>Ime</th>
                     <th>Nadimak</th>
@@ -1077,7 +1081,7 @@
                 </tr>
             </thead>
             <tbody id="fighters-table">
-                <tr><td colspan="9" style="text-align:center;padding:40px;">Loading fighters...</td></tr>
+                <tr><td colspan="10" style="text-align:center;padding:40px;">Loading fighters...</td></tr>
             </tbody>
         </table>
     </div>
@@ -2550,18 +2554,30 @@ function getWeightClassDisplayName(weightClass) {
     return weightClasses[weightClass] || 'Auto';
 }
 
+let _fightersCache = [];
+
 function displayFighters(fighters) {
     const tbody = document.getElementById('fighters-table');
+    _fightersCache = fighters.slice();
 
     if (fighters.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px;">Nema boraca. Dodajte prvog borca!</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:40px;">Nema boraca. Dodajte prvog borca!</td></tr>';
         return;
     }
 
-    tbody.innerHTML = fighters.map(fighter => {
+    tbody.innerHTML = fighters.map((fighter, idx) => {
         const weightClass = fighter.weight_class ? getWeightClassDisplayName(fighter.weight_class) : 'Auto';
+        const isFirst = idx === 0;
+        const isLast = idx === fighters.length - 1;
         return `
         <tr>
+            <td>
+                <div style="display:flex;flex-direction:column;gap:2px;align-items:center;">
+                    <button class="btn-icon" onclick="moveFighter('${fighter.id}', -1)" ${isFirst ? 'disabled style="opacity:0.3;cursor:not-allowed;"' : ''} title="Pomeri gore (levo)">↑</button>
+                    <small style="color:#888;font-size:11px;">${idx + 1}</small>
+                    <button class="btn-icon" onclick="moveFighter('${fighter.id}', 1)" ${isLast ? 'disabled style="opacity:0.3;cursor:not-allowed;"' : ''} title="Pomeri dole (desno)">↓</button>
+                </div>
+            </td>
             <td><img src="${fighter.image_url ? '../' + fighter.image_url.replace(/^\//, '') : '../assets/images/fighters/default.png'}" style="width:50px;height:50px;border-radius:50%;object-fit:cover;" alt="${fighter.name}" onerror="this.onerror=null;this.src='../assets/images/fighters/default.png'"></td>
             <td><strong>${fighter.name}</strong></td>
             <td>${fighter.nickname || '-'}</td>
@@ -2578,6 +2594,39 @@ function displayFighters(fighters) {
         `;
     }).join('');
 }
+
+async function moveFighter(fighterId, direction) {
+    const idx = _fightersCache.findIndex(f => f.id === fighterId);
+    if (idx === -1) return;
+    const newIdx = idx + direction;
+    if (newIdx < 0 || newIdx >= _fightersCache.length) return;
+
+    // Swap locally for immediate visual feedback
+    const arr = _fightersCache.slice();
+    [arr[idx], arr[newIdx]] = [arr[newIdx], arr[idx]];
+    displayFighters(arr);
+
+    try {
+        const response = await fetch('ppv_admin.php?action=reorder_fighters', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'reorder_fighters',
+                order: arr.map(f => f.id)
+            })
+        });
+        const result = await response.json();
+        if (!result.success) {
+            alert('Greška pri promeni redosleda: ' + (result.error || 'Unknown'));
+            await loadFighters();
+        }
+    } catch (err) {
+        console.error('Reorder error:', err);
+        alert('Greška pri promeni redosleda');
+        await loadFighters();
+    }
+}
+window.moveFighter = moveFighter;
 
 function openCreateFighterModal() {
     currentEditingFighter = null;

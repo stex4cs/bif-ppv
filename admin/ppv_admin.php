@@ -670,10 +670,31 @@ $event['current_price'] = $currentPrice;
     /* ---------- FIGHTERS CRUD ---------- */
     public function getFighters() {
         $fighters = $this->loadFighters();
+        // Sort by display_order (ASC), fall back to created_at (newest first) for items without order
         usort($fighters, function($a, $b) {
+            $ao = $a['display_order'] ?? PHP_INT_MAX;
+            $bo = $b['display_order'] ?? PHP_INT_MAX;
+            if ($ao !== $bo) return $ao <=> $bo;
             return ($b['created_at'] ?? '') <=> ($a['created_at'] ?? '');
         });
         return $fighters;
+    }
+
+    public function reorderFighters($orderedIds) {
+        if (!is_array($orderedIds) || empty($orderedIds)) {
+            return ['success' => false, 'error' => 'Invalid order list'];
+        }
+        $fighters = $this->loadFighters();
+        $positions = array_flip(array_values($orderedIds));
+        $maxPos = count($orderedIds);
+        foreach ($fighters as &$f) {
+            $id = $f['id'] ?? '';
+            $f['display_order'] = isset($positions[$id]) ? $positions[$id] : $maxPos++;
+        }
+        unset($f);
+        return $this->saveFighters($fighters) !== false
+            ? ['success' => true]
+            : ['success' => false, 'error' => 'Failed to save order'];
     }
 
     public function createFighter($data) {
@@ -1297,6 +1318,9 @@ try {
                 break;
             case 'delete_fighter':
                 $admin->sendJsonResponse($admin->deleteFighter($input['fighter_id'] ?? ''));
+                break;
+            case 'reorder_fighters':
+                $admin->sendJsonResponse($admin->reorderFighters($input['order'] ?? []));
                 break;
 
             case 'create_news':
