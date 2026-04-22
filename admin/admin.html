@@ -1262,9 +1262,98 @@
                 </div>
             </div>
 
+            <!-- FIGHT HISTORY -->
+            <div id="fight-history-section" style="margin-top:24px;padding:16px;background:#f8f9fa;border-radius:8px;border:1px solid #e0e0e0;display:none;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                    <h3 style="margin:0;font-size:16px;">🥊 Istorija Borbi</h3>
+                    <button type="button" class="btn btn-primary" onclick="openFightModal()" style="padding:6px 14px;font-size:13px;">+ Dodaj Borbu</button>
+                </div>
+                <div id="fight-history-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+            </div>
+
             <div class="form-actions" style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
                 <button type="button" class="btn" onclick="closeFighterModal()">Otkaži</button>
                 <button type="submit" class="btn btn-primary">Sačuvaj</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Add/Edit Fight Modal -->
+<div id="fightModal" class="modal">
+    <div class="modal-content" style="max-width:600px;">
+        <div class="modal-header">
+            <h2 id="fight-modal-title">Dodaj Borbu</h2>
+            <span class="close" onclick="closeFightModal()">&times;</span>
+        </div>
+        <form id="fightForm" onsubmit="saveFight(event)">
+            <input type="hidden" id="fight-id">
+            <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <div class="form-group">
+                    <label>Protivnik *</label>
+                    <input type="text" id="fight-opponent" required placeholder="Marko Marković">
+                </div>
+                <div class="form-group">
+                    <label>Event *</label>
+                    <input type="text" id="fight-event" required placeholder="BIF 1: New Rise">
+                </div>
+            </div>
+            <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+                <div class="form-group">
+                    <label>Datum *</label>
+                    <input type="date" id="fight-date" required>
+                </div>
+                <div class="form-group">
+                    <label>Rezultat *</label>
+                    <select id="fight-result" required>
+                        <option value="win">Pobeda</option>
+                        <option value="loss">Poraz</option>
+                        <option value="draw">Nerešeno</option>
+                        <option value="nc">Bez odluke</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Metoda</label>
+                    <select id="fight-method">
+                        <option value="">—</option>
+                        <option value="ko">KO</option>
+                        <option value="tko">TKO</option>
+                        <option value="ud">Jednoglasna odluka</option>
+                        <option value="sd">Podeljena odluka</option>
+                        <option value="md">Većinska odluka</option>
+                        <option value="sub">Submission</option>
+                        <option value="dq">Diskvalifikacija</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <div class="form-group">
+                    <label>Runda</label>
+                    <input type="number" id="fight-round" min="0" max="15" placeholder="2">
+                </div>
+                <div class="form-group">
+                    <label>Vreme (u rundi)</label>
+                    <input type="text" id="fight-time" placeholder="1:45">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>YouTube Link (opciono)</label>
+                <input type="url" id="fight-youtube" placeholder="https://youtube.com/watch?v=...">
+                <small>Full URL, embed ili watch format.</small>
+            </div>
+            <div class="form-group">
+                <label>URL Postera Eventa (opciono)</label>
+                <input type="text" id="fight-poster" placeholder="/assets/images/events/bif1/poster.png">
+            </div>
+            <div class="form-group">
+                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+                    <input type="checkbox" id="fight-is-bif" style="width:auto;">
+                    <span>BIF borba (prikazuje BIF značku i crveni okvir)</span>
+                </label>
+            </div>
+            <div class="form-actions" style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
+                <button type="button" class="btn" onclick="closeFightModal()">Otkaži</button>
+                <button type="submit" class="btn btn-primary">Sačuvaj Borbu</button>
             </div>
         </form>
     </div>
@@ -2657,13 +2746,154 @@ function editFighter(fighter) {
     document.getElementById('fighter-bio').value = fighter.bio || '';
     document.getElementById('fighter-image').value = fighter.image_url || '';
     document.getElementById('fighter-status').value = fighter.status || 'active';
+    // Show fight history section only when editing (need fighter id)
+    document.getElementById('fight-history-section').style.display = 'block';
+    renderFightHistory(fighter.fights || []);
     document.getElementById('fighterModal').style.display = 'flex';
 }
 
 function closeFighterModal() {
     document.getElementById('fighterModal').style.display = 'none';
+    document.getElementById('fight-history-section').style.display = 'none';
     currentEditingFighter = null;
 }
+
+/* ---------- FIGHT HISTORY MANAGEMENT ---------- */
+const _methodLabels = {
+    ko: 'KO', tko: 'TKO', ud: 'Jednoglasna odluka', sd: 'Podeljena odluka',
+    md: 'Većinska odluka', sub: 'Submission', dq: 'Diskvalifikacija'
+};
+const _resultBadges = {
+    win: {label: 'POBEDA', color: '#16a34a'},
+    loss: {label: 'PORAZ', color: '#dc2626'},
+    draw: {label: 'NEREŠENO', color: '#ca8a04'},
+    nc: {label: 'BEZ OD.', color: '#64748b'}
+};
+
+function renderFightHistory(fights) {
+    const list = document.getElementById('fight-history-list');
+    if (!fights || fights.length === 0) {
+        list.innerHTML = '<p style="color:#888;font-size:13px;margin:4px 0;">Nema zabeleženih borbi. Dodaj prvu borbu.</p>';
+        return;
+    }
+    const sorted = fights.slice().sort((a,b) => (b.date||'').localeCompare(a.date||''));
+    list.innerHTML = sorted.map(f => {
+        const res = _resultBadges[f.result] || _resultBadges.win;
+        const method = _methodLabels[f.method] || '';
+        return `
+        <div style="display:flex;align-items:center;gap:10px;padding:10px;background:#fff;border:1px solid #e0e0e0;border-radius:6px;">
+            <span style="background:${res.color};color:#fff;padding:4px 10px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:1px;min-width:70px;text-align:center;">${res.label}</span>
+            <div style="flex:1;">
+                <div style="font-weight:600;font-size:14px;">vs ${escapeHtml(f.opponent || '')} ${f.is_bif ? '<span style="background:#c41e3a;color:#fff;padding:1px 6px;border-radius:4px;font-size:10px;margin-left:4px;">BIF</span>' : ''}</div>
+                <div style="color:#666;font-size:12px;">${escapeHtml(f.event || '')} · ${f.date || ''} ${method ? '· ' + method : ''}${f.round ? ' · R' + f.round : ''}${f.time ? ' (' + escapeHtml(f.time) + ')' : ''}</div>
+            </div>
+            <button type="button" class="btn-icon" onclick='editFight(${JSON.stringify(f).replace(/'/g, "&#39;")})' title="Izmeni">✏️</button>
+            <button type="button" class="btn-icon" onclick="deleteFight('${f.id}')" title="Obriši">🗑️</button>
+        </div>`;
+    }).join('');
+}
+
+function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+function openFightModal() {
+    document.getElementById('fight-modal-title').textContent = 'Dodaj Borbu';
+    document.getElementById('fightForm').reset();
+    document.getElementById('fight-id').value = '';
+    document.getElementById('fight-is-bif').checked = false;
+    document.getElementById('fightModal').style.display = 'flex';
+}
+
+function editFight(fight) {
+    document.getElementById('fight-modal-title').textContent = 'Izmeni Borbu';
+    document.getElementById('fight-id').value = fight.id || '';
+    document.getElementById('fight-opponent').value = fight.opponent || '';
+    document.getElementById('fight-event').value = fight.event || '';
+    document.getElementById('fight-date').value = fight.date || '';
+    document.getElementById('fight-result').value = fight.result || 'win';
+    document.getElementById('fight-method').value = fight.method || '';
+    document.getElementById('fight-round').value = fight.round || '';
+    document.getElementById('fight-time').value = fight.time || '';
+    document.getElementById('fight-youtube').value = fight.youtube_url || '';
+    document.getElementById('fight-poster').value = fight.poster_url || '';
+    document.getElementById('fight-is-bif').checked = !!fight.is_bif;
+    document.getElementById('fightModal').style.display = 'flex';
+}
+
+function closeFightModal() {
+    document.getElementById('fightModal').style.display = 'none';
+}
+
+async function saveFight(event) {
+    event.preventDefault();
+    if (!currentEditingFighter || !currentEditingFighter.id) {
+        alert('Prvo sačuvaj borca, pa onda dodaj borbe.');
+        return;
+    }
+    const fight = {
+        id: document.getElementById('fight-id').value,
+        opponent: document.getElementById('fight-opponent').value.trim(),
+        event: document.getElementById('fight-event').value.trim(),
+        date: document.getElementById('fight-date').value,
+        result: document.getElementById('fight-result').value,
+        method: document.getElementById('fight-method').value,
+        round: parseInt(document.getElementById('fight-round').value) || 0,
+        time: document.getElementById('fight-time').value.trim(),
+        youtube_url: document.getElementById('fight-youtube').value.trim(),
+        poster_url: document.getElementById('fight-poster').value.trim(),
+        is_bif: document.getElementById('fight-is-bif').checked
+    };
+    try {
+        const response = await fetch('ppv_admin.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({action: 'save_fight', fighter_id: currentEditingFighter.id, fight})
+        });
+        const result = await response.json();
+        if (result.success) {
+            // Update local cache and re-render
+            if (!currentEditingFighter.fights) currentEditingFighter.fights = [];
+            const idx = currentEditingFighter.fights.findIndex(x => x.id === result.fight.id);
+            if (idx >= 0) currentEditingFighter.fights[idx] = result.fight;
+            else currentEditingFighter.fights.push(result.fight);
+            renderFightHistory(currentEditingFighter.fights);
+            closeFightModal();
+        } else {
+            alert('Greška: ' + (result.error || 'Nepoznata greška'));
+        }
+    } catch (err) {
+        console.error('saveFight:', err);
+        alert('Greška pri čuvanju borbe');
+    }
+}
+
+async function deleteFight(fightId) {
+    if (!confirm('Obriši ovu borbu?')) return;
+    try {
+        const response = await fetch('ppv_admin.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({action: 'delete_fight', fighter_id: currentEditingFighter.id, fight_id: fightId})
+        });
+        const result = await response.json();
+        if (result.success) {
+            currentEditingFighter.fights = (currentEditingFighter.fights || []).filter(f => f.id !== fightId);
+            renderFightHistory(currentEditingFighter.fights);
+        } else {
+            alert('Greška: ' + (result.error || 'Nepoznata greška'));
+        }
+    } catch (err) {
+        console.error('deleteFight:', err);
+        alert('Greška pri brisanju borbe');
+    }
+}
+
+window.openFightModal = openFightModal;
+window.editFight = editFight;
+window.closeFightModal = closeFightModal;
+window.saveFight = saveFight;
+window.deleteFight = deleteFight;
 
 async function saveFighter(event) {
     event.preventDefault();

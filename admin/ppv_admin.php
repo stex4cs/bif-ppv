@@ -754,6 +754,67 @@ $event['current_price'] = $currentPrice;
             : ['success' => false, 'error' => 'Failed to delete fighter'];
     }
 
+    /* ---------- FIGHT HISTORY CRUD ---------- */
+    public function saveFight($fighterId, $fightData) {
+        $fighters = $this->loadFighters();
+        foreach ($fighters as &$fighter) {
+            if (($fighter['id'] ?? '') !== $fighterId) continue;
+            if (!isset($fighter['fights']) || !is_array($fighter['fights'])) {
+                $fighter['fights'] = [];
+            }
+            $fightId = $fightData['id'] ?? '';
+            $payload = [
+                'id'          => $fightId ?: uniqid('fight_', true),
+                'opponent'    => trim($fightData['opponent'] ?? ''),
+                'event'       => trim($fightData['event'] ?? ''),
+                'date'        => trim($fightData['date'] ?? ''),
+                'result'      => trim($fightData['result'] ?? 'win'),   // win, loss, draw, nc
+                'method'      => trim($fightData['method'] ?? ''),      // ko, tko, ud, sd, md, sub, dq
+                'round'       => (int)($fightData['round'] ?? 0),
+                'time'        => trim($fightData['time'] ?? ''),
+                'youtube_url' => trim($fightData['youtube_url'] ?? ''),
+                'poster_url'  => trim($fightData['poster_url'] ?? ''),
+                'is_bif'      => !empty($fightData['is_bif']),
+            ];
+            if ($fightId) {
+                $found = false;
+                foreach ($fighter['fights'] as &$ex) {
+                    if (($ex['id'] ?? '') === $fightId) {
+                        $ex = $payload;
+                        $found = true;
+                        break;
+                    }
+                }
+                unset($ex);
+                if (!$found) $fighter['fights'][] = $payload;
+            } else {
+                $fighter['fights'][] = $payload;
+            }
+            $fighter['updated_at'] = date('Y-m-d H:i:s');
+            return $this->saveFighters($fighters) !== false
+                ? ['success' => true, 'fight' => $payload]
+                : ['success' => false, 'error' => 'Failed to save fight'];
+        }
+        unset($fighter);
+        return ['success' => false, 'error' => 'Fighter not found'];
+    }
+
+    public function deleteFight($fighterId, $fightId) {
+        $fighters = $this->loadFighters();
+        foreach ($fighters as &$fighter) {
+            if (($fighter['id'] ?? '') !== $fighterId) continue;
+            $fighter['fights'] = array_values(array_filter($fighter['fights'] ?? [], function($f) use ($fightId) {
+                return ($f['id'] ?? '') !== $fightId;
+            }));
+            $fighter['updated_at'] = date('Y-m-d H:i:s');
+            return $this->saveFighters($fighters) !== false
+                ? ['success' => true]
+                : ['success' => false, 'error' => 'Failed to delete fight'];
+        }
+        unset($fighter);
+        return ['success' => false, 'error' => 'Fighter not found'];
+    }
+
     /* ---------- NEWS CRUD ---------- */
     public function getNewsList() {
         $news = $this->loadNews();
@@ -1321,6 +1382,12 @@ try {
                 break;
             case 'reorder_fighters':
                 $admin->sendJsonResponse($admin->reorderFighters($input['order'] ?? []));
+                break;
+            case 'save_fight':
+                $admin->sendJsonResponse($admin->saveFight($input['fighter_id'] ?? '', $input['fight'] ?? []));
+                break;
+            case 'delete_fight':
+                $admin->sendJsonResponse($admin->deleteFight($input['fighter_id'] ?? '', $input['fight_id'] ?? ''));
                 break;
 
             case 'create_news':

@@ -273,24 +273,139 @@ $pageUrl = 'https://bif.events/borci/' . $slug;
             </div>
         </section>
 
+        <?php
+        $fights = $fighter['fights'] ?? [];
+        // Sort by date descending (newest first)
+        usort($fights, function($a, $b) {
+            return strtotime($b['date'] ?? '1970-01-01') <=> strtotime($a['date'] ?? '1970-01-01');
+        });
+
+        $methodLabels = [
+            'ko'  => ['sr' => 'KO',      'en' => 'KO'],
+            'tko' => ['sr' => 'TKO',     'en' => 'TKO'],
+            'ud'  => ['sr' => 'Odluka',  'en' => 'Unanimous Decision'],
+            'sd'  => ['sr' => 'Podelj.', 'en' => 'Split Decision'],
+            'md'  => ['sr' => 'Većin.',  'en' => 'Majority Decision'],
+            'sub' => ['sr' => 'Submis.', 'en' => 'Submission'],
+            'dq'  => ['sr' => 'Diskvalif.', 'en' => 'Disqualification'],
+        ];
+        $resultLabels = [
+            'win'  => ['sr' => 'POBEDA', 'en' => 'WIN',  'cls' => 'win'],
+            'loss' => ['sr' => 'PORAZ',  'en' => 'LOSS', 'cls' => 'loss'],
+            'draw' => ['sr' => 'NEREŠENO', 'en' => 'DRAW', 'cls' => 'draw'],
+            'nc'   => ['sr' => 'BEZ OD.',  'en' => 'NC',   'cls' => 'nc'],
+        ];
+
+        function ytEmbed($url) {
+            if (preg_match('~(?:youtu\.be/|youtube\.com/(?:watch\?v=|embed/|v/))([A-Za-z0-9_-]{6,})~', $url, $m)) {
+                return 'https://www.youtube.com/embed/' . $m[1];
+            }
+            return '';
+        }
+        ?>
         <section class="fight-history-section section">
             <div class="container">
                 <h2 class="section-title">
                     <span class="lang-content active" data-lang="sr">Istorija Borbi</span>
                     <span class="lang-content" data-lang="en">Fight History</span>
                 </h2>
-                <div class="fight-history-table-container">
-                    <div style="text-align: center; padding: 40px; color: var(--light-text-secondary);">
-                        <p style="font-size: 18px; margin-bottom: 10px;">
+
+                <?php if (empty($fights)): ?>
+                    <div class="fight-history-empty">
+                        <p class="fight-history-empty__title">
                             <span class="lang-content active" data-lang="sr">Nema zabeleženih borbi</span>
                             <span class="lang-content" data-lang="en">No fights recorded</span>
                         </p>
-                        <p style="font-size: 14px;">
-                            <span class="lang-content active" data-lang="sr">Borbe će biti dodane kada se održe</span>
-                            <span class="lang-content" data-lang="en">Fights will be added when they occur</span>
+                        <p class="fight-history-empty__note">
+                            <span class="lang-content active" data-lang="sr">Borbe će biti dodate kada se održe</span>
+                            <span class="lang-content" data-lang="en">Fights will be added after events</span>
                         </p>
                     </div>
-                </div>
+                <?php else: ?>
+                    <div class="fight-history-list">
+                        <?php foreach ($fights as $f):
+                            $res = $resultLabels[$f['result'] ?? 'win'] ?? $resultLabels['win'];
+                            $method = $methodLabels[$f['method'] ?? ''] ?? null;
+                            $embed = ytEmbed($f['youtube_url'] ?? '');
+                            $poster = $f['poster_url'] ?? '';
+                            if ($poster && substr($poster, 0, 1) === '/') $poster = '..' . $poster;
+                            $dateTime = strtotime($f['date'] ?? '');
+                            $dateFormatted = $dateTime ? date('d.m.Y', $dateTime) : '';
+                        ?>
+                        <article class="fight-card<?php echo !empty($f['is_bif']) ? ' fight-card--bif' : ''; ?>">
+                            <?php if ($poster): ?>
+                            <div class="fight-card__poster" style="background-image:url('<?php echo htmlspecialchars($poster); ?>');"></div>
+                            <?php endif; ?>
+
+                            <div class="fight-card__result fight-card__result--<?php echo $res['cls']; ?>">
+                                <span class="lang-content active" data-lang="sr"><?php echo $res['sr']; ?></span>
+                                <span class="lang-content" data-lang="en"><?php echo $res['en']; ?></span>
+                            </div>
+
+                            <div class="fight-card__info">
+                                <?php if (!empty($f['is_bif'])): ?>
+                                <div class="fight-card__badge">🥊 BIF</div>
+                                <?php endif; ?>
+                                <h3 class="fight-card__opponent">vs <?php echo htmlspecialchars($f['opponent'] ?? ''); ?></h3>
+                                <p class="fight-card__event"><?php echo htmlspecialchars($f['event'] ?? ''); ?></p>
+                                <div class="fight-card__meta">
+                                    <?php if ($dateFormatted): ?>
+                                        <span class="fight-meta-item">📅 <?php echo $dateFormatted; ?></span>
+                                    <?php endif; ?>
+                                    <?php if ($method): ?>
+                                        <span class="fight-meta-item">
+                                            <span class="lang-content active" data-lang="sr">⚡ <?php echo $method['sr']; ?></span>
+                                            <span class="lang-content" data-lang="en">⚡ <?php echo $method['en']; ?></span>
+                                        </span>
+                                    <?php endif; ?>
+                                    <?php if (!empty($f['round'])): ?>
+                                        <span class="fight-meta-item">
+                                            <span class="lang-content active" data-lang="sr">⏱ <?php echo (int)$f['round']; ?>. runda<?php echo !empty($f['time']) ? ' ('.htmlspecialchars($f['time']).')' : ''; ?></span>
+                                            <span class="lang-content" data-lang="en">⏱ Round <?php echo (int)$f['round']; ?><?php echo !empty($f['time']) ? ' ('.htmlspecialchars($f['time']).')' : ''; ?></span>
+                                        </span>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+
+                            <?php if ($embed): ?>
+                            <div class="fight-card__action">
+                                <button class="btn btn-primary fight-watch-btn" data-embed="<?php echo htmlspecialchars($embed); ?>">
+                                    <span class="lang-content active" data-lang="sr">▶ Gledaj Borbu</span>
+                                    <span class="lang-content" data-lang="en">▶ Watch Fight</span>
+                                </button>
+                            </div>
+                            <?php endif; ?>
+                        </article>
+                        <?php endforeach; ?>
+                    </div>
+
+                    <!-- Video Modal -->
+                    <div id="fightVideoModal" class="fight-video-modal" onclick="if(event.target===this)closeFightVideo()">
+                        <div class="fight-video-modal__inner">
+                            <button class="fight-video-modal__close" onclick="closeFightVideo()" aria-label="Close">✕</button>
+                            <div class="fight-video-modal__frame-wrap">
+                                <iframe id="fightVideoFrame" src="" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        document.querySelectorAll('.fight-watch-btn').forEach(btn => {
+                            btn.addEventListener('click', () => {
+                                const src = btn.getAttribute('data-embed');
+                                const frame = document.getElementById('fightVideoFrame');
+                                frame.src = src + (src.indexOf('?') === -1 ? '?' : '&') + 'autoplay=1';
+                                document.getElementById('fightVideoModal').classList.add('open');
+                                document.body.style.overflow = 'hidden';
+                            });
+                        });
+                        function closeFightVideo() {
+                            document.getElementById('fightVideoFrame').src = '';
+                            document.getElementById('fightVideoModal').classList.remove('open');
+                            document.body.style.overflow = '';
+                        }
+                        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeFightVideo(); });
+                    </script>
+                <?php endif; ?>
             </div>
         </section>
     </main>
