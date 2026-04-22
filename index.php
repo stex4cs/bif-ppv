@@ -952,31 +952,7 @@ if (!$recaptchaSiteKey) {
                     <span class="lang-content" data-lang="en">Soon</span>
                 </h2>
                 
-                <div class="events-grid">
-                    <div class="event-card">
-                        <div class="event-date">
-                            <span class="event-day">21</span>
-                            <span class="event-month">
-                                <span class="lang-content active" data-lang="sr">JUL</span>
-                                <span class="lang-content" data-lang="en">July</span>
-                            </span>
-                        </div>
-                        <div class="event-info">
-                            <h3 class="event-title">BIF 1: New Rise</h3>
-                            <p class="event-location">
-                                <span class="lang-content active" data-lang="sr">Beograd , Republika Srbija</span>
-                                <span class="lang-content" data-lang="en">Belgrade , Republic Serbia</span>
-                            </p>
-                            <p class="event-time">20:00</p>
-                        </div>
-                        <div class="event-action">
-                            <a href="https://www.youtube.com/@bif.events" class="btn btn-primary">
-                                <span class="lang-content active" data-lang="sr">Gledaj ovde</span>
-                                <span class="lang-content" data-lang="en">Watch here</span>
-                            </a>
-                        </div>
-                    </div>
-
+                <div class="events-grid events-grid--single">
                     <div class="event-card event-card--featured">
                         <div class="event-date">
                             <span class="event-day">20</span>
@@ -996,17 +972,13 @@ if (!$recaptchaSiteKey) {
                             </p>
                             <p class="event-description">
                                 <span class="lang-content active" data-lang="sr">
-                                    Prvi influenserski boks show sa <strong>pravom publikom</strong> na Balkanu — u organizaciji BIF-a i uz podršku generalnog sponzora <strong>Oktagonbet</strong>. Najluđa noć, omiljene zvezde, iznenađenja koja nisi video — sve to živo, pred prepunom salom. Beograd, spremi se.
+                                    Prvi influenserski boks show sa <strong>pravom publikom</strong> na Balkanu — uz podršku generalnog sponzora <strong>Oktagonbet</strong>. Omiljene zvezde, iznenađenja i najluđa atmosfera, živo pred prepunom salom.
                                 </span>
                                 <span class="lang-content" data-lang="en">
-                                    The first influencer boxing show with a <strong>live audience</strong> in the Balkans — brought to you by BIF and presented by general sponsor <strong>Oktagonbet</strong>. The craziest night, your favorite stars, surprises you've never seen — all live, in front of a packed arena. Belgrade, get ready.
+                                    The first influencer boxing show with a <strong>live audience</strong> in the Balkans — presented by general sponsor <strong>Oktagonbet</strong>. Your favorite stars, surprises, and the craziest atmosphere, live in front of a packed arena.
                                 </span>
                             </p>
                             <p class="event-time">20:00</p>
-                            <a href="#" class="btn btn-primary event-ticket-btn">
-                                <span class="lang-content active" data-lang="sr">🎟 Kupi Ulaznice</span>
-                                <span class="lang-content" data-lang="en">🎟 Buy Tickets</span>
-                            </a>
                         </div>
                         <div class="event-action">
                             <a href="#" class="btn btn-primary">
