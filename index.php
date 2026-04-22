@@ -497,7 +497,7 @@ if (!$recaptchaSiteKey) {
 </section>
 
 <!-- ===== BIF STORE SECTION ===== -->
-<section class="store-section section" id="store">
+<section class="store-section section" id="store" style="display:none !important">
     <div class="container">
         <h2 class="section-title">
             <span class="lang-content active" data-lang="sr">BIF Store</span>
