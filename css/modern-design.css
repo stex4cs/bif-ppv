@@ -3063,16 +3063,45 @@ a:hover {
 }
 
 .events-grid--single {
-    max-width: 700px;
+    max-width: 1100px;
     margin: 0 auto;
 }
 
-.events-grid--single .event-description {
-    font-size: 0.9rem;
+.events-grid--single .event-card {
+    padding: 3rem 3.5rem;
+    gap: 3rem;
+    align-items: center;
+}
+
+.events-grid--single .event-date {
+    min-width: 140px;
+}
+
+.events-grid--single .event-info {
+    flex: 1;
+    max-width: 600px;
 }
 
 .events-grid--single .event-title {
-    font-size: 1.3rem;
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+}
+
+.events-grid--single .event-description {
+    font-size: 1rem;
+    line-height: 1.7;
+    margin: 1rem 0;
+}
+
+.events-grid--single .event-action {
+    flex-shrink: 0;
+}
+
+@media (max-width: 900px) {
+    .events-grid--single .event-card {
+        padding: 2rem 1.5rem;
+        gap: 1.5rem;
+    }
 }
 
 .event-poweredby {
