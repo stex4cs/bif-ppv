@@ -395,6 +395,13 @@ if (!$recaptchaSiteKey) {
         <small>Seconds</small>
       </div>
     </div>
+
+    <!-- Ticket button -->
+    <a href="#" class="btn btn-primary ticket-btn">
+        <span class="lang-content active" data-lang="sr">🎟 Kupi Ulaznice</span>
+        <span class="lang-content" data-lang="en">🎟 Buy Tickets</span>
+    </a>
+
   </div>
 </section>
 

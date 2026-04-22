@@ -3083,6 +3083,14 @@ a:hover {
     width: 100%;
 }
 
+.ticket-btn {
+    margin-top: var(--space-xl);
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
 .countdown-title {
     font-family: 'Oswald', sans-serif;
     font-size: clamp(2rem, 4vw, 3rem);
