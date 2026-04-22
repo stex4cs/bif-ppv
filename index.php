@@ -986,20 +986,27 @@ if (!$recaptchaSiteKey) {
                             </span>
                         </div>
                         <div class="event-info">
-                            <h3 class="event-title">BIF 2 — Beogradski Sajam</h3>
+                            <h3 class="event-title">
+                                BIF 2 — Beogradski Sajam
+                                <span class="event-poweredby">Powered by <strong>Oktagonbet</strong></span>
+                            </h3>
                             <p class="event-location">
                                 <span class="lang-content active" data-lang="sr">📍 Beogradski Sajam, Beograd</span>
                                 <span class="lang-content" data-lang="en">📍 Belgrade Fair, Belgrade</span>
                             </p>
                             <p class="event-description">
                                 <span class="lang-content active" data-lang="sr">
-                                    Prvi influenserski boks show sa <strong>pravom publikom</strong> na Balkanu. Najluđa noć, omiljene zvezde, iznenađenja koja nisi video — sve to živo, pred prepunom salom. Beograd, spremi se.
+                                    Prvi influenserski boks show sa <strong>pravom publikom</strong> na Balkanu — u organizaciji BIF-a i uz podršku generalnog sponzora <strong>Oktagonbet</strong>. Najluđa noć, omiljene zvezde, iznenađenja koja nisi video — sve to živo, pred prepunom salom. Beograd, spremi se.
                                 </span>
                                 <span class="lang-content" data-lang="en">
-                                    The first influencer boxing show with a <strong>live audience</strong> in the Balkans. The craziest night, your favorite stars, surprises you've never seen — all live, in front of a packed arena. Belgrade, get ready.
+                                    The first influencer boxing show with a <strong>live audience</strong> in the Balkans — brought to you by BIF and presented by general sponsor <strong>Oktagonbet</strong>. The craziest night, your favorite stars, surprises you've never seen — all live, in front of a packed arena. Belgrade, get ready.
                                 </span>
                             </p>
                             <p class="event-time">20:00</p>
+                            <a href="#" class="btn btn-primary event-ticket-btn">
+                                <span class="lang-content active" data-lang="sr">🎟 Kupi Ulaznice</span>
+                                <span class="lang-content" data-lang="en">🎟 Buy Tickets</span>
+                            </a>
                         </div>
                         <div class="event-action">
                             <a href="#" class="btn btn-primary">
