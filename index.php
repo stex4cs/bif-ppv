@@ -761,124 +761,155 @@ if (!$recaptchaSiteKey) {
 
 <section class="sponsor-section section" id="sponsorship">
     <div class="container">
-        <div class="sponsor-content">
-            <div class="sponsor-text">
-                <h2 class="section-title">
-                    <span class="lang-content active" data-lang="sr">Postanite Deo BIF Porodice</span>
-                    <span class="lang-content" data-lang="en">Become Part of BIF Family</span>
-                </h2>
-                
-                <div class="sponsor-description">
-                    <p class="lead-text">
-                        <span class="lang-content active" data-lang="sr">Zelite da budete sponzor najveceg boks spektakla na Balkanu?</span>
-                        <span class="lang-content" data-lang="en">Want to sponsor the biggest boxing spectacle in the Balkans?</span>
-                    </p>
-                    
-                    <p>
-                        <span class="lang-content active" data-lang="sr">
-                            Balkan Influence Fighting predstavlja jedinstvenu priliku za brendove koji žele da budu deo spektakularnih događaja koji okupljaju hiljade gledalaca uživo i milione putem streaminga. Naši događaji se emituju širom regiona i privlače najširu publiku.
-                        </span>
-                        <span class="lang-content" data-lang="en">
-                            Balkan Influence Fighting represents a unique opportunity for brands that want to be part of spectacular events that gather thousands of live viewers and millions through streaming. Our events are broadcast throughout the region and attract the widest audience.
-                        </span>
-                    </p>
-                </div>
 
-                <div class="sponsor-stats">
-                    <div class="stat-item">
-                        <div class="stat-number">500K+</div>
-                        <div class="stat-label">
-                            <span class="lang-content active" data-lang="sr">Gledalaca po događaju</span>
-                            <span class="lang-content" data-lang="en">Viewers per event</span>
-                        </div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">15+</div>
-                        <div class="stat-label">
-                            <span class="lang-content active" data-lang="sr">Uspešnih događaja</span>
-                            <span class="lang-content" data-lang="en">Successful events</span>
-                        </div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">8</div>
-                        <div class="stat-label">
-                            <span class="lang-content active" data-lang="sr">Zemalja regiona</span>
-                            <span class="lang-content" data-lang="en">Regional countries</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sponsor-packages">
-                    <h3>
-                        <span class="lang-content active" data-lang="sr">Paketi Sponzorstva</span>
-                        <span class="lang-content" data-lang="en">Sponsorship Packages</span>
-                    </h3>
-                    <div class="packages-grid">
-                        <div class="package-item">
-                            <div class="package-icon">🥇</div>
-                            <div class="package-title">
-                                <span class="lang-content active" data-lang="sr">Glavni Partner</span>
-                                <span class="lang-content" data-lang="en">Main Partner</span>
-                            </div>
-                            <div class="package-description">
-                                <span class="lang-content active" data-lang="sr">Logo na kavezu, dresovima boraca i svim marketinškim materijalima</span>
-                                <span class="lang-content" data-lang="en">Logo on cage, fighter gear and all marketing materials</span>
-                            </div>
-                        </div>
-                        <div class="package-item">
-                            <div class="package-icon">🥈</div>
-                            <div class="package-title">
-                                <span class="lang-content active" data-lang="sr">Premium Partner</span>
-                                <span class="lang-content" data-lang="en">Premium Partner</span>
-                            </div>
-                            <div class="package-description">
-                                <span class="lang-content active" data-lang="sr">Promocija tokom prenosa i VIP mesta za događaje</span>
-                                <span class="lang-content" data-lang="en">Promotion during broadcast and VIP seats for events</span>
-                            </div>
-                        </div>
-                        <div class="package-item">
-                            <div class="package-icon">🥉</div>
-                            <div class="package-title">
-                                <span class="lang-content active" data-lang="sr">Osnovni Partner</span>
-                                <span class="lang-content" data-lang="en">Basic Partner</span>
-                            </div>
-                            <div class="package-description">
-                                <span class="lang-content active" data-lang="sr">Logo na digitalnim platformama i društvenim mrežama</span>
-                                <span class="lang-content" data-lang="en">Logo on digital platforms and social networks</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sponsor-cta">
-                    <a href="#contact" class="btn btn-primary sponsor-btn">
-                        <span class="lang-content active" data-lang="sr">Kontaktitajte Nas</span>
-                        <span class="lang-content" data-lang="en">Contact Us</span>
-                    </a>
-                    <p class="cta-note">
-                        <span class="lang-content active" data-lang="sr">Budite deo naše priče uspeha!</span>
-                        <span class="lang-content" data-lang="en">Be part of our success story!</span>
-                    </p>
-                </div>
+        <!-- GENERAL SPONSOR SHOWCASE -->
+        <div class="general-sponsor">
+            <div class="general-sponsor__badge">
+                <span class="lang-content active" data-lang="sr">⭐ GENERALNI SPONZOR BIF 2</span>
+                <span class="lang-content" data-lang="en">⭐ GENERAL SPONSOR BIF 2</span>
             </div>
-
-            <div class="sponsor-visual">
-                <!-- Dodao sam link oko celog kontejnera i uklonio overlay -->
-                <a href="https://www.oktagonbet.com/mob/sr/registracija" target="_blank" rel="noopener noreferrer" class="sponsor-image-container">
-                    <img src="assets/images/oktagon.jpg" alt="Oktagon Bet - Glavni sponzor BIF" loading="lazy">
-
-                     <!-- ovo je overlay koji se prikazuje na hover -->
-  <div class="sponsor-overlay">
-    <span class="lang-content active" data-lang="sr">
-      Uzmi 500 FREE BETA i 200 FREE SPINOVA
-    </span>
-    <span class="lang-content" data-lang="en">
-      Get 500 FREE BETS and 200 FREE SPINS
-    </span>
-  </div>
-                </a>
+            <div class="general-sponsor__grid">
+                <div class="general-sponsor__logo">
+                    <a href="https://www.oktagonbet.com/mob/sr/registracija" target="_blank" rel="noopener noreferrer">
+                        <img src="assets/images/partners/oktagon.jpg" alt="Oktagonbet — Generalni sponzor BIF 2" loading="lazy">
+                    </a>
+                </div>
+                <div class="general-sponsor__text">
+                    <h2>Oktagonbet</h2>
+                    <p class="general-sponsor__tagline">
+                        <span class="lang-content active" data-lang="sr">Ponosno predstavljamo našeg generalnog sponzora koji pokreće BIF 2 — Beogradski Sajam, 20. jun 2026.</span>
+                        <span class="lang-content" data-lang="en">Proudly presenting our general sponsor powering BIF 2 — Belgrade Fair, June 20, 2026.</span>
+                    </p>
+                    <div class="general-sponsor__perks">
+                        <span class="lang-content active" data-lang="sr">🎁 500 FREE BETOVA + 200 FREE SPINOVA za nove korisnike</span>
+                        <span class="lang-content" data-lang="en">🎁 500 FREE BETS + 200 FREE SPINS for new users</span>
+                    </div>
+                    <a href="https://www.oktagonbet.com/mob/sr/registracija" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                        <span class="lang-content active" data-lang="sr">Posetite Oktagonbet →</span>
+                        <span class="lang-content" data-lang="en">Visit Oktagonbet →</span>
+                    </a>
+                </div>
             </div>
         </div>
+
+        <!-- STATS ROW -->
+        <div class="sponsor-stats sponsor-stats--standalone">
+            <div class="stat-item">
+                <div class="stat-number">500K+</div>
+                <div class="stat-label">
+                    <span class="lang-content active" data-lang="sr">Gledalaca po događaju</span>
+                    <span class="lang-content" data-lang="en">Viewers per event</span>
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">15+</div>
+                <div class="stat-label">
+                    <span class="lang-content active" data-lang="sr">Uspešnih događaja</span>
+                    <span class="lang-content" data-lang="en">Successful events</span>
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">8</div>
+                <div class="stat-label">
+                    <span class="lang-content active" data-lang="sr">Zemalja regiona</span>
+                    <span class="lang-content" data-lang="en">Regional countries</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- PARTNER CTA -->
+        <div class="partner-cta">
+            <div class="partner-cta__header">
+                <h2 class="section-title">
+                    <span class="lang-content active" data-lang="sr">Postanite Prijatelj Događaja</span>
+                    <span class="lang-content" data-lang="en">Become a Friend of the Event</span>
+                </h2>
+                <p class="partner-cta__lead">
+                    <span class="lang-content active" data-lang="sr">Tražimo brendove spremne da postanu deo najvećeg influenserskog boks spektakla na Balkanu. Tri nivoa partnerstva, beskrajne mogućnosti.</span>
+                    <span class="lang-content" data-lang="en">We're looking for brands ready to become part of the biggest influencer boxing spectacle in the Balkans. Three partnership tiers, endless opportunities.</span>
+                </p>
+            </div>
+
+            <div class="partner-tiers">
+                <div class="partner-tier partner-tier--gold">
+                    <div class="partner-tier__medal">🥇</div>
+                    <div class="partner-tier__name">
+                        <span class="lang-content active" data-lang="sr">GLAVNI PARTNER</span>
+                        <span class="lang-content" data-lang="en">MAIN PARTNER</span>
+                    </div>
+                    <ul class="partner-tier__perks">
+                        <li>
+                            <span class="lang-content active" data-lang="sr">Logo na ringu i dresovima boraca</span>
+                            <span class="lang-content" data-lang="en">Logo on the ring and fighter gear</span>
+                        </li>
+                        <li>
+                            <span class="lang-content active" data-lang="sr">Prominentno brendiranje u svim materijalima</span>
+                            <span class="lang-content" data-lang="en">Prominent branding in all materials</span>
+                        </li>
+                        <li>
+                            <span class="lang-content active" data-lang="sr">VIP tretman i ekskluzivni pristup</span>
+                            <span class="lang-content" data-lang="en">VIP treatment and exclusive access</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="partner-tier partner-tier--silver">
+                    <div class="partner-tier__medal">🥈</div>
+                    <div class="partner-tier__name">
+                        <span class="lang-content active" data-lang="sr">PREMIUM PARTNER</span>
+                        <span class="lang-content" data-lang="en">PREMIUM PARTNER</span>
+                    </div>
+                    <ul class="partner-tier__perks">
+                        <li>
+                            <span class="lang-content active" data-lang="sr">Promocija tokom TV i stream prenosa</span>
+                            <span class="lang-content" data-lang="en">Promotion during TV and stream broadcasts</span>
+                        </li>
+                        <li>
+                            <span class="lang-content active" data-lang="sr">VIP mesta za sve BIF događaje</span>
+                            <span class="lang-content" data-lang="en">VIP seats for all BIF events</span>
+                        </li>
+                        <li>
+                            <span class="lang-content active" data-lang="sr">Integracija u marketing kampanje</span>
+                            <span class="lang-content" data-lang="en">Integration in marketing campaigns</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="partner-tier partner-tier--bronze">
+                    <div class="partner-tier__medal">🥉</div>
+                    <div class="partner-tier__name">
+                        <span class="lang-content active" data-lang="sr">OSNOVNI PARTNER</span>
+                        <span class="lang-content" data-lang="en">BASIC PARTNER</span>
+                    </div>
+                    <ul class="partner-tier__perks">
+                        <li>
+                            <span class="lang-content active" data-lang="sr">Logo na zvaničnom sajtu BIF-a</span>
+                            <span class="lang-content" data-lang="en">Logo on the official BIF website</span>
+                        </li>
+                        <li>
+                            <span class="lang-content active" data-lang="sr">Prisustvo na društvenim mrežama</span>
+                            <span class="lang-content" data-lang="en">Social media presence</span>
+                        </li>
+                        <li>
+                            <span class="lang-content active" data-lang="sr">Digitalni materijali i promocija</span>
+                            <span class="lang-content" data-lang="en">Digital materials and promotion</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="partner-cta__action">
+                <a href="#contact" class="btn btn-primary">
+                    <span class="lang-content active" data-lang="sr">Kontaktirajte Nas za Saradnju →</span>
+                    <span class="lang-content" data-lang="en">Contact Us for Partnership →</span>
+                </a>
+                <p class="partner-cta__note">
+                    <span class="lang-content active" data-lang="sr">Piši nam i pridruži se BIF porodici</span>
+                    <span class="lang-content" data-lang="en">Reach out and join the BIF family</span>
+                </p>
+            </div>
+        </div>
+
     </div>
 </section>
 
