@@ -3046,6 +3046,22 @@ a:hover {
     font-size: var(--text-lg);
 }
 
+.event-description {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--light-text-secondary);
+    margin-bottom: var(--space-sm);
+}
+
+[data-theme="dark"] .event-description {
+    color: var(--dark-text-secondary) !important;
+}
+
+.event-card--featured {
+    border: 2px solid var(--primary-red) !important;
+    box-shadow: 0 0 30px rgba(196, 30, 58, 0.25) !important;
+}
+
 .event-action {
     flex-shrink: 0;
 }

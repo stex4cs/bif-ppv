@@ -977,26 +977,34 @@ if (!$recaptchaSiteKey) {
                         </div>
                     </div>
 
-                    <div class="event-card">
+                    <div class="event-card event-card--featured">
                         <div class="event-date">
-                            <span class="event-day">10</span>
+                            <span class="event-day">20</span>
                             <span class="event-month">
-                                <span class="lang-content active" data-lang="sr">Oktobar</span>
-                                <span class="lang-content" data-lang="en">October</span>
+                                <span class="lang-content active" data-lang="sr">JUN 2026</span>
+                                <span class="lang-content" data-lang="en">JUNE 2026</span>
                             </span>
                         </div>
                         <div class="event-info">
-                            <h3 class="event-title">BIF 2: After Summer Showdown</h3>
+                            <h3 class="event-title">BIF 2 — Beogradski Sajam</h3>
                             <p class="event-location">
-                                <span class="lang-content active" data-lang="sr">USKORO</span>
-                                <span class="lang-content" data-lang="en">SOON</span>
+                                <span class="lang-content active" data-lang="sr">📍 Beogradski Sajam, Beograd</span>
+                                <span class="lang-content" data-lang="en">📍 Belgrade Fair, Belgrade</span>
                             </p>
-                            <p class="event-time">19:30</p>
+                            <p class="event-description">
+                                <span class="lang-content active" data-lang="sr">
+                                    Prvi influenserski boks show sa <strong>pravom publikom</strong> na Balkanu. Najluđa noć, omiljene zvezde, iznenađenja koja nisi video — sve to živo, pred prepunom salom. Beograd, spremi se.
+                                </span>
+                                <span class="lang-content" data-lang="en">
+                                    The first influencer boxing show with a <strong>live audience</strong> in the Balkans. The craziest night, your favorite stars, surprises you've never seen — all live, in front of a packed arena. Belgrade, get ready.
+                                </span>
+                            </p>
+                            <p class="event-time">20:00</p>
                         </div>
                         <div class="event-action">
-                            <a href="https://www.youtube.com/@bif.events" class="btn btn-secondary">
-                                <span class="lang-content active" data-lang="sr">Uskoro</span>
-                                <span class="lang-content" data-lang="en">Coming Soon</span>
+                            <a href="#" class="btn btn-primary">
+                                <span class="lang-content active" data-lang="sr">🎟 Kupi Ulaznice</span>
+                                <span class="lang-content" data-lang="en">🎟 Buy Tickets</span>
                             </a>
                         </div>
                     </div>
