@@ -157,9 +157,17 @@ $pageUrl = 'https://bif.events/borci/' . $slug;
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/loading-screen.css">
-    <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/modern-design.css">
+    <?php
+        $_cssBase = dirname(__DIR__) . '/css/';
+        $_cssVer = [
+            'loading-screen' => file_exists($_cssBase.'loading-screen.css') ? filemtime($_cssBase.'loading-screen.css') : time(),
+            'main' => file_exists($_cssBase.'main.css') ? filemtime($_cssBase.'main.css') : time(),
+            'modern-design' => file_exists($_cssBase.'modern-design.css') ? filemtime($_cssBase.'modern-design.css') : time(),
+        ];
+    ?>
+    <link rel="stylesheet" href="../css/loading-screen.css?v=<?php echo $_cssVer['loading-screen']; ?>">
+    <link rel="stylesheet" href="../css/main.css?v=<?php echo $_cssVer['main']; ?>">
+    <link rel="stylesheet" href="../css/modern-design.css?v=<?php echo $_cssVer['modern-design']; ?>">
     <link rel="stylesheet" href="../css/fighter-details.css">
     <meta name="theme-color" content="#c41e3a">
 
