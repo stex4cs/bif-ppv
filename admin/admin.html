@@ -1291,11 +1291,19 @@
             <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
                 <div class="form-group">
                     <label>Protivnik *</label>
-                    <input type="text" id="fight-opponent" required placeholder="Marko Marković">
+                    <select id="fight-opponent-select" onchange="onOpponentSelectChange()" required>
+                        <option value="">— Izaberi borca —</option>
+                        <option value="__custom__">✏️ Drugi (ukucaj ručno)</option>
+                    </select>
+                    <input type="text" id="fight-opponent" placeholder="Ime protivnika" style="margin-top:6px;display:none;">
                 </div>
                 <div class="form-group">
                     <label>Event *</label>
-                    <input type="text" id="fight-event" required placeholder="BIF 1: New Rise">
+                    <select id="fight-event-select" onchange="onEventSelectChange()" required>
+                        <option value="">— Izaberi event —</option>
+                        <option value="__custom__">✏️ Drugi (ukucaj ručno)</option>
+                    </select>
+                    <input type="text" id="fight-event" placeholder="Ime eventa" style="margin-top:6px;display:none;">
                 </div>
             </div>
             <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
@@ -2797,19 +2805,129 @@ function escapeHtml(s) {
     return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 }
 
-function openFightModal() {
+let _websiteEventsCache = [];
+
+async function ensureEventsCache() {
+    if (_websiteEventsCache.length > 0) return;
+    try {
+        const response = await fetch('ppv_admin.php?action=get_website_events');
+        const data = await response.json();
+        if (data.success && Array.isArray(data.events)) {
+            _websiteEventsCache = data.events;
+        }
+    } catch (err) {
+        console.error('Could not load events:', err);
+    }
+}
+
+function populateOpponentDropdown(currentOpponent = '') {
+    const select = document.getElementById('fight-opponent-select');
+    const customInput = document.getElementById('fight-opponent');
+    // Build list of fighters excluding the current one being edited
+    const opponents = (_fightersCache || []).filter(f => !currentEditingFighter || f.id !== currentEditingFighter.id);
+    const options = ['<option value="">— Izaberi borca —</option>']
+        .concat(opponents.map(f => `<option value="${escapeHtml(f.name)}">${escapeHtml(f.name)}${f.nickname ? ' "' + escapeHtml(f.nickname) + '"' : ''}</option>`))
+        .concat(['<option value="__custom__">✏️ Drugi (ukucaj ručno)</option>']);
+    select.innerHTML = options.join('');
+    // If editing, check if opponent is in list
+    if (currentOpponent) {
+        const found = opponents.some(f => f.name === currentOpponent);
+        if (found) {
+            select.value = currentOpponent;
+            customInput.style.display = 'none';
+            customInput.value = '';
+        } else {
+            select.value = '__custom__';
+            customInput.style.display = 'block';
+            customInput.value = currentOpponent;
+        }
+    } else {
+        customInput.style.display = 'none';
+        customInput.value = '';
+    }
+}
+
+function populateEventDropdown(currentEvent = '') {
+    const select = document.getElementById('fight-event-select');
+    const customInput = document.getElementById('fight-event');
+    const events = _websiteEventsCache || [];
+    const opts = ['<option value="">— Izaberi event —</option>']
+        .concat(events.map(e => {
+            const title = e.title_sr || e.title_en || e.name || '';
+            return `<option value="${escapeHtml(title)}">${escapeHtml(title)}</option>`;
+        }))
+        .concat(['<option value="__custom__">✏️ Drugi (ukucaj ručno)</option>']);
+    select.innerHTML = opts.join('');
+    if (currentEvent) {
+        const found = events.some(e => (e.title_sr || e.title_en || e.name) === currentEvent);
+        if (found) {
+            select.value = currentEvent;
+            customInput.style.display = 'none';
+            customInput.value = '';
+        } else {
+            select.value = '__custom__';
+            customInput.style.display = 'block';
+            customInput.value = currentEvent;
+        }
+    } else {
+        customInput.style.display = 'none';
+        customInput.value = '';
+    }
+}
+
+function onOpponentSelectChange() {
+    const select = document.getElementById('fight-opponent-select');
+    const customInput = document.getElementById('fight-opponent');
+    if (select.value === '__custom__') {
+        customInput.style.display = 'block';
+        customInput.focus();
+    } else {
+        customInput.style.display = 'none';
+        customInput.value = '';
+    }
+}
+
+function onEventSelectChange() {
+    const select = document.getElementById('fight-event-select');
+    const customInput = document.getElementById('fight-event');
+    if (select.value === '__custom__') {
+        customInput.style.display = 'block';
+        customInput.focus();
+    } else {
+        customInput.style.display = 'none';
+        customInput.value = '';
+    }
+}
+
+function getSelectedOpponent() {
+    const selectVal = document.getElementById('fight-opponent-select').value;
+    if (selectVal === '__custom__') return document.getElementById('fight-opponent').value.trim();
+    return selectVal;
+}
+
+function getSelectedEvent() {
+    const selectVal = document.getElementById('fight-event-select').value;
+    if (selectVal === '__custom__') return document.getElementById('fight-event').value.trim();
+    return selectVal;
+}
+
+async function openFightModal() {
     document.getElementById('fight-modal-title').textContent = 'Dodaj Borbu';
     document.getElementById('fightForm').reset();
     document.getElementById('fight-id').value = '';
     document.getElementById('fight-is-bif').checked = false;
+    await ensureEventsCache();
+    populateOpponentDropdown('');
+    populateEventDropdown('');
     document.getElementById('fightModal').style.display = 'flex';
 }
 
-function editFight(fight) {
+async function editFight(fight) {
     document.getElementById('fight-modal-title').textContent = 'Izmeni Borbu';
     document.getElementById('fight-id').value = fight.id || '';
-    document.getElementById('fight-opponent').value = fight.opponent || '';
-    document.getElementById('fight-event').value = fight.event || '';
+    await ensureEventsCache();
+    populateOpponentDropdown(fight.opponent || '');
+    populateEventDropdown(fight.event || '');
     document.getElementById('fight-date').value = fight.date || '';
     document.getElementById('fight-result').value = fight.result || 'win';
     document.getElementById('fight-method').value = fight.method || '';
@@ -2831,10 +2949,14 @@ async function saveFight(event) {
         alert('Prvo sačuvaj borca, pa onda dodaj borbe.');
         return;
     }
+    const opponentVal = getSelectedOpponent();
+    const eventVal = getSelectedEvent();
+    if (!opponentVal) { alert('Izaberi ili ukucaj protivnika'); return; }
+    if (!eventVal) { alert('Izaberi ili ukucaj event'); return; }
     const fight = {
         id: document.getElementById('fight-id').value,
-        opponent: document.getElementById('fight-opponent').value.trim(),
-        event: document.getElementById('fight-event').value.trim(),
+        opponent: opponentVal,
+        event: eventVal,
         date: document.getElementById('fight-date').value,
         result: document.getElementById('fight-result').value,
         method: document.getElementById('fight-method').value,
@@ -2894,6 +3016,8 @@ window.editFight = editFight;
 window.closeFightModal = closeFightModal;
 window.saveFight = saveFight;
 window.deleteFight = deleteFight;
+window.onOpponentSelectChange = onOpponentSelectChange;
+window.onEventSelectChange = onEventSelectChange;
 
 async function saveFighter(event) {
     event.preventDefault();
