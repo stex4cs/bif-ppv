@@ -223,10 +223,17 @@ function formatNewsDate($dateString) {
     <!-- Fonts Awesone -->
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Main CSS -->
-    <link rel="stylesheet" href="css/loading-screen.css"> <!-- Loading Screen -->
-    <link rel="stylesheet" href="css/main.css"> <!-- CSS Variables -->
-    <link rel="stylesheet" href="css/modern-design.css"> <!-- Modern Design System -->
+    <!-- Main CSS with cache busting -->
+    <?php
+        $cssVer = [
+            'loading-screen' => file_exists(__DIR__.'/css/loading-screen.css') ? filemtime(__DIR__.'/css/loading-screen.css') : time(),
+            'main' => file_exists(__DIR__.'/css/main.css') ? filemtime(__DIR__.'/css/main.css') : time(),
+            'modern-design' => file_exists(__DIR__.'/css/modern-design.css') ? filemtime(__DIR__.'/css/modern-design.css') : time(),
+        ];
+    ?>
+    <link rel="stylesheet" href="css/loading-screen.css?v=<?php echo $cssVer['loading-screen']; ?>">
+    <link rel="stylesheet" href="css/main.css?v=<?php echo $cssVer['main']; ?>">
+    <link rel="stylesheet" href="css/modern-design.css?v=<?php echo $cssVer['modern-design']; ?>">
 
     <!-- Main JavaScript (loaded early with defer) -->
     <script src="js/main.js" defer></script>
