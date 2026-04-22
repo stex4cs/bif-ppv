@@ -895,8 +895,10 @@ if (!$recaptchaSiteKey) {
                 $dateFormatted = formatNewsDate($article['published_at']);
                 $newsUrl = 'vesti/' . htmlspecialchars($article['slug']) . '.html';
                 $imgUrl = $article['image_url'] ?? 'assets/images/news/news-1.png';
-                // Fix escape slashes in image URL
                 $imgUrl = str_replace('\\/', '/', $imgUrl);
+                // Cache busting
+                $absImgPath = __DIR__ . '/' . ltrim($imgUrl, '/');
+                $imgUrl .= '?v=' . (file_exists($absImgPath) ? filemtime($absImgPath) : time());
 
                 // Get bilingual titles (fallback to old format for compatibility)
                 $titleSr = $article['title_sr'] ?? $article['title'] ?? 'Bez naslova';
