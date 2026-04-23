@@ -338,22 +338,34 @@ if (!$recaptchaSiteKey) {
     <main id="main-content">
         <!-- Hero Section -->
         <section class="hero section" id="home" role="banner">
+            <!-- Background video -->
+            <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="/assets/images/events/bif2/bif2-poster.png">
+                <source src="/assets/video/hero.mp4" type="video/mp4">
+            </video>
+            <div class="hero-video-overlay"></div>
+
             <div class="container">
                 <div class="hero-content">
                     <h1>
                         <span class="lang-content active" data-lang="sr">Balkan Influence Fighting</span>
                         <span class="lang-content" data-lang="en">Balkan Influence Fighting</span>
                     </h1>
-                    
+
                     <p>
                         <span class="lang-content active" data-lang="sr">Najveći balkanski fight-show sa influenserima</span>
                         <span class="lang-content" data-lang="en">The biggest Balkan fight show featuring influencers</span>
                     </p>
-                    
-                    <a href="#fighters" class="btn btn-primary cta-button">
-                        <span class="lang-content active" data-lang="sr">Pogledaj Borce</span>
-                        <span class="lang-content" data-lang="en">View Fighters</span>
-                    </a>
+
+                    <div class="hero-cta-group">
+                        <a href="#" class="btn btn-primary cta-button">
+                            <span class="lang-content active" data-lang="sr">🎟 Kupi Ulaznice za BIF 2</span>
+                            <span class="lang-content" data-lang="en">🎟 Buy Tickets for BIF 2</span>
+                        </a>
+                        <a href="#fighters" class="btn btn-secondary cta-button">
+                            <span class="lang-content active" data-lang="sr">Pogledaj Borce</span>
+                            <span class="lang-content" data-lang="en">View Fighters</span>
+                        </a>
+                    </div>
                 </div>
             </div>
             <!-- Scroll Indicator -->
