@@ -477,39 +477,108 @@ header.scrolled {
     }
 }
 
-.hero h1 {
+/* Eyebrow above main title */
+.hero-eyebrow {
+    display: inline-block;
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(0.75rem, 1.2vw, 0.95rem);
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--secondary, #ffd700);
+    margin-bottom: 1.25rem;
+    padding: 0.45rem 1.1rem;
+    background: rgba(196, 30, 58, 0.15);
+    border: 1px solid rgba(255, 215, 0, 0.35);
+    border-radius: 100px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    animation: fadeInUp 0.9s ease-out both;
+}
+
+[data-theme="light"] .hero-eyebrow {
+    color: var(--primary, #c41e3a);
+    background: rgba(196, 30, 58, 0.08);
+    border-color: rgba(196, 30, 58, 0.25);
+}
+
+.hero h1,
+.hero-title {
     font-family: 'Oswald', sans-serif !important;
-    font-size: clamp(3rem, 8vw, 6rem) !important;
+    font-size: clamp(3rem, 9vw, 7rem) !important;
     font-weight: 800 !important;
-    line-height: 1.1 !important;
-    margin-bottom: var(--spacing-md) !important;
-    background: linear-gradient(135deg, white, var(--secondary)) !important;
+    line-height: 0.95 !important;
+    margin-bottom: 1.5rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: clamp(2px, 0.6vw, 5px) !important;
+    color: #fff !important;
+    background: linear-gradient(180deg, #ffffff 0%, #f5f5f5 50%, #d4d4d4 100%) !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
     background-clip: text !important;
-    text-transform: uppercase !important;
-    letter-spacing: 3px !important;
+    text-shadow: 0 4px 30px rgba(0, 0, 0, 0.6) !important;
     animation: fadeInUp 1s ease-out 0.2s both;
+}
+
+.hero-title em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--primary, #c41e3a) 0%, var(--secondary, #ffd700) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline-block;
+}
+
+[data-theme="light"] .hero h1,
+[data-theme="light"] .hero-title {
+    background: linear-gradient(180deg, #0a0a0a 0%, #3a3a3a 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
     text-shadow: none !important;
 }
 
-[data-theme="light"] .hero h1 {
-    background: linear-gradient(135deg, var(--primary), var(--secondary)) !important;
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-    background-clip: text !important;
+[data-theme="light"] .hero-title em {
+    background: linear-gradient(135deg, var(--primary, #c41e3a) 0%, #8b0000 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
-.hero p {
-    font-size: clamp(1.1rem, 2vw, 1.4rem) !important;
-    color: var(--text-muted) !important;
-    margin-bottom: var(--spacing-lg) !important;
-    line-height: 1.8 !important;
+.hero p,
+.hero-tagline {
+    font-family: 'Inter', sans-serif !important;
+    font-size: clamp(1rem, 1.6vw, 1.25rem) !important;
+    font-weight: 500 !important;
+    letter-spacing: 2px !important;
+    text-transform: uppercase !important;
+    color: rgba(255, 255, 255, 0.85) !important;
+    margin-bottom: 0 !important;
+    line-height: 1.6 !important;
     animation: fadeInUp 1s ease-out 0.4s both;
+    position: relative;
+    display: inline-block;
+    padding: 0.5rem 0;
 }
 
-[data-theme="light"] .hero p {
-    color: #6c757d !important;
+.hero-tagline::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary, #c41e3a), var(--secondary, #ffd700));
+    margin: 1rem auto 0;
+    border-radius: 2px;
+}
+
+[data-theme="light"] .hero p,
+[data-theme="light"] .hero-tagline {
+    color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.hero-cta-group {
+    margin-top: 2.5rem !important;
+    animation: fadeInUp 1s ease-out 0.6s both;
 }
 
 .cta-button {

@@ -346,14 +346,18 @@ if (!$recaptchaSiteKey) {
 
             <div class="container">
                 <div class="hero-content">
-                    <h1>
-                        <span class="lang-content active" data-lang="sr">Balkan Influence Fighting</span>
-                        <span class="lang-content" data-lang="en">Balkan Influence Fighting</span>
+                    <span class="hero-eyebrow">
+                        <span class="lang-content active" data-lang="sr">⚡ Prvi Balkanski Influenser Boks Show</span>
+                        <span class="lang-content" data-lang="en">⚡ The First Balkan Influencer Boxing Show</span>
+                    </span>
+                    <h1 class="hero-title">
+                        <span class="lang-content active" data-lang="sr">Balkan Influence <em>Fighting</em></span>
+                        <span class="lang-content" data-lang="en">Balkan Influence <em>Fighting</em></span>
                     </h1>
 
-                    <p>
-                        <span class="lang-content active" data-lang="sr">Najveći balkanski fight-show sa influenserima</span>
-                        <span class="lang-content" data-lang="en">The biggest Balkan fight show featuring influencers</span>
+                    <p class="hero-tagline">
+                        <span class="lang-content active" data-lang="sr">Najluđa noć · Omiljene zvezde · Prava publika</span>
+                        <span class="lang-content" data-lang="en">The craziest night · Favorite stars · Live audience</span>
                     </p>
 
                     <div class="hero-cta-group">
