@@ -113,16 +113,27 @@
 }
 
 .fighter-info-container h1 {
-  font-size: var(--text-4xl);
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(3rem, 7vw, 6rem);
   color: var(--light-text-primary);
-  margin-bottom: var(--space-sm);
+  margin-bottom: 0.4rem;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: clamp(1px, 0.3vw, 3px);
+  line-height: 0.95;
+  background: linear-gradient(180deg, #0a0a0a 0%, #3a3a3a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 [data-theme="dark"] .fighter-info-container h1 {
-  color: var(--dark-text-primary);
+  background: linear-gradient(180deg, #ffffff 0%, #c0c0c0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
 }
 
 .fighter-age {
@@ -136,14 +147,36 @@
   color: var(--dark-text-muted);
 }
 
+/* Fighter nickname — gold accent, italic, prominent */
+.fighter-info-container .fighter-nickname {
+  font-family: 'Oswald', sans-serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
+  letter-spacing: 1.5px;
+  color: #ffd700;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+[data-theme="dark"] .fighter-info-container .fighter-nickname {
+  color: #ffd700;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
 .fighter-category-details {
-  font-size: var(--text-lg);
-  color: var(--primary-red);
-  font-family: var(--font-heading);
+  font-size: 0.8rem !important;
+  color: #fff !important;
+  font-family: 'Oswald', sans-serif;
   text-transform: uppercase;
   margin-bottom: var(--space-xl);
-  display: block;
+  display: inline-block;
   font-weight: 700;
+  letter-spacing: 3px;
+  padding: 0.5rem 1.2rem;
+  background: linear-gradient(135deg, var(--primary-red, #c41e3a), var(--dark-red, #8b0000));
+  border-radius: 100px;
+  box-shadow: 0 4px 14px rgba(196, 30, 58, 0.35);
   letter-spacing: 1px;
 }
 

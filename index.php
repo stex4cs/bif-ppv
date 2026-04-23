@@ -461,10 +461,16 @@ if (!$recaptchaSiteKey) {
 <!-- Fighters Section -->
 <section class="fighters-section section" id="fighters">
     <div class="container">
-        <h2 class="section-title">
-            <span class="lang-content active" data-lang="sr">BIF Borci</span>
-            <span class="lang-content" data-lang="en">BIF Fighters</span>
-        </h2>
+        <div class="section-heading">
+            <span class="section-eyebrow">
+                <span class="lang-content active" data-lang="sr">NAŠI BORCI</span>
+                <span class="lang-content" data-lang="en">OUR FIGHTERS</span>
+            </span>
+            <h2 class="section-title">
+                <span class="lang-content active" data-lang="sr">Roster</span>
+                <span class="lang-content" data-lang="en">Roster</span>
+            </h2>
+        </div>
         
         <div class="fighters-carousel" role="region" aria-label="Fighters carousel">
             <button class="carousel-arrow prev" onclick="bifApp.previousSlide()" aria-label="Previous fighters">
@@ -846,10 +852,16 @@ if (!$recaptchaSiteKey) {
         <!-- PARTNER CTA -->
         <div class="partner-cta">
             <div class="partner-cta__header">
-                <h2 class="section-title">
-                    <span class="lang-content active" data-lang="sr">Postanite Prijatelj Događaja</span>
-                    <span class="lang-content" data-lang="en">Become a Friend of the Event</span>
-                </h2>
+                <div class="section-heading">
+                    <span class="section-eyebrow">
+                        <span class="lang-content active" data-lang="sr">PARTNERSTVO</span>
+                        <span class="lang-content" data-lang="en">PARTNERSHIP</span>
+                    </span>
+                    <h2 class="section-title">
+                        <span class="lang-content active" data-lang="sr">Postanite Prijatelj Događaja</span>
+                        <span class="lang-content" data-lang="en">Become a Friend of the Event</span>
+                    </h2>
+                </div>
                 <p class="partner-cta__lead">
                     <span class="lang-content active" data-lang="sr">Tražimo brendove spremne da postanu deo najvećeg influenserskog boks spektakla na Balkanu. Tri nivoa partnerstva, beskrajne mogućnosti.</span>
                     <span class="lang-content" data-lang="en">We're looking for brands ready to become part of the biggest influencer boxing spectacle in the Balkans. Three partnership tiers, endless opportunities.</span>
@@ -942,10 +954,16 @@ if (!$recaptchaSiteKey) {
         <!-- News Section -->
         <section class="news-section section" id="news">
     <div class="container">
-        <h2 class="section-title">
-            <span class="lang-content active" data-lang="sr">Najnovije Vesti</span>
-            <span class="lang-content" data-lang="en">Latest News</span>
-        </h2>
+        <div class="section-heading">
+            <span class="section-eyebrow">
+                <span class="lang-content active" data-lang="sr">ŠTA SE DEŠAVA</span>
+                <span class="lang-content" data-lang="en">WHAT'S HAPPENING</span>
+            </span>
+            <h2 class="section-title">
+                <span class="lang-content active" data-lang="sr">Vesti</span>
+                <span class="lang-content" data-lang="en">News</span>
+            </h2>
+        </div>
         
         <div class="news-grid">
             <?php foreach ($publishedNews as $article):
@@ -1006,10 +1024,16 @@ if (!$recaptchaSiteKey) {
         <!-- Events Section -->
         <section class="events-section section" id="events">
             <div class="container">
-                <h2 class="section-title">
-                    <span class="lang-content active" data-lang="sr">Uskoro</span>
-                    <span class="lang-content" data-lang="en">Soon</span>
-                </h2>
+                <div class="section-heading">
+                    <span class="section-eyebrow">
+                        <span class="lang-content active" data-lang="sr">DOLAZI USKORO</span>
+                        <span class="lang-content" data-lang="en">COMING SOON</span>
+                    </span>
+                    <h2 class="section-title">
+                        <span class="lang-content active" data-lang="sr">BIF 2</span>
+                        <span class="lang-content" data-lang="en">BIF 2</span>
+                    </h2>
+                </div>
                 
                 <div class="events-grid events-grid--single">
                     <div class="event-card event-card--featured">
@@ -1055,10 +1079,16 @@ if (!$recaptchaSiteKey) {
 <!-- Contact Section -->
         <section class="contact-section section" id="contact">
             <div class="container">
-                <h2 class="section-title">
-                    <span class="lang-content active" data-lang="sr">Kontaktirajte Nas</span>
-                    <span class="lang-content" data-lang="en">Contact Us</span>
-                </h2>
+                <div class="section-heading">
+                    <span class="section-eyebrow">
+                        <span class="lang-content active" data-lang="sr">STUPITE U KONTAKT</span>
+                        <span class="lang-content" data-lang="en">GET IN TOUCH</span>
+                    </span>
+                    <h2 class="section-title">
+                        <span class="lang-content active" data-lang="sr">Kontakt</span>
+                        <span class="lang-content" data-lang="en">Contact</span>
+                    </h2>
+                </div>
                 
                 <div class="contact-content">
                     <div class="contact-info">
@@ -1201,10 +1231,16 @@ if (!$recaptchaSiteKey) {
         <!-- Partners Section -->
         <section class="partners-section section" id="partners">
     <div class="container">
-        <h2 class="section-title">
-            <span class="lang-content active" data-lang="sr">Naši Partneri</span>
-            <span class="lang-content" data-lang="en">Our Partners</span>
-        </h2>
+        <div class="section-heading">
+            <span class="section-eyebrow">
+                <span class="lang-content active" data-lang="sr">UZ NAS SU</span>
+                <span class="lang-content" data-lang="en">SUPPORTED BY</span>
+            </span>
+            <h2 class="section-title">
+                <span class="lang-content active" data-lang="sr">Naši Partneri</span>
+                <span class="lang-content" data-lang="en">Our Partners</span>
+            </h2>
+        </div>
         
         <div class="partners-grid">
             <a href="https://www.popzify.com" target="_blank" rel="noopener noreferrer" class="partner-logo">

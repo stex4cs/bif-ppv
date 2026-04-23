@@ -873,6 +873,50 @@ header.scrolled {
     margin-bottom: var(--spacing-lg) !important;
 }
 
+/* Section heading wrapper (eyebrow + title) */
+.section-heading {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.section-eyebrow {
+    display: inline-block;
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(0.75rem, 1vw, 0.9rem);
+    font-weight: 600;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--primary, #c41e3a);
+    margin-bottom: 0.9rem;
+    padding-bottom: 0.5rem;
+    position: relative;
+}
+
+.section-eyebrow::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 40px;
+    height: 2px;
+    background: var(--primary, #c41e3a);
+    transform: translateX(-50%);
+    opacity: 0.6;
+}
+
+[data-theme="light"] .section-eyebrow {
+    color: var(--primary, #c41e3a);
+}
+
+.section-heading .section-title {
+    margin-bottom: 0 !important;
+    font-size: clamp(3rem, 7vw, 5.5rem) !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+    letter-spacing: clamp(2px, 0.5vw, 4px) !important;
+    padding-bottom: 1.25rem !important;
+}
+
 .section-title {
     font-family: 'Oswald', sans-serif;
     font-size: clamp(2.5rem, 5vw, 4rem) !important;
@@ -989,14 +1033,17 @@ header.scrolled {
 
 .fighter-name {
     font-family: 'Oswald', sans-serif;
-    font-size: 1.8rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
+    font-size: clamp(1.5rem, 2vw, 2rem);
+    font-weight: 800;
+    margin-bottom: 0.25rem;
     color: white;
+    line-height: 1;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
 [data-theme="light"] .fighter-name {
-    color: #212529;
+    color: #0a0a0a;
 }
 
 .fighter-record {
@@ -1570,14 +1617,25 @@ footer::before {
 }
 
 .time-box {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border: 1px solid rgba(255, 215, 0, 0.15);
     border-radius: var(--radius-lg);
-    padding: 2rem 3rem;
-    min-width: 120px;
-    box-shadow: var(--shadow-sm);
+    padding: 1.75rem 2.5rem;
+    min-width: 140px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
     transition: all var(--transition-base);
     text-align: center;
+    position: relative;
+}
+
+.time-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--secondary, #ffd700), transparent);
 }
 
 [data-theme="light"] .time-box {
@@ -1588,23 +1646,37 @@ footer::before {
 
 .time-box span {
     display: block;
-    font-size: 3rem;
-    font-weight: 700;
-    color: var(--secondary);
+    font-size: clamp(3.5rem, 7vw, 6rem);
+    font-weight: 800;
+    color: #fff;
     font-family: 'Oswald', sans-serif;
+    line-height: 1;
+    letter-spacing: -2px;
+    background: linear-gradient(180deg, #ffffff 0%, #e0e0e0 50%, #a0a0a0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    font-variant-numeric: tabular-nums;
 }
 
 [data-theme="light"] .time-box span {
-    color: var(--primary);
+    background: linear-gradient(180deg, #0a0a0a 0%, #3a3a3a 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
 }
 
 .time-box small {
     display: block;
-    font-size: 0.875rem;
-    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--secondary, #ffd700);
     text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-top: 0.5rem;
+    letter-spacing: 3px;
+    margin-top: 0.75rem;
+    font-family: 'Oswald', sans-serif;
 }
 
 [data-theme="light"] .time-box small {
@@ -1800,16 +1872,43 @@ a:hover {
     font-size: var(--text-base);
 }
 
-.fighter-category {
-    color: var(--light-text-secondary);
-    text-transform: uppercase;
-    font-size: var(--text-sm);
-    font-weight: 600;
+.fighter-card .fighter-nickname {
+    font-family: 'Oswald', sans-serif;
+    color: #ffd700;
+    font-size: 0.95rem;
+    font-weight: 500;
+    font-style: italic;
     letter-spacing: 1px;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    opacity: 0.95;
+}
+
+[data-theme="light"] .fighter-card .fighter-nickname {
+    color: #b8860b;
+}
+
+.fighter-category {
+    display: inline-block;
+    padding: 0.3rem 0.9rem;
+    background: rgba(196, 30, 58, 0.15);
+    border: 1px solid rgba(196, 30, 58, 0.3);
+    border-radius: 100px;
+    color: #ff6b7c !important;
+    text-transform: uppercase;
+    font-size: 0.7rem !important;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    font-family: 'Oswald', sans-serif;
+}
+
+[data-theme="light"] .fighter-category {
+    color: var(--primary, #c41e3a) !important;
+    background: rgba(196, 30, 58, 0.08);
 }
 
 [data-theme="dark"] .fighter-category {
-    color: var(--dark-text-secondary) !important;
+    color: #ff6b7c !important;
 }
 
 /* ========================================
