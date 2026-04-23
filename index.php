@@ -347,8 +347,8 @@ if (!$recaptchaSiteKey) {
             <div class="container">
                 <div class="hero-content">
                     <span class="hero-eyebrow">
-                        <span class="lang-content active" data-lang="sr">⚡ Prvi Balkanski Influenser Boks Show</span>
-                        <span class="lang-content" data-lang="en">⚡ The First Balkan Influencer Boxing Show</span>
+                        <span class="lang-content active" data-lang="sr">Prvi Balkanski Influenser Boks Show</span>
+                        <span class="lang-content" data-lang="en">The First Balkan Influencer Boxing Show</span>
                     </span>
                     <h1 class="hero-title">
                         <span class="lang-content active" data-lang="sr">Balkan Influence <em>Fighting</em></span>
