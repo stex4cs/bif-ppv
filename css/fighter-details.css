@@ -168,6 +168,7 @@
   letter-spacing: 0;
   opacity: 0.6;
   vertical-align: middle;
+  margin-left: 0.75rem;
   background: none !important;
   -webkit-text-fill-color: initial !important;
 }

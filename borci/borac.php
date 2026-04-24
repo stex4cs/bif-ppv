@@ -255,7 +255,7 @@ if (substr($absImageUrl, 0, 4) !== 'http') {
                             <h1>
                                 <span class="lang-content active" data-lang="sr"><?php echo strtoupper($name); ?></span>
                                 <span class="lang-content" data-lang="en"><?php echo strtoupper($name); ?></span>
-                                <?php if ($age > 0): ?><span class="fighter-age">, <?php echo $age; ?></span><?php endif; ?>
+                                <?php if ($age > 0): ?><span class="fighter-age"><?php echo $age; ?></span><?php endif; ?>
                             </h1>
                             <?php if ($nickname): ?>
                             <p class="fighter-nickname">"<?php echo $nickname; ?>"</p>
