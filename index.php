@@ -813,8 +813,8 @@ if (!$recaptchaSiteKey) {
                         <span class="lang-content" data-lang="en">Proudly presenting our general sponsor powering BIF 2 — Belgrade Fair, June 20, 2026.</span>
                     </p>
                     <div class="general-sponsor__perks">
-                        <span class="lang-content active" data-lang="sr">🎁 500 FREE BETOVA + 200 FREE SPINOVA za nove korisnike</span>
-                        <span class="lang-content" data-lang="en">🎁 500 FREE BETS + 200 FREE SPINS for new users</span>
+                        <span class="lang-content active" data-lang="sr">Bonus dobrodošlice uz tiket bez rizika i do 700 free spinova</span>
+                        <span class="lang-content" data-lang="en">Welcome bonus with risk-free ticket and up to 700 free spins</span>
                     </div>
                     <a href="https://www.oktagonbet.com/mob/sr/registracija" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
                         <span class="lang-content active" data-lang="sr">Posetite Oktagonbet →</span>
