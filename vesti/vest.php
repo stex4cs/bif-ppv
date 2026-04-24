@@ -172,9 +172,17 @@ foreach ($allNews as $n) {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/news.css">
-    <link rel="stylesheet" href="../css/modern-design.css">
+    <?php
+        $_cssBase = dirname(__DIR__) . '/css/';
+        $_cssVer = [
+            'main' => file_exists($_cssBase.'main.css') ? filemtime($_cssBase.'main.css') : time(),
+            'news' => file_exists($_cssBase.'news.css') ? filemtime($_cssBase.'news.css') : time(),
+            'modern-design' => file_exists($_cssBase.'modern-design.css') ? filemtime($_cssBase.'modern-design.css') : time(),
+        ];
+    ?>
+    <link rel="stylesheet" href="../css/main.css?v=<?php echo $_cssVer['main']; ?>">
+    <link rel="stylesheet" href="../css/news.css?v=<?php echo $_cssVer['news']; ?>">
+    <link rel="stylesheet" href="../css/modern-design.css?v=<?php echo $_cssVer['modern-design']; ?>">
 
     <meta name="theme-color" content="#c41e3a">
 
