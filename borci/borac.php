@@ -183,12 +183,13 @@ if (substr($absImageUrl, 0, 4) !== 'http') {
             'loading-screen' => file_exists($_cssBase.'loading-screen.css') ? filemtime($_cssBase.'loading-screen.css') : time(),
             'main' => file_exists($_cssBase.'main.css') ? filemtime($_cssBase.'main.css') : time(),
             'modern-design' => file_exists($_cssBase.'modern-design.css') ? filemtime($_cssBase.'modern-design.css') : time(),
+            'fighter-details' => file_exists($_cssBase.'fighter-details.css') ? filemtime($_cssBase.'fighter-details.css') : time(),
         ];
     ?>
     <link rel="stylesheet" href="../css/loading-screen.css?v=<?php echo $_cssVer['loading-screen']; ?>">
     <link rel="stylesheet" href="../css/main.css?v=<?php echo $_cssVer['main']; ?>">
     <link rel="stylesheet" href="../css/modern-design.css?v=<?php echo $_cssVer['modern-design']; ?>">
-    <link rel="stylesheet" href="../css/fighter-details.css">
+    <link rel="stylesheet" href="../css/fighter-details.css?v=<?php echo $_cssVer['fighter-details']; ?>">
     <meta name="theme-color" content="#c41e3a">
 
     <title><?php echo $metaTitle; ?></title>
@@ -247,6 +248,10 @@ if (substr($absImageUrl, 0, 4) !== 'http') {
                     </div>
                     <div class="fighter-info-container">
                         <div class="fighter-header">
+                            <span class="fighter-eyebrow">
+                                <span class="lang-content active" data-lang="sr">BIF BORAC</span>
+                                <span class="lang-content" data-lang="en">BIF FIGHTER</span>
+                            </span>
                             <h1>
                                 <span class="lang-content active" data-lang="sr"><?php echo strtoupper($name); ?></span>
                                 <span class="lang-content" data-lang="en"><?php echo strtoupper($name); ?></span>
