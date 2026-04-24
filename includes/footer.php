@@ -1,91 +1,116 @@
-<footer id="contact" role="contentinfo">
+<footer id="contact" class="site-footer" role="contentinfo">
     <div class="container">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>
-                    <span class="lang-content active" data-lang="sr">O Nama</span>
-                    <span class="lang-content" data-lang="en">About Us</span>
-                </h3>
-                <p>
-                    <span class="lang-content active" data-lang="sr">Balkan Influence Fighting je najveci boks spektakl na Balkanu, posvecen promociji vrhunskog boksa i sportskog duha.</span>
-                    <span class="lang-content" data-lang="en">Balkan Influence Fighting is the biggest boxing spectacle in the Balkans, dedicated to promoting top-tier boxing and sportsmanship.</span>
-                </p>
-            </div>
 
-            <div class="footer-section">
-                <h3>
-                    <span class="lang-content active" data-lang="sr">Kontakt</span>
-                    <span class="lang-content" data-lang="en">Contact</span>
-                </h3>
-                <p>&#128231; <a href="mailto:business@bif.events">business@bif.events</a></p>
-                <p>&#128222; <a href="tel:+381601484066">+381 601484066</a></p>
-                <p>
-                    <span class="lang-content active" data-lang="sr">&#128205; Beograd, Srbija</span>
-                    <span class="lang-content" data-lang="en">&#128205; Belgrade, Serbia</span>
-                </p>
-            </div>
-
-            <div class="footer-section">
-                <h3>
-                    <span class="lang-content active" data-lang="sr">Prati Nas</span>
-                    <span class="lang-content" data-lang="en">Follow Us</span>
-                </h3>
-                <div class="social-links">
-                    <a href="https://x.com/BIFFighting" class="social-link" aria-label="X (Twitter)" target="_blank" rel="noopener">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                        </svg>
-                    </a>
-                    <a href="https://www.instagram.com/bif.events?igsh=MW9pMHlrM2Znc28wOA==" class="social-link" aria-label="Instagram" target="_blank" rel="noopener">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                        </svg>
-                    </a>
-                    <a href="https://www.youtube.com/@bif.events/" class="social-link" aria-label="YouTube" target="_blank" rel="noopener">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                        </svg>
-                    </a>
-                    <a href="https://www.tiktok.com/@bif.events" class="social-link" aria-label="TikTok" target="_blank" rel="noopener">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
-                        </svg>
-                    </a>
+        <!-- Top brand row -->
+        <div class="footer-top">
+            <div class="footer-brand">
+                <img src="/assets/images/logo/biflogo.png" alt="BIF Logo" class="footer-logo" width="72" height="72">
+                <div class="footer-brand-text">
+                    <div class="footer-brand-name">BALKAN INFLUENCE FIGHTING</div>
+                    <div class="footer-brand-tagline">
+                        <span class="lang-content active" data-lang="sr">Prvi Balkanski Influenser Boks Show</span>
+                        <span class="lang-content" data-lang="en">The First Balkan Influencer Boxing Show</span>
+                    </div>
                 </div>
             </div>
-
-            <div class="footer-section">
-                <h3>
-                    <span class="lang-content active" data-lang="sr">Brzi Linkovi</span>
-                    <span class="lang-content" data-lang="en">Quick Links</span>
-                </h3>
-                <a href="/#fighters">
-                    <span class="lang-content active" data-lang="sr">Borci</span>
-                    <span class="lang-content" data-lang="en">Fighters</span>
-                </a>
-                <a href="/#news">
-                    <span class="lang-content active" data-lang="sr">Vesti</span>
-                    <span class="lang-content" data-lang="en">News</span>
-                </a>
-                <a href="/#events">
-                    <span class="lang-content active" data-lang="sr">Dogadjaji</span>
-                    <span class="lang-content" data-lang="en">Events</span>
-                </a>
-                <a href="/privacy">
-                    <span class="lang-content active" data-lang="sr">Privatnost</span>
-                    <span class="lang-content" data-lang="en">Privacy</span>
+            <div class="footer-brand-cta">
+                <a href="#" class="btn btn-primary footer-tickets-btn">
+                    <span class="lang-content active" data-lang="sr">🎟 Kupi Ulaznice</span>
+                    <span class="lang-content" data-lang="en">🎟 Buy Tickets</span>
                 </a>
             </div>
         </div>
 
+        <!-- Main columns -->
+        <div class="footer-grid">
+
+            <div class="footer-col">
+                <span class="footer-eyebrow">
+                    <span class="lang-content active" data-lang="sr">O BIF-u</span>
+                    <span class="lang-content" data-lang="en">About BIF</span>
+                </span>
+                <p class="footer-about">
+                    <span class="lang-content active" data-lang="sr">Balkan Influence Fighting — spektakl koji okuplja najveće Balkanske zvezde u ringu. Spajamo zabavu, adrenalin i pravi boks u jedan nezaboravan događaj.</span>
+                    <span class="lang-content" data-lang="en">Balkan Influence Fighting — a spectacle bringing the biggest Balkan stars into the ring. We merge entertainment, adrenaline and real boxing into one unforgettable event.</span>
+                </p>
+            </div>
+
+            <div class="footer-col">
+                <span class="footer-eyebrow">
+                    <span class="lang-content active" data-lang="sr">Brzi Linkovi</span>
+                    <span class="lang-content" data-lang="en">Quick Links</span>
+                </span>
+                <ul class="footer-links">
+                    <li><a href="/#fighters"><span class="lang-content active" data-lang="sr">Borci</span><span class="lang-content" data-lang="en">Fighters</span></a></li>
+                    <li><a href="/#news"><span class="lang-content active" data-lang="sr">Vesti</span><span class="lang-content" data-lang="en">News</span></a></li>
+                    <li><a href="/#events"><span class="lang-content active" data-lang="sr">Događaji</span><span class="lang-content" data-lang="en">Events</span></a></li>
+                    <li><a href="/#sponsorship"><span class="lang-content active" data-lang="sr">Sponzorstvo</span><span class="lang-content" data-lang="en">Sponsorship</span></a></li>
+                    <li><a href="/#contact"><span class="lang-content active" data-lang="sr">Kontakt</span><span class="lang-content" data-lang="en">Contact</span></a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <span class="footer-eyebrow">
+                    <span class="lang-content active" data-lang="sr">Kontakt</span>
+                    <span class="lang-content" data-lang="en">Contact</span>
+                </span>
+                <ul class="footer-contact">
+                    <li>
+                        <span class="contact-ico">&#9993;</span>
+                        <a href="mailto:business@bif.events">business@bif.events</a>
+                    </li>
+                    <li>
+                        <span class="contact-ico">&#9742;</span>
+                        <a href="tel:+381601484066">+381 60 148 40 66</a>
+                    </li>
+                    <li>
+                        <span class="contact-ico">&#128205;</span>
+                        <span class="lang-content active" data-lang="sr">Beograd, Srbija</span>
+                        <span class="lang-content" data-lang="en">Belgrade, Serbia</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <span class="footer-eyebrow">
+                    <span class="lang-content active" data-lang="sr">Prati Nas</span>
+                    <span class="lang-content" data-lang="en">Follow Us</span>
+                </span>
+                <div class="footer-socials">
+                    <a href="https://www.instagram.com/bif.events?igsh=MW9pMHlrM2Znc28wOA==" class="footer-social" aria-label="Instagram" target="_blank" rel="noopener">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    </a>
+                    <a href="https://www.youtube.com/@bif.events/" class="footer-social" aria-label="YouTube" target="_blank" rel="noopener">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    </a>
+                    <a href="https://www.tiktok.com/@bif.events" class="footer-social" aria-label="TikTok" target="_blank" rel="noopener">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+                    </a>
+                    <a href="https://x.com/BIFFighting" class="footer-social" aria-label="X (Twitter)" target="_blank" rel="noopener">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                </div>
+                <p class="footer-socials-note">
+                    <span class="lang-content active" data-lang="sr">Prati nas za najsvežije vesti</span>
+                    <span class="lang-content" data-lang="en">Follow us for the latest updates</span>
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Bottom strip -->
         <div class="footer-bottom">
-            <p>
-                <span class="lang-content active" data-lang="sr">&copy; 2025 Balkan Influence Fighting. Sva prava zadrzana.</span>
-                <span class="lang-content" data-lang="en">&copy; 2025 Balkan Influence Fighting. All rights reserved.</span>
+            <p class="footer-copyright">
+                &copy; <?php echo date('Y'); ?> <strong>Balkan Influence Fighting</strong>.
+                <span class="lang-content active" data-lang="sr">Sva prava zadržana.</span>
+                <span class="lang-content" data-lang="en">All rights reserved.</span>
             </p>
-            <p class="powered-by">
-                Powered by <a href="https://popzify.com" target="_blank" rel="noopener">Popzify</a>
+            <p class="footer-powered">
+                <span class="lang-content active" data-lang="sr">Sajt razvio</span>
+                <span class="lang-content" data-lang="en">Built by</span>
+                <a href="https://popzify.com" target="_blank" rel="noopener">Popzify</a>
             </p>
         </div>
+
     </div>
 </footer>
