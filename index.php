@@ -315,7 +315,7 @@ if (!$recaptchaSiteKey) {
             <div class="particle"></div>
         </div>
         <div class="loading-logo">
-            <div class="loading-logo-text">BIF</div>
+            <img src="/assets/images/logo/biflogo.png" alt="BIF" class="loading-logo-img" width="160" height="160">
             <div class="loading-subtitle">Balkan Influence Fighting</div>
         </div>
         <div class="loading-spinner">

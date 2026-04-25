@@ -70,6 +70,27 @@
 }
 
 /* Logo Text - BIF */
+.loading-logo-img {
+    display: block;
+    margin: 0 auto;
+    width: clamp(120px, 18vw, 180px);
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 0 30px rgba(196, 30, 58, 0.6)) drop-shadow(0 0 60px rgba(255, 215, 0, 0.25));
+    animation: logoPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes logoPulse {
+    0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 30px rgba(196, 30, 58, 0.6)) drop-shadow(0 0 60px rgba(255, 215, 0, 0.25));
+    }
+    50% {
+        transform: scale(1.06);
+        filter: drop-shadow(0 0 45px rgba(196, 30, 58, 0.85)) drop-shadow(0 0 80px rgba(255, 215, 0, 0.4));
+    }
+}
+
 .loading-logo-text {
     font-family: 'Oswald', sans-serif;
     font-size: clamp(4rem, 10vw, 8rem);
