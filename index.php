@@ -33,6 +33,38 @@ function loadActiveFighters() {
 
 $activeFighters = loadActiveFighters();
 
+// Load website events (featured upcoming event for "Uskoro" section)
+function loadFeaturedEvent() {
+    $file = __DIR__ . '/data/website_events.json';
+    if (!file_exists($file)) return null;
+    $events = json_decode(file_get_contents($file), true);
+    if (!is_array($events) || empty($events)) return null;
+    // First try featured, fall back to nearest upcoming
+    $featured = null;
+    $upcoming = [];
+    foreach ($events as $e) {
+        if (!empty($e['is_featured']) && in_array(($e['status'] ?? 'upcoming'), ['upcoming','live'])) {
+            $featured = $e;
+            break;
+        }
+        if (in_array(($e['status'] ?? 'upcoming'), ['upcoming','live']) && !empty($e['date'])) {
+            $upcoming[] = $e;
+        }
+    }
+    if ($featured) return $featured;
+    if (empty($upcoming)) return null;
+    usort($upcoming, function($a,$b){ return strtotime($a['date']) <=> strtotime($b['date']); });
+    return $upcoming[0];
+}
+$featuredEvent = loadFeaturedEvent();
+
+// Helper to load all events for fighter pages, etc.
+function loadAllEvents() {
+    $file = __DIR__ . '/data/website_events.json';
+    if (!file_exists($file)) return [];
+    return json_decode(file_get_contents($file), true) ?: [];
+}
+
 // Weight class helpers (same as in borac.php)
 function getWeightClassByWeight($weight) {
     if ($weight <= 49) return ['sr' => 'Muha', 'en' => 'Flyweight'];
@@ -1035,42 +1067,70 @@ if (!$recaptchaSiteKey) {
                     </h2>
                 </div>
                 
+                <?php if ($featuredEvent):
+                    $evDate    = !empty($featuredEvent['date']) ? strtotime($featuredEvent['date']) : null;
+                    $evDay     = $evDate ? date('d', $evDate) : '';
+                    $monthMap  = ['Jan'=>['JAN','JAN'], 'Feb'=>['FEB','FEB'], 'Mar'=>['MAR','MAR'], 'Apr'=>['APR','APR'], 'May'=>['MAJ','MAY'], 'Jun'=>['JUN','JUN'], 'Jul'=>['JUL','JUL'], 'Aug'=>['AVG','AUG'], 'Sep'=>['SEP','SEP'], 'Oct'=>['OKT','OCT'], 'Nov'=>['NOV','NOV'], 'Dec'=>['DEC','DEC']];
+                    $evMon     = $evDate ? date('M', $evDate) : '';
+                    $evYear    = $evDate ? date('Y', $evDate) : '';
+                    $evMonSr   = isset($monthMap[$evMon]) ? $monthMap[$evMon][0] : strtoupper($evMon);
+                    $evMonEn   = isset($monthMap[$evMon]) ? $monthMap[$evMon][1] : strtoupper($evMon);
+                    $evTitleSr = $featuredEvent['title_sr'] ?? $featuredEvent['title'] ?? '';
+                    $evTitleEn = $featuredEvent['title_en'] ?? $featuredEvent['title'] ?? $evTitleSr;
+                    $evTagSr   = $featuredEvent['tagline_sr'] ?? '';
+                    $evTagEn   = $featuredEvent['tagline_en'] ?? $evTagSr;
+                    $evLocSr   = $featuredEvent['location_sr'] ?? $featuredEvent['location'] ?? '';
+                    $evLocEn   = $featuredEvent['location_en'] ?? $featuredEvent['location'] ?? $evLocSr;
+                    $evDescSr  = $featuredEvent['description_sr'] ?? $featuredEvent['description'] ?? '';
+                    $evDescEn  = $featuredEvent['description_en'] ?? $featuredEvent['description'] ?? $evDescSr;
+                    $evTime    = $featuredEvent['time'] ?? '';
+                    $evTicket  = $featuredEvent['ticket_url'] ?? '#';
+                ?>
                 <div class="events-grid events-grid--single">
                     <div class="event-card event-card--featured">
                         <div class="event-date">
-                            <span class="event-day">20</span>
+                            <span class="event-day"><?php echo htmlspecialchars($evDay); ?></span>
                             <span class="event-month">
-                                <span class="lang-content active" data-lang="sr">JUN 2026</span>
-                                <span class="lang-content" data-lang="en">JUNE 2026</span>
+                                <span class="lang-content active" data-lang="sr"><?php echo htmlspecialchars($evMonSr . ' ' . $evYear); ?></span>
+                                <span class="lang-content" data-lang="en"><?php echo htmlspecialchars($evMonEn . ' ' . $evYear); ?></span>
                             </span>
                         </div>
                         <div class="event-info">
                             <h3 class="event-title">
-                                BIF 2 — Beogradski Sajam
-                                <span class="event-poweredby">Powered by <strong>Oktagonbet</strong></span>
+                                <span class="lang-content active" data-lang="sr"><?php echo htmlspecialchars($evTitleSr); ?></span>
+                                <span class="lang-content" data-lang="en"><?php echo htmlspecialchars($evTitleEn); ?></span>
+                                <?php if ($evTagSr || $evTagEn): ?>
+                                <span class="event-poweredby">
+                                    <span class="lang-content active" data-lang="sr"><?php echo htmlspecialchars($evTagSr); ?></span>
+                                    <span class="lang-content" data-lang="en"><?php echo htmlspecialchars($evTagEn); ?></span>
+                                </span>
+                                <?php endif; ?>
                             </h3>
+                            <?php if ($evLocSr || $evLocEn): ?>
                             <p class="event-location">
-                                <span class="lang-content active" data-lang="sr">📍 Beogradski Sajam, Beograd</span>
-                                <span class="lang-content" data-lang="en">📍 Belgrade Fair, Belgrade</span>
+                                <span class="lang-content active" data-lang="sr">📍 <?php echo htmlspecialchars($evLocSr); ?></span>
+                                <span class="lang-content" data-lang="en">📍 <?php echo htmlspecialchars($evLocEn); ?></span>
                             </p>
+                            <?php endif; ?>
+                            <?php if ($evDescSr || $evDescEn): ?>
                             <p class="event-description">
-                                <span class="lang-content active" data-lang="sr">
-                                    Prvi influenserski boks show sa <strong>pravom publikom</strong> na Balkanu — uz podršku generalnog sponzora <strong>Oktagonbet</strong>. Omiljene zvezde, iznenađenja i najluđa atmosfera, živo pred prepunom salom.
-                                </span>
-                                <span class="lang-content" data-lang="en">
-                                    The first influencer boxing show with a <strong>live audience</strong> in the Balkans — presented by general sponsor <strong>Oktagonbet</strong>. Your favorite stars, surprises, and the craziest atmosphere, live in front of a packed arena.
-                                </span>
+                                <span class="lang-content active" data-lang="sr"><?php echo htmlspecialchars($evDescSr); ?></span>
+                                <span class="lang-content" data-lang="en"><?php echo htmlspecialchars($evDescEn); ?></span>
                             </p>
-                            <p class="event-time">20:00</p>
+                            <?php endif; ?>
+                            <?php if ($evTime): ?><p class="event-time"><?php echo htmlspecialchars($evTime); ?></p><?php endif; ?>
                         </div>
                         <div class="event-action">
-                            <a href="#" class="btn btn-primary">
+                            <a href="<?php echo htmlspecialchars($evTicket); ?>"<?php echo (substr($evTicket,0,1)==='#') ? '' : ' target="_blank" rel="noopener"'; ?> class="btn btn-primary">
                                 <span class="lang-content active" data-lang="sr">🎟 Kupi Ulaznice</span>
                                 <span class="lang-content" data-lang="en">🎟 Buy Tickets</span>
                             </a>
                         </div>
                     </div>
                 </div>
+                <?php else: ?>
+                <p style="text-align:center;color:var(--text-muted);font-style:italic;">Nema najavljenih događaja.</p>
+                <?php endif; ?>
             </div>
         </section>
 

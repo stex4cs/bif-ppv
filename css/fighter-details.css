@@ -399,6 +399,197 @@
   color: var(--dark-text-secondary);
 }
 
+/* ========================================
+   UPCOMING FIGHTS SECTION
+   ======================================== */
+.upcoming-fights-section {
+  padding: 4rem 0 2rem;
+}
+
+.upcoming-fights-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.upcoming-fight-card {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 2px solid var(--primary-red, #c41e3a);
+  background: linear-gradient(135deg, #1a0a0c 0%, #0a0a0a 100%);
+  box-shadow: 0 10px 40px rgba(196, 30, 58, 0.25);
+  isolation: isolate;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.upcoming-fight-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 50px rgba(196, 30, 58, 0.4);
+}
+
+.upcoming-fight-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-red, #c41e3a), var(--accent-gold, #ffd700), var(--primary-red, #c41e3a));
+  z-index: 3;
+}
+
+.upcoming-fight-card__poster {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.3;
+  z-index: 0;
+  filter: blur(2px);
+  transition: opacity 0.4s ease, transform 0.6s ease;
+}
+
+.upcoming-fight-card:hover .upcoming-fight-card__poster {
+  opacity: 0.45;
+  transform: scale(1.04);
+}
+
+.upcoming-fight-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg,
+    rgba(10,10,10,0.92) 0%,
+    rgba(10,10,10,0.65) 50%,
+    rgba(10,10,10,0.85) 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.upcoming-fight-card__body {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 200px 1fr auto;
+  gap: 2.5rem;
+  align-items: center;
+  padding: 2.25rem 2.75rem;
+}
+
+.upcoming-fight-card__date-block {
+  text-align: center;
+  border-right: 1px solid rgba(255, 215, 0, 0.2);
+  padding-right: 2rem;
+}
+
+.upcoming-fight-card__countdown {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.upcoming-fight-card__countdown .countdown-num {
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(3.5rem, 7vw, 5.5rem);
+  font-weight: 800;
+  line-height: 1;
+  background: linear-gradient(180deg, #fff 0%, var(--accent-gold, #ffd700) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
+  letter-spacing: -2px;
+}
+
+.upcoming-fight-card__countdown .countdown-label {
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: var(--accent-gold, #ffd700);
+  text-transform: uppercase;
+  margin-top: 0.4rem;
+}
+
+.upcoming-fight-card__date {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.65);
+  letter-spacing: 1px;
+}
+
+.upcoming-fight-card__center {
+  min-width: 0;
+}
+
+.upcoming-fight-card__vs {
+  display: inline-block;
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 5px;
+  color: var(--primary-red, #c41e3a);
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 2px solid var(--primary-red, #c41e3a);
+}
+
+.upcoming-fight-card__opponent {
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  line-height: 1;
+  margin: 0 0 0.75rem;
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+.upcoming-fight-card__event {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--accent-gold, #ffd700);
+  margin: 0 0 0.4rem;
+  letter-spacing: 0.5px;
+}
+
+.upcoming-fight-card__location {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0;
+}
+
+.upcoming-tickets-btn {
+  padding: 1.1rem 2rem !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.5px !important;
+  text-transform: uppercase !important;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .upcoming-fight-card__body {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 1.75rem;
+    text-align: center;
+  }
+  .upcoming-fight-card__date-block {
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+    padding-right: 0;
+    padding-bottom: 1rem;
+  }
+  .upcoming-tickets-btn {
+    width: 100%;
+  }
+}
+
 /* Fight history section title on fighter page */
 .fight-history-section .section-title {
   font-family: 'Oswald', sans-serif !important;

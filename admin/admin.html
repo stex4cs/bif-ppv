@@ -1503,36 +1503,52 @@
         <form id="websiteEventForm" onsubmit="saveWebsiteEvent(event)">
             <input type="hidden" id="website-event-id" name="id">
 
-            <div class="form-group">
-                <label for="website-event-title">Naziv događaja *</label>
-                <input type="text" id="website-event-title" name="title" required placeholder="BIF 2: Showdown">
+            <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
+                <div class="form-group">
+                    <label for="website-event-title-sr">Naziv (SR) *</label>
+                    <input type="text" id="website-event-title-sr" name="title_sr" required placeholder="BIF 2 — Beogradski Sajam">
+                </div>
+                <div class="form-group">
+                    <label for="website-event-title-en">Naziv (EN) *</label>
+                    <input type="text" id="website-event-title-en" name="title_en" required placeholder="BIF 2 — Belgrade Fair">
+                </div>
             </div>
 
             <div class="form-group">
-                <label for="website-event-slug">URL Slug * (npr: bif-2-showdown)</label>
-                <input type="text" id="website-event-slug" name="slug" required placeholder="bif-2-showdown" pattern="[a-z0-9-]+">
-            </div>
-
-            <div class="form-group">
-                <label for="website-event-description">Opis</label>
-                <textarea id="website-event-description" name="description" rows="4" placeholder="Opis događaja..."></textarea>
+                <label for="website-event-slug">URL Slug *</label>
+                <input type="text" id="website-event-slug" name="slug" required placeholder="bif-2" pattern="[a-z0-9-]+">
             </div>
 
             <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
+                <div class="form-group">
+                    <label for="website-event-tagline-sr">Tagline / Sponzor (SR)</label>
+                    <input type="text" id="website-event-tagline-sr" name="tagline_sr" placeholder="Powered by Oktagonbet">
+                </div>
+                <div class="form-group">
+                    <label for="website-event-tagline-en">Tagline / Sponzor (EN)</label>
+                    <input type="text" id="website-event-tagline-en" name="tagline_en" placeholder="Powered by Oktagonbet">
+                </div>
+            </div>
+
+            <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
+                <div class="form-group">
+                    <label for="website-event-description-sr">Kratak opis (SR)</label>
+                    <textarea id="website-event-description-sr" name="description_sr" rows="3" placeholder="Prvi influenserski boks show sa pravom publikom..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="website-event-description-en">Kratak opis (EN)</label>
+                    <textarea id="website-event-description-en" name="description_en" rows="3" placeholder="The first influencer boxing show with a live audience..."></textarea>
+                </div>
+            </div>
+
+            <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px;">
                 <div class="form-group">
                     <label for="website-event-date">Datum *</label>
-                    <input type="datetime-local" id="website-event-date" name="date" required>
+                    <input type="date" id="website-event-date" name="date" required>
                 </div>
                 <div class="form-group">
-                    <label for="website-event-location">Lokacija</label>
-                    <input type="text" id="website-event-location" name="location" placeholder="Beograd Arena">
-                </div>
-            </div>
-
-            <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
-                <div class="form-group">
-                    <label for="website-event-image">URL Slike</label>
-                    <input type="text" id="website-event-image" name="image_url" placeholder="/assets/images/events/event-1.jpg">
+                    <label for="website-event-time">Vreme</label>
+                    <input type="text" id="website-event-time" name="time" placeholder="20:00">
                 </div>
                 <div class="form-group">
                     <label for="website-event-status">Status</label>
@@ -1543,6 +1559,35 @@
                         <option value="cancelled">Otkazan</option>
                     </select>
                 </div>
+            </div>
+
+            <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
+                <div class="form-group">
+                    <label for="website-event-location-sr">Lokacija (SR)</label>
+                    <input type="text" id="website-event-location-sr" name="location_sr" placeholder="Beogradski Sajam, Beograd">
+                </div>
+                <div class="form-group">
+                    <label for="website-event-location-en">Lokacija (EN)</label>
+                    <input type="text" id="website-event-location-en" name="location_en" placeholder="Belgrade Fair, Belgrade">
+                </div>
+            </div>
+
+            <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
+                <div class="form-group">
+                    <label for="website-event-image">URL Postera</label>
+                    <input type="text" id="website-event-image" name="image_url" placeholder="/assets/images/events/bif2/bif2-poster.png">
+                </div>
+                <div class="form-group">
+                    <label for="website-event-ticket-url">URL za Ulaznice</label>
+                    <input type="url" id="website-event-ticket-url" name="ticket_url" placeholder="https://gigstix.com/...">
+                </div>
+            </div>
+
+            <div class="form-group" style="background:#fffbea;padding:12px;border:1px solid #fcd34d;border-radius:6px;">
+                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:600;">
+                    <input type="checkbox" id="website-event-featured" name="is_featured" style="width:auto;">
+                    <span>⭐ Istakni na početnoj ("Uskoro" sekcija) — samo jedan event treba da bude istaknut</span>
+                </label>
             </div>
 
             <div class="form-actions" style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
@@ -3473,18 +3518,23 @@ function displayWebsiteEvents(events) {
         'cancelled': 'Otkazan'
     };
 
-    tbody.innerHTML = events.map(event => `
+    tbody.innerHTML = events.map(event => {
+        const title = event.title_sr || event.title || '(bez naslova)';
+        const location = event.location_sr || event.location || '-';
+        const featured = event.is_featured ? ' <span style="background:#fcd34d;color:#92400e;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;margin-left:6px;">⭐ ISTAKNUT</span>' : '';
+        const dateStr = event.date ? new Date(event.date).toLocaleDateString('sr-RS') : '-';
+        return `
         <tr>
-            <td><strong>${event.title}</strong></td>
-            <td>${new Date(event.date).toLocaleDateString('sr-RS')}</td>
-            <td>${event.location || '-'}</td>
+            <td><strong>${title}</strong>${featured}</td>
+            <td>${dateStr}</td>
+            <td>${location}</td>
             <td><span class="badge ${statusBadge[event.status] || 'badge-secondary'}">${statusText[event.status] || event.status}</span></td>
             <td>
                 <button class="btn-icon" onclick='editWebsiteEvent(${JSON.stringify(event).replace(/'/g, "&apos;")})' title="Izmeni">✏️</button>
                 <button class="btn-icon" onclick="deleteWebsiteEvent('${event.id}')" title="Obriši">🗑️</button>
             </td>
-        </tr>
-    `).join('');
+        </tr>`;
+    }).join('');
 }
 
 function openCreateWebsiteEventModal() {
@@ -3492,6 +3542,7 @@ function openCreateWebsiteEventModal() {
     document.getElementById('website-event-modal-title').textContent = 'Dodaj Događaj';
     document.getElementById('websiteEventForm').reset();
     document.getElementById('website-event-id').value = '';
+    document.getElementById('website-event-featured').checked = false;
     document.getElementById('websiteEventModal').style.display = 'flex';
 }
 
@@ -3499,16 +3550,25 @@ function editWebsiteEvent(event) {
     currentEditingWebsiteEvent = event;
     document.getElementById('website-event-modal-title').textContent = 'Izmeni Događaj';
     document.getElementById('website-event-id').value = event.id;
-    document.getElementById('website-event-title').value = event.title || '';
+    document.getElementById('website-event-title-sr').value = event.title_sr || event.title || '';
+    document.getElementById('website-event-title-en').value = event.title_en || event.title || '';
     document.getElementById('website-event-slug').value = event.slug || '';
-    document.getElementById('website-event-description').value = event.description || '';
-    document.getElementById('website-event-location').value = event.location || '';
+    document.getElementById('website-event-tagline-sr').value = event.tagline_sr || '';
+    document.getElementById('website-event-tagline-en').value = event.tagline_en || '';
+    document.getElementById('website-event-description-sr').value = event.description_sr || event.description || '';
+    document.getElementById('website-event-description-en').value = event.description_en || event.description || '';
+    document.getElementById('website-event-time').value = event.time || '';
+    document.getElementById('website-event-location-sr').value = event.location_sr || event.location || '';
+    document.getElementById('website-event-location-en').value = event.location_en || event.location || '';
     document.getElementById('website-event-image').value = event.image_url || '';
+    document.getElementById('website-event-ticket-url').value = event.ticket_url || '';
     document.getElementById('website-event-status').value = event.status || 'upcoming';
+    document.getElementById('website-event-featured').checked = !!event.is_featured;
 
     if (event.date) {
-        const date = new Date(event.date);
-        document.getElementById('website-event-date').value = date.toISOString().slice(0, 16);
+        // Accept both ISO datetime and plain YYYY-MM-DD
+        const dateOnly = event.date.length >= 10 ? event.date.substring(0, 10) : event.date;
+        document.getElementById('website-event-date').value = dateOnly;
     }
 
     document.getElementById('websiteEventModal').style.display = 'flex';
@@ -3524,6 +3584,13 @@ async function saveWebsiteEvent(event) {
     const form = event.target;
     const formData = new FormData(form);
     const eventData = Object.fromEntries(formData.entries());
+
+    // Convert featured checkbox to boolean
+    eventData.is_featured = document.getElementById('website-event-featured').checked;
+    // Backward-compat: keep "title" populated from SR
+    eventData.title = eventData.title_sr || eventData.title || '';
+    eventData.location = eventData.location_sr || eventData.location || '';
+    eventData.description = eventData.description_sr || eventData.description || '';
 
     const action = eventData.id ? 'update_website_event' : 'create_website_event';
 

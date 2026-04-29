@@ -328,11 +328,42 @@ if (substr($absImageUrl, 0, 4) !== 'http') {
         </section>
 
         <?php
-        $fights = $fighter['fights'] ?? [];
-        // Sort by date descending (newest first)
+        $allFights = $fighter['fights'] ?? [];
+        $todayTs = strtotime(date('Y-m-d'));
+
+        // Split into upcoming (date >= today AND no result method) and past
+        $upcomingFights = [];
+        $fights = [];
+        foreach ($allFights as $f) {
+            $fts = strtotime($f['date'] ?? '');
+            $isFuture = $fts && $fts >= $todayTs;
+            $hasResult = !empty($f['method']) || !empty($f['round']);
+            if ($isFuture && !$hasResult) {
+                $upcomingFights[] = $f;
+            } else {
+                $fights[] = $f;
+            }
+        }
+        // Past fights: newest first
         usort($fights, function($a, $b) {
             return strtotime($b['date'] ?? '1970-01-01') <=> strtotime($a['date'] ?? '1970-01-01');
         });
+        // Upcoming fights: nearest first
+        usort($upcomingFights, function($a, $b) {
+            return strtotime($a['date'] ?? '9999-12-31') <=> strtotime($b['date'] ?? '9999-12-31');
+        });
+
+        // Load events to enrich upcoming cards (poster, ticket URL)
+        $eventsFile = dirname(__DIR__) . '/data/website_events.json';
+        $allEvents = file_exists($eventsFile) ? (json_decode(file_get_contents($eventsFile), true) ?: []) : [];
+        // Build lookup by lower-cased title (sr or en)
+        $eventLookup = [];
+        foreach ($allEvents as $ev) {
+            foreach ([$ev['title_sr'] ?? '', $ev['title_en'] ?? '', $ev['title'] ?? ''] as $t) {
+                $t = trim($t);
+                if ($t !== '') $eventLookup[mb_strtolower($t)] = $ev;
+            }
+        }
 
         $methodLabels = [
             'ko'  => ['sr' => 'KO',      'en' => 'KO'],
@@ -357,6 +388,81 @@ if (substr($absImageUrl, 0, 4) !== 'http') {
             return '';
         }
         ?>
+
+        <?php if (!empty($upcomingFights)): ?>
+        <section class="upcoming-fights-section section">
+            <div class="container">
+                <div class="section-heading">
+                    <span class="section-eyebrow">
+                        <span class="lang-content active" data-lang="sr">DOLAZI USKORO</span>
+                        <span class="lang-content" data-lang="en">UP NEXT</span>
+                    </span>
+                    <h2 class="section-title">
+                        <span class="lang-content active" data-lang="sr">Predstojeći Mečevi</span>
+                        <span class="lang-content" data-lang="en">Upcoming Matches</span>
+                    </h2>
+                </div>
+
+                <div class="upcoming-fights-list">
+                    <?php foreach ($upcomingFights as $f):
+                        $fts = strtotime($f['date'] ?? '');
+                        $daysLeft = $fts ? max(0, ceil(($fts - $todayTs) / 86400)) : 0;
+                        $dateFormatted = $fts ? date('d.m.Y', $fts) : '';
+                        $eventKey = mb_strtolower(trim($f['event'] ?? ''));
+                        $matchedEvent = $eventLookup[$eventKey] ?? null;
+                        $poster = $matchedEvent['image_url'] ?? ($f['poster_url'] ?? '');
+                        if ($poster && substr($poster, 0, 1) === '/') $poster = '..' . $poster;
+                        $ticketUrl = $matchedEvent['ticket_url'] ?? '';
+                        $eventTimeStr = $matchedEvent['time'] ?? '';
+                        $eventLocSr = $matchedEvent['location_sr'] ?? $matchedEvent['location'] ?? '';
+                        $eventLocEn = $matchedEvent['location_en'] ?? $matchedEvent['location'] ?? '';
+                    ?>
+                    <article class="upcoming-fight-card">
+                        <?php if ($poster): ?>
+                        <div class="upcoming-fight-card__poster" style="background-image:url('<?php echo htmlspecialchars($poster); ?>');"></div>
+                        <?php endif; ?>
+                        <div class="upcoming-fight-card__overlay"></div>
+
+                        <div class="upcoming-fight-card__body">
+                            <div class="upcoming-fight-card__date-block">
+                                <div class="upcoming-fight-card__countdown">
+                                    <span class="countdown-num"><?php echo $daysLeft; ?></span>
+                                    <span class="countdown-label">
+                                        <span class="lang-content active" data-lang="sr"><?php echo $daysLeft === 1 ? 'DAN' : 'DANA'; ?></span>
+                                        <span class="lang-content" data-lang="en"><?php echo $daysLeft === 1 ? 'DAY' : 'DAYS'; ?></span>
+                                    </span>
+                                </div>
+                                <div class="upcoming-fight-card__date"><?php echo htmlspecialchars($dateFormatted); ?><?php echo $eventTimeStr ? ' · ' . htmlspecialchars($eventTimeStr) : ''; ?></div>
+                            </div>
+
+                            <div class="upcoming-fight-card__center">
+                                <span class="upcoming-fight-card__vs">VS</span>
+                                <h3 class="upcoming-fight-card__opponent"><?php echo htmlspecialchars($f['opponent'] ?? ''); ?></h3>
+                                <p class="upcoming-fight-card__event">🥊 <?php echo htmlspecialchars($f['event'] ?? ''); ?></p>
+                                <?php if ($eventLocSr || $eventLocEn): ?>
+                                <p class="upcoming-fight-card__location">
+                                    <span class="lang-content active" data-lang="sr">📍 <?php echo htmlspecialchars($eventLocSr); ?></span>
+                                    <span class="lang-content" data-lang="en">📍 <?php echo htmlspecialchars($eventLocEn); ?></span>
+                                </p>
+                                <?php endif; ?>
+                            </div>
+
+                            <?php if ($ticketUrl): ?>
+                            <div class="upcoming-fight-card__action">
+                                <a href="<?php echo htmlspecialchars($ticketUrl); ?>" target="_blank" rel="noopener" class="btn btn-primary upcoming-tickets-btn">
+                                    <span class="lang-content active" data-lang="sr">🎟 Kupi Ulaznice</span>
+                                    <span class="lang-content" data-lang="en">🎟 Buy Tickets</span>
+                                </a>
+                            </div>
+                            <?php endif; ?>
+                        </div>
+                    </article>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </section>
+        <?php endif; ?>
+
         <section class="fight-history-section section">
             <div class="container">
                 <h2 class="section-title">
