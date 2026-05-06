@@ -1307,10 +1307,17 @@
         </div>
         <form id="fightForm" onsubmit="saveFight(event)">
             <input type="hidden" id="fight-id">
+            <div class="form-group" style="background:#fef3c7;padding:10px 14px;border-radius:6px;border:1px solid #fcd34d;">
+                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:600;margin:0;">
+                    <input type="checkbox" id="fight-is-handicap" onchange="onHandicapToggle()" style="width:auto;">
+                    <span>🥊 Hendikep meč (više protivnika)</span>
+                </label>
+            </div>
+
             <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                <div class="form-group">
+                <div class="form-group" id="single-opponent-row">
                     <label>Protivnik *</label>
-                    <select id="fight-opponent-select" onchange="onOpponentSelectChange()" required>
+                    <select id="fight-opponent-select" onchange="onOpponentSelectChange()">
                         <option value="">— Izaberi borca —</option>
                         <option value="__custom__">✏️ Drugi (ukucaj ručno)</option>
                     </select>
@@ -1324,6 +1331,23 @@
                     </select>
                     <input type="text" id="fight-event" placeholder="Ime eventa" style="margin-top:6px;display:none;">
                 </div>
+            </div>
+
+            <!-- Multi-opponent rows (only visible when handicap checked) -->
+            <div id="handicap-opponents-row" style="display:none;margin-bottom:12px;">
+                <label style="display:block;margin-bottom:8px;font-weight:600;">Protivnici * <small style="color:#888;font-weight:400;">(2-3 borca)</small></label>
+                <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+                    <select id="fight-opponent-multi-1" onchange="onMultiOpponentChange(1)">
+                        <option value="">— Protivnik 1 —</option>
+                    </select>
+                    <select id="fight-opponent-multi-2" onchange="onMultiOpponentChange(2)">
+                        <option value="">— Protivnik 2 —</option>
+                    </select>
+                    <select id="fight-opponent-multi-3" onchange="onMultiOpponentChange(3)">
+                        <option value="">— Protivnik 3 (opciono) —</option>
+                    </select>
+                </div>
+                <div id="handicap-type-display" style="margin-top:8px;color:#92400e;font-weight:600;font-size:13px;"></div>
             </div>
             <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
                 <div class="form-group">
@@ -2860,11 +2884,16 @@ function renderFightHistory(fights) {
     list.innerHTML = sorted.map(f => {
         const res = _resultBadges[f.result] || _resultBadges.win;
         const method = _methodLabels[f.method] || '';
+        const oppList = Array.isArray(f.opponents) && f.opponents.length > 0 ? f.opponents : (f.opponent ? [f.opponent] : []);
+        const oppText = oppList.map(escapeHtml).join(' + ');
+        const handicapBadge = (f.is_handicap || oppList.length > 1)
+            ? `<span style="background:#fcd34d;color:#92400e;padding:1px 6px;border-radius:4px;font-size:10px;margin-left:4px;">HENDIKEP ${oppList.length}v1</span>`
+            : '';
         return `
         <div style="display:flex;align-items:center;gap:10px;padding:10px;background:#fff;border:1px solid #e0e0e0;border-radius:6px;">
             <span style="background:${res.color};color:#fff;padding:4px 10px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:1px;min-width:70px;text-align:center;">${res.label}</span>
             <div style="flex:1;">
-                <div style="font-weight:600;font-size:14px;">vs ${escapeHtml(f.opponent || '')} ${f.is_bif ? '<span style="background:#c41e3a;color:#fff;padding:1px 6px;border-radius:4px;font-size:10px;margin-left:4px;">BIF</span>' : ''}</div>
+                <div style="font-weight:600;font-size:14px;">vs ${oppText} ${f.is_bif ? '<span style="background:#c41e3a;color:#fff;padding:1px 6px;border-radius:4px;font-size:10px;margin-left:4px;">BIF</span>' : ''}${handicapBadge}</div>
                 <div style="color:#666;font-size:12px;">${escapeHtml(f.event || '')} · ${f.date || ''} ${method ? '· ' + method : ''}${f.round ? ' · R' + f.round : ''}${f.time ? ' (' + escapeHtml(f.time) + ')' : ''}</div>
             </div>
             <button type="button" class="btn-icon" onclick='editFight(${JSON.stringify(f).replace(/'/g, "&#39;")})' title="Izmeni">✏️</button>
@@ -2959,6 +2988,64 @@ function onOpponentSelectChange() {
     }
 }
 
+function onHandicapToggle() {
+    const cb = document.getElementById('fight-is-handicap');
+    const single = document.getElementById('single-opponent-row');
+    const multi = document.getElementById('handicap-opponents-row');
+    const singleSelect = document.getElementById('fight-opponent-select');
+    if (cb.checked) {
+        single.style.display = 'none';
+        multi.style.display = 'block';
+        singleSelect.removeAttribute('required');
+        populateMultiOpponentDropdowns();
+        updateHandicapTypeDisplay();
+    } else {
+        single.style.display = 'block';
+        multi.style.display = 'none';
+        singleSelect.setAttribute('required', 'required');
+    }
+}
+
+function populateMultiOpponentDropdowns(preselected = []) {
+    // preselected is array of opponent names to mark as selected for slots 1, 2, 3
+    const opponents = (_fightersCache || []).filter(f => !currentEditingFighter || f.id !== currentEditingFighter.id);
+    const baseOpts = opponents.map(f => `<option value="${escapeHtml(f.name)}">${escapeHtml(f.name)}${f.nickname ? ' "' + escapeHtml(f.nickname) + '"' : ''}</option>`).join('');
+    const slots = [
+        ['fight-opponent-multi-1', '— Protivnik 1 —'],
+        ['fight-opponent-multi-2', '— Protivnik 2 —'],
+        ['fight-opponent-multi-3', '— Protivnik 3 (opciono) —'],
+    ];
+    slots.forEach(([id, placeholder], idx) => {
+        const sel = document.getElementById(id);
+        sel.innerHTML = `<option value="">${placeholder}</option>` + baseOpts;
+        if (preselected[idx]) sel.value = preselected[idx];
+    });
+}
+
+function onMultiOpponentChange(slot) {
+    updateHandicapTypeDisplay();
+}
+
+function updateHandicapTypeDisplay() {
+    const v1 = document.getElementById('fight-opponent-multi-1').value.trim();
+    const v2 = document.getElementById('fight-opponent-multi-2').value.trim();
+    const v3 = document.getElementById('fight-opponent-multi-3').value.trim();
+    const count = [v1, v2, v3].filter(x => x).length;
+    const label = document.getElementById('handicap-type-display');
+    if (count >= 3) label.textContent = '🥊 Tip: HENDIKEP 3v1';
+    else if (count === 2) label.textContent = '🥊 Tip: HENDIKEP 2v1';
+    else if (count === 1) label.textContent = '⚠️ Samo 1 protivnik — odčekiraj hendikep';
+    else label.textContent = '';
+}
+
+function getMultiOpponents() {
+    return [
+        document.getElementById('fight-opponent-multi-1').value.trim(),
+        document.getElementById('fight-opponent-multi-2').value.trim(),
+        document.getElementById('fight-opponent-multi-3').value.trim(),
+    ].filter(x => x);
+}
+
 function onEventSelectChange() {
     const select = document.getElementById('fight-event-select');
     const customInput = document.getElementById('fight-event');
@@ -2988,6 +3075,10 @@ async function openFightModal() {
     document.getElementById('fightForm').reset();
     document.getElementById('fight-id').value = '';
     document.getElementById('fight-is-bif').checked = false;
+    document.getElementById('fight-is-handicap').checked = false;
+    document.getElementById('handicap-opponents-row').style.display = 'none';
+    document.getElementById('single-opponent-row').style.display = 'block';
+    document.getElementById('fight-opponent-select').setAttribute('required', 'required');
     await ensureEventsCache();
     populateOpponentDropdown('');
     populateEventDropdown('');
@@ -2998,12 +3089,29 @@ async function editFight(fight) {
     document.getElementById('fight-modal-title').textContent = 'Izmeni Borbu';
     document.getElementById('fight-id').value = fight.id || '';
     await ensureEventsCache();
-    populateOpponentDropdown(fight.opponent || '');
+
+    const opponents = Array.isArray(fight.opponents) && fight.opponents.length > 0
+        ? fight.opponents
+        : (fight.opponent ? [fight.opponent] : []);
+    const isHandicap = !!fight.is_handicap || opponents.length > 1;
+
+    document.getElementById('fight-is-handicap').checked = isHandicap;
+    if (isHandicap) {
+        document.getElementById('single-opponent-row').style.display = 'none';
+        document.getElementById('handicap-opponents-row').style.display = 'block';
+        document.getElementById('fight-opponent-select').removeAttribute('required');
+        populateMultiOpponentDropdowns(opponents);
+        updateHandicapTypeDisplay();
+    } else {
+        document.getElementById('single-opponent-row').style.display = 'block';
+        document.getElementById('handicap-opponents-row').style.display = 'none';
+        document.getElementById('fight-opponent-select').setAttribute('required', 'required');
+        populateOpponentDropdown(opponents[0] || '');
+    }
+
     populateEventDropdown(fight.event || '');
     document.getElementById('fight-date').value = fight.date || '';
-    const resultVal = fight.result || 'win';
-    const resultRadio = document.querySelector(`input[name="fight-result"][value="${resultVal}"]`);
-    if (resultRadio) resultRadio.checked = true;
+    document.getElementById('fight-result').value = fight.result || 'win';
     document.getElementById('fight-method').value = fight.method || '';
     document.getElementById('fight-round').value = fight.round || '';
     document.getElementById('fight-time').value = fight.time || '';
@@ -3023,13 +3131,25 @@ async function saveFight(event) {
         alert('Prvo sačuvaj borca, pa onda dodaj borbe.');
         return;
     }
-    const opponentVal = getSelectedOpponent();
+    const isHandicap = document.getElementById('fight-is-handicap').checked;
+    let opponents = [];
+    if (isHandicap) {
+        opponents = getMultiOpponents();
+        if (opponents.length < 2) { alert('Hendikep meč mora imati najmanje 2 protivnika'); return; }
+    } else {
+        const single = getSelectedOpponent();
+        if (!single) { alert('Izaberi ili ukucaj protivnika'); return; }
+        opponents = [single];
+    }
     const eventVal = getSelectedEvent();
-    if (!opponentVal) { alert('Izaberi ili ukucaj protivnika'); return; }
     if (!eventVal) { alert('Izaberi ili ukucaj event'); return; }
+    const matchType = opponents.length === 3 ? '3v1' : (opponents.length === 2 ? '2v1' : 'standard');
     const fight = {
         id: document.getElementById('fight-id').value,
-        opponent: opponentVal,
+        opponent: opponents[0] || '',
+        opponents,
+        match_type: matchType,
+        is_handicap: isHandicap,
         event: eventVal,
         date: document.getElementById('fight-date').value,
         result: document.getElementById('fight-result').value,
@@ -3092,6 +3212,8 @@ window.saveFight = saveFight;
 window.deleteFight = deleteFight;
 window.onOpponentSelectChange = onOpponentSelectChange;
 window.onEventSelectChange = onEventSelectChange;
+window.onHandicapToggle = onHandicapToggle;
+window.onMultiOpponentChange = onMultiOpponentChange;
 
 async function saveFighter(event) {
     event.preventDefault();

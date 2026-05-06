@@ -800,104 +800,144 @@ $event['current_price'] = $currentPrice;
 
         $fightId = $fightData['id'] ?? '';
 
-        // If editing, detect any previously linked mirror so we can clean it up
-        $oldLinkedFightId = '';
-        $oldLinkedFighterId = '';
+        // Build opponents array — supports single opponent (legacy) or multiple (handicap)
+        $opponents = [];
+        if (isset($fightData['opponents']) && is_array($fightData['opponents'])) {
+            foreach ($fightData['opponents'] as $o) {
+                $o = trim($o);
+                if ($o !== '') $opponents[] = $o;
+            }
+        }
+        // Fallback / legacy: single opponent string
+        if (empty($opponents) && !empty(trim($fightData['opponent'] ?? ''))) {
+            $opponents = [trim($fightData['opponent'])];
+        }
+        // Auto-classify match type
+        $matchType = trim($fightData['match_type'] ?? '');
+        if (!$matchType) {
+            $matchType = match (count($opponents)) {
+                3 => '3v1',
+                2 => '2v1',
+                default => 'standard',
+            };
+        }
+        $isHandicap = count($opponents) > 1;
+
+        // If editing, capture existing linked_fights so we can clean up old mirrors
+        $oldLinkedFights = [];
         if ($fightId) {
             foreach ($primary['fights'] as $ex) {
                 if (($ex['id'] ?? '') === $fightId) {
-                    $oldLinkedFightId = $ex['linked_fight_id'] ?? '';
-                    $oldLinkedFighterId = $ex['linked_fighter_id'] ?? '';
+                    if (!empty($ex['linked_fights']) && is_array($ex['linked_fights'])) {
+                        $oldLinkedFights = $ex['linked_fights'];
+                    } elseif (!empty($ex['linked_fight_id'])) {
+                        // Legacy single mirror
+                        $oldLinkedFights = [[
+                            'fight_id'   => $ex['linked_fight_id'],
+                            'fighter_id' => $ex['linked_fighter_id'] ?? '',
+                        ]];
+                    }
                     break;
                 }
             }
         }
 
-        // Build primary fight payload
+        // Build primary fight payload (kept compatible: 'opponent' = first/only opponent for legacy displays)
         $payload = [
-            'id'                 => $fightId ?: uniqid('fight_', true),
-            'opponent'           => trim($fightData['opponent'] ?? ''),
-            'event'              => trim($fightData['event'] ?? ''),
-            'date'               => trim($fightData['date'] ?? ''),
-            'result'             => trim($fightData['result'] ?? 'win'),
-            'method'             => trim($fightData['method'] ?? ''),
-            'round'              => (int)($fightData['round'] ?? 0),
-            'time'               => trim($fightData['time'] ?? ''),
-            'youtube_url'        => trim($fightData['youtube_url'] ?? ''),
-            'poster_url'         => trim($fightData['poster_url'] ?? ''),
-            'is_bif'             => !empty($fightData['is_bif']),
-            'linked_fight_id'    => '',
-            'linked_fighter_id'  => '',
+            'id'           => $fightId ?: uniqid('fight_', true),
+            'opponent'     => $opponents[0] ?? '',
+            'opponents'    => $opponents,
+            'match_type'   => $matchType,
+            'is_handicap'  => $isHandicap,
+            'event'        => trim($fightData['event'] ?? ''),
+            'date'         => trim($fightData['date'] ?? ''),
+            'result'       => trim($fightData['result'] ?? 'win'),
+            'method'       => trim($fightData['method'] ?? ''),
+            'round'        => (int)($fightData['round'] ?? 0),
+            'time'         => trim($fightData['time'] ?? ''),
+            'youtube_url'  => trim($fightData['youtube_url'] ?? ''),
+            'poster_url'   => trim($fightData['poster_url'] ?? ''),
+            'is_bif'       => !empty($fightData['is_bif']),
+            'linked_fights' => [],
         ];
 
-        // Find opponent in fighter list (auto-mirror target)
-        $opponentIdx = $this->findFighterIndexByName($fighters, $payload['opponent']);
-        if ($opponentIdx === $primaryIdx) $opponentIdx = null; // can't mirror to self
-
-        // Clean up stale mirror if:
-        // - opponent changed (old linked fighter no longer matches current opponent)
-        // - or opponent is no longer a known fighter
-        if ($oldLinkedFightId && $oldLinkedFighterId) {
-            $stillValid = ($opponentIdx !== null)
-                && (($fighters[$opponentIdx]['id'] ?? '') === $oldLinkedFighterId);
-            if (!$stillValid) {
-                foreach ($fighters as $i => &$fx) {
-                    if (($fx['id'] ?? '') === $oldLinkedFighterId) {
-                        $this->removeFightById($fx, $oldLinkedFightId);
-                        $fx['updated_at'] = date('Y-m-d H:i:s');
-                        break;
-                    }
-                }
-                unset($fx);
-                $oldLinkedFightId = '';
-                $oldLinkedFighterId = '';
+        // Find which opponents are real BIF fighters (auto-mirror targets)
+        $newOpponentIdxs = [];
+        foreach ($opponents as $oppName) {
+            $idx = $this->findFighterIndexByName($fighters, $oppName);
+            if ($idx !== null && $idx !== $primaryIdx) {
+                $newOpponentIdxs[] = $idx;
             }
         }
 
-        // Create or update mirror on opponent (if opponent is a real fighter)
-        $mirrorFightId = '';
-        if ($opponentIdx !== null) {
-            $opponent = &$fighters[$opponentIdx];
+        // Remove old mirrors that are no longer matched in new opponent list
+        $newLinkedFighterIds = array_map(fn($i) => $fighters[$i]['id'] ?? '', $newOpponentIdxs);
+        foreach ($oldLinkedFights as $oldLink) {
+            if (in_array($oldLink['fighter_id'] ?? '', $newLinkedFighterIds, true)) continue;
+            // Stale → delete
+            foreach ($fighters as &$fx) {
+                if (($fx['id'] ?? '') === ($oldLink['fighter_id'] ?? '')) {
+                    if ($this->removeFightById($fx, $oldLink['fight_id'] ?? '')) {
+                        $fx['updated_at'] = date('Y-m-d H:i:s');
+                    }
+                    break;
+                }
+            }
+            unset($fx);
+        }
+
+        // Create or update mirror on each known opponent
+        $oppositeRes = $this->oppositeResult($payload['result']);
+        foreach ($newOpponentIdxs as $oppIdx) {
+            $opponent = &$fighters[$oppIdx];
             if (!isset($opponent['fights']) || !is_array($opponent['fights'])) $opponent['fights'] = [];
 
-            // Use old linked fight id if still valid, else new id
-            $mirrorFightId = $oldLinkedFightId ?: uniqid('fight_', true);
+            // Reuse old mirror id if it existed for this fighter
+            $oppFightId = '';
+            foreach ($oldLinkedFights as $oldLink) {
+                if (($oldLink['fighter_id'] ?? '') === ($opponent['id'] ?? '')) {
+                    $oppFightId = $oldLink['fight_id'] ?? '';
+                    break;
+                }
+            }
+            if (!$oppFightId) $oppFightId = uniqid('fight_', true);
 
             $mirrorPayload = [
-                'id'                 => $mirrorFightId,
-                'opponent'           => $primary['name'] ?? '',
-                'event'              => $payload['event'],
-                'date'               => $payload['date'],
-                'result'             => $this->oppositeResult($payload['result']),
-                'method'             => $payload['method'],
-                'round'              => $payload['round'],
-                'time'               => $payload['time'],
-                'youtube_url'        => $payload['youtube_url'],
-                'poster_url'         => $payload['poster_url'],
-                'is_bif'             => $payload['is_bif'],
-                'linked_fight_id'    => $payload['id'],
-                'linked_fighter_id'  => $primary['id'] ?? '',
+                'id'                => $oppFightId,
+                'opponent'          => $primary['name'] ?? '',
+                'opponents'         => [$primary['name'] ?? ''],
+                'match_type'        => $matchType,
+                'is_handicap'       => $isHandicap,
+                'event'             => $payload['event'],
+                'date'              => $payload['date'],
+                'result'            => $oppositeRes,
+                'method'            => $payload['method'],
+                'round'             => $payload['round'],
+                'time'              => $payload['time'],
+                'youtube_url'       => $payload['youtube_url'],
+                'poster_url'        => $payload['poster_url'],
+                'is_bif'            => $payload['is_bif'],
+                'linked_fight_id'   => $payload['id'],
+                'linked_fighter_id' => $primary['id'] ?? '',
             ];
 
             $found = false;
             foreach ($opponent['fights'] as &$ex) {
-                if (($ex['id'] ?? '') === $mirrorFightId) {
-                    $ex = $mirrorPayload;
-                    $found = true;
-                    break;
-                }
+                if (($ex['id'] ?? '') === $oppFightId) { $ex = $mirrorPayload; $found = true; break; }
             }
             unset($ex);
             if (!$found) $opponent['fights'][] = $mirrorPayload;
 
             $opponent['updated_at'] = date('Y-m-d H:i:s');
 
-            $payload['linked_fight_id'] = $mirrorFightId;
-            $payload['linked_fighter_id'] = $opponent['id'] ?? '';
+            $payload['linked_fights'][] = [
+                'fight_id'   => $oppFightId,
+                'fighter_id' => $opponent['id'] ?? '',
+            ];
             unset($opponent);
         }
 
-        // Save primary fight (now with final link ids)
+        // Save primary fight
         if ($fightId) {
             $found = false;
             foreach ($primary['fights'] as &$ex) {
@@ -915,28 +955,32 @@ $event['current_price'] = $currentPrice;
             return ['success' => false, 'error' => 'Failed to save fight'];
         }
         return [
-            'success' => true,
-            'fight' => $payload,
-            'mirrored' => $opponentIdx !== null,
+            'success'        => true,
+            'fight'          => $payload,
+            'mirrored_count' => count($payload['linked_fights']),
         ];
     }
 
     public function deleteFight($fighterId, $fightId) {
         $fighters = $this->loadFighters();
 
-        // Find primary and capture linked mirror info before removing
-        $linkedFightId = '';
-        $linkedFighterId = '';
+        // Find primary fight, capture all linked mirrors
+        $linkedFights = [];
         $removed = false;
 
         foreach ($fighters as &$fighter) {
             if (($fighter['id'] ?? '') !== $fighterId) continue;
             foreach ($fighter['fights'] ?? [] as $f) {
-                if (($f['id'] ?? '') === $fightId) {
-                    $linkedFightId = $f['linked_fight_id'] ?? '';
-                    $linkedFighterId = $f['linked_fighter_id'] ?? '';
-                    break;
+                if (($f['id'] ?? '') !== $fightId) continue;
+                if (!empty($f['linked_fights']) && is_array($f['linked_fights'])) {
+                    $linkedFights = $f['linked_fights'];
+                } elseif (!empty($f['linked_fight_id'])) {
+                    $linkedFights = [[
+                        'fight_id'   => $f['linked_fight_id'],
+                        'fighter_id' => $f['linked_fighter_id'] ?? '',
+                    ]];
                 }
+                break;
             }
             $removed = $this->removeFightById($fighter, $fightId);
             if ($removed) $fighter['updated_at'] = date('Y-m-d H:i:s');
@@ -946,11 +990,11 @@ $event['current_price'] = $currentPrice;
 
         if (!$removed) return ['success' => false, 'error' => 'Fight not found'];
 
-        // Delete mirror on opponent, if present
-        if ($linkedFightId && $linkedFighterId) {
+        // Delete each mirrored fight from each linked opponent
+        foreach ($linkedFights as $link) {
             foreach ($fighters as &$opp) {
-                if (($opp['id'] ?? '') === $linkedFighterId) {
-                    if ($this->removeFightById($opp, $linkedFightId)) {
+                if (($opp['id'] ?? '') === ($link['fighter_id'] ?? '')) {
+                    if ($this->removeFightById($opp, $link['fight_id'] ?? '')) {
                         $opp['updated_at'] = date('Y-m-d H:i:s');
                     }
                     break;

@@ -444,22 +444,40 @@ if (substr($absImageUrl, 0, 4) !== 'http') {
                             </div>
 
                             <?php
-                                $oppName = trim($f['opponent'] ?? '');
-                                $oppData = $opponentLookup[mb_strtolower($oppName)] ?? null;
-                                $oppNickname = $oppData['nickname'] ?? '';
-                                $oppSlug = $oppData['slug'] ?? '';
+                                $oppList = (!empty($f['opponents']) && is_array($f['opponents']))
+                                    ? $f['opponents']
+                                    : (!empty($f['opponent']) ? [$f['opponent']] : []);
+                                $isHandicap = !empty($f['is_handicap']) || count($oppList) > 1;
+                                $matchType = $f['match_type'] ?? (count($oppList) === 3 ? '3v1' : (count($oppList) === 2 ? '2v1' : 'standard'));
                             ?>
                             <div class="upcoming-fight-card__center">
+                                <?php if ($isHandicap): ?>
+                                <span class="upcoming-fight-card__handicap-badge">⚔ HENDIKEP <?php echo strtoupper($matchType); ?></span>
+                                <?php endif; ?>
                                 <span class="upcoming-fight-card__vs">VS</span>
                                 <h3 class="upcoming-fight-card__opponent">
-                                    <?php if ($oppSlug): ?>
-                                        <a href="<?php echo htmlspecialchars($oppSlug); ?>" class="upcoming-fight-card__opponent-link"><?php echo htmlspecialchars($oppName); ?></a>
-                                    <?php else: ?>
-                                        <?php echo htmlspecialchars($oppName); ?>
-                                    <?php endif; ?>
+                                    <?php
+                                    $parts = [];
+                                    foreach ($oppList as $oppName) {
+                                        $oppName = trim($oppName);
+                                        $oppData = $opponentLookup[mb_strtolower($oppName)] ?? null;
+                                        if (!empty($oppData['slug'])) {
+                                            $parts[] = '<a href="' . htmlspecialchars($oppData['slug']) . '" class="upcoming-fight-card__opponent-link">' . htmlspecialchars($oppName) . '</a>';
+                                        } else {
+                                            $parts[] = htmlspecialchars($oppName);
+                                        }
+                                    }
+                                    echo implode('<span class="upcoming-fight-card__plus"> + </span>', $parts);
+                                    ?>
                                 </h3>
-                                <?php if ($oppNickname): ?>
-                                <p class="upcoming-fight-card__opponent-nickname">"<?php echo htmlspecialchars(strtoupper($oppNickname)); ?>"</p>
+                                <?php if (!$isHandicap):
+                                    $solo = trim($oppList[0] ?? '');
+                                    $soloData = $opponentLookup[mb_strtolower($solo)] ?? null;
+                                    $soloNickname = $soloData['nickname'] ?? '';
+                                ?>
+                                    <?php if ($soloNickname): ?>
+                                    <p class="upcoming-fight-card__opponent-nickname">"<?php echo htmlspecialchars(strtoupper($soloNickname)); ?>"</p>
+                                    <?php endif; ?>
                                 <?php endif; ?>
                                 <p class="upcoming-fight-card__event">🥊 <?php echo htmlspecialchars($f['event'] ?? ''); ?></p>
                                 <?php if ($eventLocSr || $eventLocEn): ?>
@@ -530,20 +548,33 @@ if (substr($absImageUrl, 0, 4) !== 'http') {
                             </div>
 
                             <?php
-                                $histOppName = trim($f['opponent'] ?? '');
-                                $histOppData = $opponentLookup[mb_strtolower($histOppName)] ?? null;
-                                $histOppNickname = $histOppData['nickname'] ?? '';
-                                $histOppSlug = $histOppData['slug'] ?? '';
+                                $histOppList = (!empty($f['opponents']) && is_array($f['opponents']))
+                                    ? $f['opponents']
+                                    : (!empty($f['opponent']) ? [$f['opponent']] : []);
+                                $histIsHandicap = !empty($f['is_handicap']) || count($histOppList) > 1;
+                                $histMatchType = $f['match_type'] ?? (count($histOppList) === 3 ? '3v1' : (count($histOppList) === 2 ? '2v1' : 'standard'));
+                                $histParts = [];
+                                $histSoloNickname = '';
+                                foreach ($histOppList as $oN) {
+                                    $oN = trim($oN);
+                                    $oD = $opponentLookup[mb_strtolower($oN)] ?? null;
+                                    $oS = $oD['slug'] ?? '';
+                                    if ($oS) {
+                                        $histParts[] = '<a href="' . htmlspecialchars($oS) . '" style="color:inherit;text-decoration:none;border-bottom:1px solid currentColor;">' . htmlspecialchars($oN) . '</a>';
+                                    } else {
+                                        $histParts[] = htmlspecialchars($oN);
+                                    }
+                                    if (!$histIsHandicap && !empty($oD['nickname'])) $histSoloNickname = $oD['nickname'];
+                                }
                             ?>
                             <div class="fight-card__info">
                                 <h3 class="fight-card__title">
-                                    <?php if ($histOppSlug): ?>
-                                        vs <a href="<?php echo htmlspecialchars($histOppSlug); ?>" style="color:inherit;text-decoration:none;border-bottom:1px solid currentColor;"><?php echo htmlspecialchars($histOppName); ?></a>
-                                    <?php else: ?>
-                                        vs <?php echo htmlspecialchars($histOppName); ?>
+                                    vs <?php echo implode(' <span style="color:var(--primary-red);">+</span> ', $histParts); ?>
+                                    <?php if ($histSoloNickname && !$histIsHandicap): ?>
+                                        <span style="color:#ffd700;font-style:italic;font-size:0.85em;font-weight:500;letter-spacing:1px;margin-left:0.5rem;">"<?php echo htmlspecialchars(strtoupper($histSoloNickname)); ?>"</span>
                                     <?php endif; ?>
-                                    <?php if ($histOppNickname): ?>
-                                        <span style="color:#ffd700;font-style:italic;font-size:0.85em;font-weight:500;letter-spacing:1px;margin-left:0.5rem;">"<?php echo htmlspecialchars(strtoupper($histOppNickname)); ?>"</span>
+                                    <?php if ($histIsHandicap): ?>
+                                        <span class="fight-card__handicap-badge">⚔ HENDIKEP <?php echo strtoupper($histMatchType); ?></span>
                                     <?php endif; ?>
                                     <?php if (!empty($f['is_bif'])): ?>
                                     <span class="fight-card__bif-badge">BIF</span>
