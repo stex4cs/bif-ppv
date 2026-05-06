@@ -387,6 +387,14 @@ if (substr($absImageUrl, 0, 4) !== 'http') {
             }
             return '';
         }
+
+        // Lookup opponent fighter by name (case-insensitive) to get nickname
+        $opponentLookup = [];
+        foreach ($fighters as $fr) {
+            if (!empty($fr['name'])) {
+                $opponentLookup[mb_strtolower(trim($fr['name']))] = $fr;
+            }
+        }
         ?>
 
         <?php if (!empty($upcomingFights)): ?>
@@ -435,9 +443,24 @@ if (substr($absImageUrl, 0, 4) !== 'http') {
                                 <div class="upcoming-fight-card__date"><?php echo htmlspecialchars($dateFormatted); ?><?php echo $eventTimeStr ? ' · ' . htmlspecialchars($eventTimeStr) : ''; ?></div>
                             </div>
 
+                            <?php
+                                $oppName = trim($f['opponent'] ?? '');
+                                $oppData = $opponentLookup[mb_strtolower($oppName)] ?? null;
+                                $oppNickname = $oppData['nickname'] ?? '';
+                                $oppSlug = $oppData['slug'] ?? '';
+                            ?>
                             <div class="upcoming-fight-card__center">
                                 <span class="upcoming-fight-card__vs">VS</span>
-                                <h3 class="upcoming-fight-card__opponent"><?php echo htmlspecialchars($f['opponent'] ?? ''); ?></h3>
+                                <h3 class="upcoming-fight-card__opponent">
+                                    <?php if ($oppSlug): ?>
+                                        <a href="<?php echo htmlspecialchars($oppSlug); ?>" class="upcoming-fight-card__opponent-link"><?php echo htmlspecialchars($oppName); ?></a>
+                                    <?php else: ?>
+                                        <?php echo htmlspecialchars($oppName); ?>
+                                    <?php endif; ?>
+                                </h3>
+                                <?php if ($oppNickname): ?>
+                                <p class="upcoming-fight-card__opponent-nickname">"<?php echo htmlspecialchars(strtoupper($oppNickname)); ?>"</p>
+                                <?php endif; ?>
                                 <p class="upcoming-fight-card__event">🥊 <?php echo htmlspecialchars($f['event'] ?? ''); ?></p>
                                 <?php if ($eventLocSr || $eventLocEn): ?>
                                 <p class="upcoming-fight-card__location">
@@ -506,9 +529,22 @@ if (substr($absImageUrl, 0, 4) !== 'http') {
                                 <?php endif; ?>
                             </div>
 
+                            <?php
+                                $histOppName = trim($f['opponent'] ?? '');
+                                $histOppData = $opponentLookup[mb_strtolower($histOppName)] ?? null;
+                                $histOppNickname = $histOppData['nickname'] ?? '';
+                                $histOppSlug = $histOppData['slug'] ?? '';
+                            ?>
                             <div class="fight-card__info">
                                 <h3 class="fight-card__title">
-                                    vs <?php echo htmlspecialchars($f['opponent'] ?? ''); ?>
+                                    <?php if ($histOppSlug): ?>
+                                        vs <a href="<?php echo htmlspecialchars($histOppSlug); ?>" style="color:inherit;text-decoration:none;border-bottom:1px solid currentColor;"><?php echo htmlspecialchars($histOppName); ?></a>
+                                    <?php else: ?>
+                                        vs <?php echo htmlspecialchars($histOppName); ?>
+                                    <?php endif; ?>
+                                    <?php if ($histOppNickname): ?>
+                                        <span style="color:#ffd700;font-style:italic;font-size:0.85em;font-weight:500;letter-spacing:1px;margin-left:0.5rem;">"<?php echo htmlspecialchars(strtoupper($histOppNickname)); ?>"</span>
+                                    <?php endif; ?>
                                     <?php if (!empty($f['is_bif'])): ?>
                                     <span class="fight-card__bif-badge">BIF</span>
                                     <?php endif; ?>
