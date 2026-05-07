@@ -488,14 +488,12 @@ if (substr($absImageUrl, 0, 4) !== 'http') {
                                 <?php endif; ?>
                             </div>
 
-                            <?php if ($ticketUrl): ?>
                             <div class="upcoming-fight-card__action">
-                                <a href="<?php echo htmlspecialchars($ticketUrl); ?>" target="_blank" rel="noopener" class="btn btn-primary upcoming-tickets-btn">
+                                <a href="<?php echo htmlspecialchars($ticketUrl ?: '#'); ?>"<?php echo $ticketUrl ? ' target="_blank" rel="noopener"' : ''; ?> class="btn btn-primary upcoming-tickets-btn">
                                     <span class="lang-content active" data-lang="sr">🎟 Kupi Ulaznice</span>
                                     <span class="lang-content" data-lang="en">🎟 Buy Tickets</span>
                                 </a>
                             </div>
-                            <?php endif; ?>
                         </div>
                     </article>
                     <?php endforeach; ?>
