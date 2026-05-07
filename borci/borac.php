@@ -115,11 +115,47 @@ if (!empty($customWeightClass)) {
     $weightClass = getWeightClassByWeight($weight);
 }
 
-// Meta podaci - SEO optimized
-$recordShort = $wins . '-' . $losses . ($draws > 0 ? '-' . $draws : '');
-$metaTitle = $name . ($nickname ? ' "' . $nickname . '"' : '') . ' — BIF Borac | ' . $weightClass['sr'] . ' | Rekord ' . $recordShort;
-$metaDescription = 'Zvanični profil BIF borca ' . $name . ($nickname ? ' "' . $nickname . '"' : '') . '. Težinska kategorija: ' . $weightClass['sr'] . '. BIF rekord: ' . $wins . ' pobeda, ' . $losses . ' poraza' . ($draws > 0 ? ', ' . $draws . ' nerešeno' : '') . '. Statistike, istorija borbi i video snimci.';
-$metaDescription = mb_substr($metaDescription, 0, 160);
+// Meta podaci - SEO optimized, fully dynamic per-fighter
+$hasBifFights = ($wins + $losses + $draws) > 0;
+$hasOverallFights = ($overallWins + $overallLosses + $overallDraws) > 0;
+$bifRecord = $wins . '-' . $losses . ($draws > 0 ? '-' . $draws : '');
+$overallRecord = $overallWins . '-' . $overallLosses . ($overallDraws > 0 ? '-' . $overallDraws : '');
+$nicknameStr = $nickname ? ' "' . $nickname . '"' : '';
+
+// TITLE — dynamic by fighter state
+if ($hasBifFights) {
+    $metaTitle = $name . $nicknameStr . ' — BIF Borac | ' . $weightClass['sr'] . ' | BIF Rekord ' . $bifRecord;
+} elseif ($hasOverallFights) {
+    $metaTitle = $name . $nicknameStr . ' — BIF Borac | ' . $weightClass['sr'] . ' | Karijera ' . $overallRecord;
+} else {
+    $metaTitle = $name . $nicknameStr . ' — BIF Borac | ' . $weightClass['sr'];
+}
+
+// DESCRIPTION — prefer admin-set bio, fall back to smart auto-generated copy
+$customBio = trim(strip_tags($fighter['bio'] ?? ''));
+if ($customBio !== '') {
+    // Use the fighter's bio if admin filled it in
+    $metaDescription = mb_substr($customBio, 0, 157) . (mb_strlen($customBio) > 157 ? '…' : '');
+} else {
+    $parts = [];
+    $parts[] = 'Profil BIF borca ' . $name . $nicknameStr;
+    $parts[] = 'kategorija ' . $weightClass['sr'];
+    if ($hasBifFights) {
+        $parts[] = 'BIF rekord ' . $bifRecord;
+    }
+    if ($hasOverallFights) {
+        $kosTxt = $overallKo > 0 ? ' (' . $overallKo . ' KO)' : '';
+        $parts[] = 'Karijera ' . $overallRecord . $kosTxt;
+    }
+    if (!$hasBifFights && !$hasOverallFights) {
+        $parts[] = 'novi član BIF rostera';
+    }
+    if ($height > 0 && $weight > 0) {
+        $parts[] = $height . ' cm / ' . $weight . ' kg';
+    }
+    $metaDescription = implode(' · ', $parts) . '.';
+    $metaDescription = mb_substr($metaDescription, 0, 160);
+}
 $pageUrl = 'https://bif.events/borci/' . $slug;
 // Absolute image URL for social sharing
 $absImageUrl = $fighter['image_url'] ?? '/assets/images/fighters/default.png';
