@@ -400,6 +400,83 @@
 }
 
 /* ========================================
+   FIGHTER SOCIAL LINKS
+   ======================================== */
+.fighter-socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+}
+
+.fighter-social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+[data-theme="light"] .fighter-social {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #333;
+}
+
+.fighter-social:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.3);
+}
+
+.fighter-social--instagram:hover {
+  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  border-color: transparent;
+  color: #fff;
+}
+
+.fighter-social--tiktok:hover {
+  background: #000;
+  border-color: #fff;
+  color: #fff;
+}
+
+.fighter-social--youtube:hover {
+  background: #ff0000;
+  border-color: #ff0000;
+  color: #fff;
+}
+
+.fighter-social--twitter:hover {
+  background: #000;
+  border-color: #fff;
+  color: #fff;
+}
+
+.fighter-social--facebook:hover {
+  background: #1877f2;
+  border-color: #1877f2;
+  color: #fff;
+}
+
+.fighter-social--website:hover {
+  background: linear-gradient(135deg, var(--primary-red, #c41e3a), var(--accent-gold, #ffd700));
+  border-color: transparent;
+  color: #fff;
+}
+
+@media (max-width: 1024px) {
+  .fighter-socials {
+    justify-content: center;
+  }
+}
+
+/* ========================================
    UPCOMING FIGHTS SECTION
    ======================================== */
 .upcoming-fights-section {
