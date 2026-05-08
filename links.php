@@ -180,9 +180,15 @@ Security_Headers::apply();
             background: #ff0000;
         }
 
+        .link-btn--kick .ico {
+            background: #53fc18;
+            color: #000;
+        }
+
         .link-btn--instagram:hover { border-color: rgba(220, 39, 67, 0.6); }
         .link-btn--tiktok:hover { border-color: rgba(255, 255, 255, 0.4); }
         .link-btn--youtube:hover { border-color: rgba(255, 0, 0, 0.6); }
+        .link-btn--kick:hover { border-color: rgba(83, 252, 24, 0.6); }
 
         /* Tickets button — primary CTA, full red */
         .link-btn--tickets {
@@ -377,6 +383,14 @@ Security_Headers::apply();
                 <svg viewBox="0 0 24 24" fill="#fff"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
             </span>
             <span class="label">YouTube · @bif.events</span>
+        </a>
+
+        <!-- Kick -->
+        <a href="https://kick.com/bifevents" target="_blank" rel="noopener" class="link-btn link-btn--kick">
+            <span class="ico">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 2h6v5h2V5h2V3h2v2h2V2h6v8h-2v2h-2v2h2v2h2v8h-6v-3h-2v-2h-2v-2h-2v2h-2v2H8v3H2V2zm6 7h2V7h2V5h2v2h-2v2h-2v2h2v2h2v2h-2v-2h-2v-2H8V9z"/></svg>
+            </span>
+            <span class="label">Kick · @bifevents</span>
         </a>
 
         <footer class="links-footer">
