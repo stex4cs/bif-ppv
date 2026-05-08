@@ -1312,6 +1312,9 @@ if (!$recaptchaSiteKey) {
             <a href="https://www.correctscore.pro" target="_blank" rel="noopener noreferrer" class="partner-logo">
                 <img src="assets/images/partners/cslogo.png" alt="Correct Score Pro - Partner" loading="lazy">
             </a>
+            <a href="https://www.instagram.com/sportissimo.rs/" target="_blank" rel="noopener noreferrer" class="partner-logo">
+                <img src="assets/images/partners/sportisimo.png" alt="Sportissimo - Partner" loading="lazy">
+            </a>
         </div>
     </div>
 </section>
