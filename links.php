@@ -19,6 +19,8 @@ Security_Headers::apply();
     <meta property="og:url" content="https://bif.events/links">
     <meta property="og:image" content="https://bif.events/assets/images/logo/biflogo.png">
 
+    <?php include __DIR__ . '/includes/google-analytics.php'; ?>
+
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/favicon/favicon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">

@@ -1350,13 +1350,7 @@ if (!$recaptchaSiteKey) {
      <!-- Main JavaScript already loaded in head with defer -->
 
     <!-- Google Analytics (Optional) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'GA_MEASUREMENT_ID');
-    </script>
+    <?php include __DIR__ . '/includes/google-analytics.php'; ?>
     
     <!-- Inline Critical JavaScript -->
     <script>

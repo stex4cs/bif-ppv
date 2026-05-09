@@ -204,6 +204,8 @@ if (substr($absImageUrl, 0, 4) !== 'http') {
     <meta name="twitter:description" content="<?php echo htmlspecialchars($metaDescription); ?>">
     <meta name="twitter:image" content="<?php echo htmlspecialchars($absImageUrl); ?>">
 
+    <?php include dirname(__DIR__) . '/includes/google-analytics.php'; ?>
+
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/favicon/favicon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
