@@ -590,6 +590,9 @@
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js"></script>
+    <!-- Cropper.js for image preview/crop -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.js"></script>
 </head>
 <body>
     <div class="admin-container">
@@ -1251,7 +1254,14 @@
             <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
                 <div class="form-group">
                     <label for="fighter-image">URL Slike</label>
-                    <input type="text" id="fighter-image" name="image_url" placeholder="/assets/images/fighters/fighter.png">
+                    <div style="display:flex;gap:8px;">
+                        <input type="text" id="fighter-image" name="image_url" placeholder="/assets/images/fighters/fighter.png" style="flex:1;" onchange="updateImagePreview('fighter-image', 'fighter-image-preview')" oninput="updateImagePreview('fighter-image', 'fighter-image-preview')">
+                        <button type="button" class="btn" onclick="openCropper('fighter-image', 'fighter-image-preview')" style="padding:8px 14px;font-size:13px;">✂️ Crop</button>
+                    </div>
+                    <div id="fighter-image-preview-wrap" style="margin-top:10px;display:none;">
+                        <small style="color:#666;display:block;margin-bottom:6px;">Preview:</small>
+                        <img id="fighter-image-preview" src="" alt="" style="max-width:160px;max-height:160px;border:1px solid #e0e0e0;border-radius:50%;background:#f5f5f5;object-fit:cover;width:160px;height:160px;">
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="fighter-status">Status</label>
@@ -1334,6 +1344,33 @@
 </div>
 
 <!-- Add/Edit Fight Modal -->
+<!-- Image Cropper Modal -->
+<div id="cropperModal" class="modal" style="display:none;">
+    <div class="modal-content" style="max-width:900px;">
+        <div class="modal-header">
+            <h2>✂️ Crop / Zumiranje slike</h2>
+            <span class="close" onclick="closeCropperModal()">&times;</span>
+        </div>
+        <div style="padding:0;">
+            <div style="background:#000;max-height:60vh;overflow:hidden;">
+                <img id="cropperImage" src="" alt="Crop preview" style="max-width:100%;display:block;">
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;padding:14px;background:#f5f5f5;border-top:1px solid #e0e0e0;">
+                <button type="button" class="btn" onclick="cropperZoomIn()">🔍+ Zoom In</button>
+                <button type="button" class="btn" onclick="cropperZoomOut()">🔍− Zoom Out</button>
+                <button type="button" class="btn" onclick="cropperReset()">↺ Reset</button>
+            </div>
+            <small style="display:block;text-align:center;padding:0 14px 10px;color:#666;">
+                Klikni i prevlači sliku da je pomeriš. Drži uglove kvadrata da promeniš crop frame.
+            </small>
+        </div>
+        <div class="form-actions" style="display:flex;gap:10px;justify-content:flex-end;padding:14px;border-top:1px solid #e0e0e0;">
+            <button type="button" class="btn" onclick="closeCropperModal()">Otkaži</button>
+            <button type="button" class="btn btn-primary" onclick="cropperApplyAndUpload()">💾 Sačuvaj Crop</button>
+        </div>
+    </div>
+</div>
+
 <div id="fightModal" class="modal">
     <div class="modal-content" style="max-width:600px;">
         <div class="modal-header">
@@ -1477,7 +1514,14 @@
                     </div>
                     <div class="form-group">
                         <label for="news-image">URL Slike</label>
-                        <input type="text" id="news-image" name="image_url" placeholder="/assets/images/news/news-1.png">
+                        <div style="display:flex;gap:8px;">
+                            <input type="text" id="news-image" name="image_url" placeholder="/assets/images/news/card.png" style="flex:1;" onchange="updateImagePreview('news-image', 'news-image-preview')" oninput="updateImagePreview('news-image', 'news-image-preview')">
+                            <button type="button" class="btn" onclick="openCropper('news-image', 'news-image-preview')" style="padding:8px 14px;font-size:13px;">✂️ Crop</button>
+                        </div>
+                        <div id="news-image-preview-wrap" style="margin-top:10px;display:none;">
+                            <small style="color:#666;display:block;margin-bottom:6px;">Preview (kako će izgledati u članku):</small>
+                            <img id="news-image-preview" src="" alt="" style="max-width:100%;max-height:200px;border:1px solid #e0e0e0;border-radius:6px;background:#f5f5f5;object-fit:cover;width:100%;">
+                        </div>
                     </div>
                 </div>
 
@@ -2848,6 +2892,136 @@ async function moveFighter(fighterId, direction) {
 }
 window.moveFighter = moveFighter;
 
+/* ===========================
+   IMAGE PREVIEW + CROPPER
+   =========================== */
+function updateImagePreview(inputId, previewImgId) {
+    const input = document.getElementById(inputId);
+    const previewWrap = document.getElementById(previewImgId + '-wrap');
+    const previewImg = document.getElementById(previewImgId);
+    if (!input || !previewImg) return;
+    const url = (input.value || '').trim();
+    if (!url) {
+        previewWrap.style.display = 'none';
+        previewImg.src = '';
+        return;
+    }
+    // Resolve relative paths from admin perspective ("/assets/..." -> "../assets/...")
+    let displayUrl = url;
+    if (displayUrl.startsWith('/')) displayUrl = '..' + displayUrl;
+    else if (!displayUrl.match(/^https?:\/\//)) displayUrl = '../' + displayUrl.replace(/^\/+/, '');
+    previewImg.onerror = () => { previewWrap.style.display = 'none'; };
+    previewImg.onload = () => { previewWrap.style.display = 'block'; };
+    previewImg.src = displayUrl;
+}
+
+let _activeCropper = null;
+let _activeCropperInputId = null;
+let _activeCropperPreviewId = null;
+
+function openCropper(inputId, previewImgId) {
+    const input = document.getElementById(inputId);
+    if (!input || !input.value.trim()) {
+        alert('Prvo unesi URL slike, pa onda crop.');
+        return;
+    }
+    _activeCropperInputId = inputId;
+    _activeCropperPreviewId = previewImgId;
+
+    let url = input.value.trim();
+    if (url.startsWith('/')) url = '..' + url;
+    else if (!url.match(/^https?:\/\//)) url = '../' + url.replace(/^\/+/, '');
+
+    const modal = document.getElementById('cropperModal');
+    const img = document.getElementById('cropperImage');
+    if (_activeCropper) { _activeCropper.destroy(); _activeCropper = null; }
+    img.src = url;
+    modal.style.display = 'flex';
+    img.onload = () => {
+        _activeCropper = new Cropper(img, {
+            viewMode: 1,
+            dragMode: 'move',
+            autoCropArea: 0.9,
+            background: true,
+            zoomable: true,
+            scalable: false,
+            rotatable: false,
+            movable: true,
+            cropBoxResizable: true,
+            cropBoxMovable: true,
+        });
+    };
+}
+
+function closeCropperModal() {
+    if (_activeCropper) { _activeCropper.destroy(); _activeCropper = null; }
+    document.getElementById('cropperModal').style.display = 'none';
+    _activeCropperInputId = null;
+    _activeCropperPreviewId = null;
+}
+
+function cropperZoomIn()  { if (_activeCropper) _activeCropper.zoom(0.1); }
+function cropperZoomOut() { if (_activeCropper) _activeCropper.zoom(-0.1); }
+function cropperReset()   { if (_activeCropper) _activeCropper.reset(); }
+
+async function cropperApplyAndUpload() {
+    if (!_activeCropper) return;
+    const canvas = _activeCropper.getCroppedCanvas({
+        maxWidth: 2000,
+        maxHeight: 2000,
+        imageSmoothingEnabled: true,
+        imageSmoothingQuality: 'high',
+    });
+    if (!canvas) return;
+
+    // Determine destination subfolder from current image path
+    const input = document.getElementById(_activeCropperInputId);
+    const originalUrl = (input.value || '').trim();
+    // Try to keep same folder, append "-crop" suffix to filename
+    const parts = originalUrl.split('/');
+    const filename = parts.pop() || 'crop.png';
+    const folder = parts.join('/') || '/assets/images';
+    const dotIdx = filename.lastIndexOf('.');
+    const baseName = dotIdx > 0 ? filename.substring(0, dotIdx) : filename;
+    const ext = 'png';
+    const newName = baseName + '-crop-' + Date.now() + '.' + ext;
+    const newPath = folder + '/' + newName;
+
+    canvas.toBlob(async (blob) => {
+        if (!blob) { alert('Greška pri generisanju slike.'); return; }
+        const formData = new FormData();
+        formData.append('action', 'upload_cropped_image');
+        formData.append('image', blob, newName);
+        formData.append('target_path', newPath);
+        try {
+            const r = await fetch('ppv_admin.php?action=upload_cropped_image', {
+                method: 'POST',
+                body: formData,
+            });
+            const result = await r.json();
+            if (result.success) {
+                input.value = result.path || newPath;
+                updateImagePreview(_activeCropperInputId, _activeCropperPreviewId);
+                closeCropperModal();
+                alert('Snimljeno: ' + (result.path || newPath));
+            } else {
+                alert('Greška pri snimanju: ' + (result.error || 'Unknown'));
+            }
+        } catch (err) {
+            console.error('Crop upload error:', err);
+            alert('Greška pri uploadu: ' + err.message);
+        }
+    }, 'image/png', 0.95);
+}
+
+window.updateImagePreview = updateImagePreview;
+window.openCropper = openCropper;
+window.closeCropperModal = closeCropperModal;
+window.cropperZoomIn = cropperZoomIn;
+window.cropperZoomOut = cropperZoomOut;
+window.cropperReset = cropperReset;
+window.cropperApplyAndUpload = cropperApplyAndUpload;
+
 function openCreateFighterModal() {
     currentEditingFighter = null;
     document.getElementById('fighter-modal-title').textContent = 'Dodaj Borca';
@@ -2879,6 +3053,8 @@ function editFighter(fighter) {
     document.getElementById('fighter-bio').value = fighter.bio || '';
     document.getElementById('fighter-image').value = fighter.image_url || '';
     document.getElementById('fighter-status').value = fighter.status || 'active';
+    // Trigger image preview
+    updateImagePreview('fighter-image', 'fighter-image-preview');
     // Social media URLs
     document.getElementById('fighter-instagram').value = fighter.instagram_url || '';
     document.getElementById('fighter-tiktok').value = fighter.tiktok_url || '';
@@ -3417,6 +3593,7 @@ function editNews(article) {
     document.getElementById('news-slug').value = article.slug || '';
     document.getElementById('news-category').value = article.category || 'news';
     document.getElementById('news-image').value = article.image_url || '';
+    updateImagePreview('news-image', 'news-image-preview');
     document.getElementById('news-status').value = article.status || 'published';
 
     // Serbian content

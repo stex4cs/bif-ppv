@@ -186,6 +186,46 @@ class PPV_Admin {
         return file_put_contents(FIGHTERS_FILE, json_encode($fighters, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
     }
 
+    /**
+     * Handle cropped image upload from admin Cropper.js
+     * Receives multipart form-data with image blob and target_path
+     */
+    public function handleCroppedImageUpload() {
+        if (!isset($_FILES['image']) || $_FILES['image']['error'] !== UPLOAD_ERR_OK) {
+            return ['success' => false, 'error' => 'No image uploaded or upload error'];
+        }
+        $targetPath = trim($_POST['target_path'] ?? '');
+        if ($targetPath === '') {
+            return ['success' => false, 'error' => 'Missing target_path'];
+        }
+
+        // Sanitize target_path: must start with /assets/images/ and stay within
+        $targetPath = '/' . ltrim($targetPath, '/');
+        if (strpos($targetPath, '/assets/images/') !== 0) {
+            return ['success' => false, 'error' => 'Target must be under /assets/images/'];
+        }
+        if (strpos($targetPath, '..') !== false) {
+            return ['success' => false, 'error' => 'Path traversal not allowed'];
+        }
+        // Only allow png/jpg/jpeg/webp file extensions
+        if (!preg_match('/\.(png|jpg|jpeg|webp)$/i', $targetPath)) {
+            return ['success' => false, 'error' => 'Only PNG, JPG, WEBP allowed'];
+        }
+
+        $baseDir = dirname(__DIR__); // project root
+        $absDest = $baseDir . $targetPath;
+        $destDir = dirname($absDest);
+        if (!is_dir($destDir)) {
+            if (!@mkdir($destDir, 0755, true)) {
+                return ['success' => false, 'error' => 'Failed to create directory'];
+            }
+        }
+        if (!move_uploaded_file($_FILES['image']['tmp_name'], $absDest)) {
+            return ['success' => false, 'error' => 'Failed to move uploaded file'];
+        }
+        return ['success' => true, 'path' => $targetPath];
+    }
+
     public function loadNews() {
         if (!file_exists(NEWS_FILE)) return [];
         $content = file_get_contents(NEWS_FILE);
@@ -1576,6 +1616,9 @@ try {
                 break;
             case 'save_fight':
                 $admin->sendJsonResponse($admin->saveFight($input['fighter_id'] ?? '', $input['fight'] ?? []));
+                break;
+            case 'upload_cropped_image':
+                $admin->sendJsonResponse($admin->handleCroppedImageUpload());
                 break;
             case 'delete_fight':
                 $admin->sendJsonResponse($admin->deleteFight($input['fighter_id'] ?? '', $input['fight_id'] ?? ''));
