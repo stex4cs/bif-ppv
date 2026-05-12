@@ -2966,6 +2966,14 @@ function cropperReset()   { if (_activeCropper) _activeCropper.reset(); }
 
 async function cropperApplyAndUpload() {
     if (!_activeCropper) return;
+
+    const input = document.getElementById(_activeCropperInputId);
+    const originalUrl = (input.value || '').trim();
+    if (!originalUrl) { alert('Nema URL slike.'); return; }
+
+    // Confirm — original file will be overwritten
+    if (!confirm('Snimanje će ZAMENITI originalnu sliku:\n\n' + originalUrl + '\n\nNastavi?')) return;
+
     const canvas = _activeCropper.getCroppedCanvas({
         maxWidth: 2000,
         maxHeight: 2000,
@@ -2974,25 +2982,20 @@ async function cropperApplyAndUpload() {
     });
     if (!canvas) return;
 
-    // Determine destination subfolder from current image path
-    const input = document.getElementById(_activeCropperInputId);
-    const originalUrl = (input.value || '').trim();
-    // Try to keep same folder, append "-crop" suffix to filename
-    const parts = originalUrl.split('/');
-    const filename = parts.pop() || 'crop.png';
-    const folder = parts.join('/') || '/assets/images';
-    const dotIdx = filename.lastIndexOf('.');
-    const baseName = dotIdx > 0 ? filename.substring(0, dotIdx) : filename;
-    const ext = 'png';
-    const newName = baseName + '-crop-' + Date.now() + '.' + ext;
-    const newPath = folder + '/' + newName;
+    // Detect format from original file extension
+    const filename = originalUrl.split('/').pop() || 'image.png';
+    const extMatch = filename.toLowerCase().match(/\.(png|jpg|jpeg|webp)$/);
+    const ext = extMatch ? extMatch[1] : 'png';
+    const mime = ext === 'jpg' || ext === 'jpeg' ? 'image/jpeg'
+              : ext === 'webp' ? 'image/webp'
+              : 'image/png';
 
     canvas.toBlob(async (blob) => {
         if (!blob) { alert('Greška pri generisanju slike.'); return; }
         const formData = new FormData();
         formData.append('action', 'upload_cropped_image');
-        formData.append('image', blob, newName);
-        formData.append('target_path', newPath);
+        formData.append('image', blob, filename);
+        formData.append('target_path', originalUrl); // OVERWRITE same path
         try {
             const r = await fetch('ppv_admin.php?action=upload_cropped_image', {
                 method: 'POST',
@@ -3000,10 +3003,16 @@ async function cropperApplyAndUpload() {
             });
             const result = await r.json();
             if (result.success) {
-                input.value = result.path || newPath;
-                updateImagePreview(_activeCropperInputId, _activeCropperPreviewId);
+                // Cache-bust the preview so we see the new image immediately
+                const previewImg = document.getElementById(_activeCropperPreviewId);
+                if (previewImg) {
+                    let display = originalUrl;
+                    if (display.startsWith('/')) display = '..' + display;
+                    else if (!display.match(/^https?:\/\//)) display = '../' + display.replace(/^\/+/, '');
+                    previewImg.src = display + '?t=' + Date.now();
+                }
                 closeCropperModal();
-                alert('Snimljeno: ' + (result.path || newPath));
+                alert('Slika zamenjena: ' + originalUrl);
             } else {
                 alert('Greška pri snimanju: ' + (result.error || 'Unknown'));
             }
@@ -3011,7 +3020,7 @@ async function cropperApplyAndUpload() {
             console.error('Crop upload error:', err);
             alert('Greška pri uploadu: ' + err.message);
         }
-    }, 'image/png', 0.95);
+    }, mime, 0.92);
 }
 
 window.updateImagePreview = updateImagePreview;
