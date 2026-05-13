@@ -163,6 +163,7 @@ foreach ($allNews as $n) {
     <meta name="twitter:image" content="<?php echo htmlspecialchars($absImageUrl); ?>">
 
     <?php include dirname(__DIR__) . '/includes/google-analytics.php'; ?>
+    <script src="/js/ticket-tracker.js" defer></script>
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="../favicon/favicon.ico">

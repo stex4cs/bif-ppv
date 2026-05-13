@@ -276,7 +276,10 @@ function formatNewsDate($dateString) {
 
     <!-- Theme Color -->
     <meta name="theme-color" content="#c41e3a">
-    
+
+    <!-- Ticket click tracker -->
+    <script src="/js/ticket-tracker.js" defer></script>
+
     <title>BIF - Balkan Influence Fighting</title>
     
     <!-- Structured Data -->
@@ -393,7 +396,7 @@ if (!$recaptchaSiteKey) {
                     </p>
 
                     <div class="hero-cta-group">
-                        <a href="https://ticketing.sajam.rs/catalog/dogadjaj/bif_2_46" target="_blank" rel="noopener" class="btn btn-primary cta-button">
+                        <a href="https://ticketing.sajam.rs/catalog/dogadjaj/bif_2_46" target="_blank" rel="noopener" class="btn btn-primary cta-button" data-ticket-source="hero_cta">
                             <span class="lang-content active" data-lang="sr">🎟 Kupi Ulaznice za BIF 2</span>
                             <span class="lang-content" data-lang="en">🎟 Buy Tickets for BIF 2</span>
                         </a>
@@ -455,7 +458,7 @@ if (!$recaptchaSiteKey) {
     </div>
 
     <!-- Ticket button -->
-    <a href="https://ticketing.sajam.rs/catalog/dogadjaj/bif_2_46" target="_blank" rel="noopener" class="btn btn-primary ticket-btn">
+    <a href="https://ticketing.sajam.rs/catalog/dogadjaj/bif_2_46" target="_blank" rel="noopener" class="btn btn-primary ticket-btn" data-ticket-source="under_timer">
         <span class="lang-content active" data-lang="sr">🎟 Kupi Ulaznice</span>
         <span class="lang-content" data-lang="en">🎟 Buy Tickets</span>
     </a>
@@ -1121,7 +1124,7 @@ if (!$recaptchaSiteKey) {
                             <?php if ($evTime): ?><p class="event-time"><?php echo htmlspecialchars($evTime); ?></p><?php endif; ?>
                         </div>
                         <div class="event-action">
-                            <a href="<?php echo htmlspecialchars($evTicket); ?>"<?php echo (substr($evTicket,0,1)==='#') ? '' : ' target="_blank" rel="noopener"'; ?> class="btn btn-primary">
+                            <a href="<?php echo htmlspecialchars($evTicket); ?>"<?php echo (substr($evTicket,0,1)==='#') ? '' : ' target="_blank" rel="noopener"'; ?> class="btn btn-primary" data-ticket-source="event_card_home">
                                 <span class="lang-content active" data-lang="sr">🎟 Kupi Ulaznice</span>
                                 <span class="lang-content" data-lang="en">🎟 Buy Tickets</span>
                             </a>

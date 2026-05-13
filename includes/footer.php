@@ -14,7 +14,7 @@
                 </div>
             </div>
             <div class="footer-brand-cta">
-                <a href="https://ticketing.sajam.rs/catalog/dogadjaj/bif_2_46" target="_blank" rel="noopener" class="btn btn-primary footer-tickets-btn">
+                <a href="https://ticketing.sajam.rs/catalog/dogadjaj/bif_2_46" target="_blank" rel="noopener" class="btn btn-primary footer-tickets-btn" data-ticket-source="footer">
                     <span class="lang-content active" data-lang="sr">🎟 Kupi Ulaznice</span>
                     <span class="lang-content" data-lang="en">🎟 Buy Tickets</span>
                 </a>

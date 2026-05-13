@@ -205,6 +205,7 @@ if (substr($absImageUrl, 0, 4) !== 'http') {
     <meta name="twitter:image" content="<?php echo htmlspecialchars($absImageUrl); ?>">
 
     <?php include dirname(__DIR__) . '/includes/google-analytics.php'; ?>
+    <script src="/js/ticket-tracker.js" defer></script>
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/favicon/favicon.ico">
@@ -591,7 +592,7 @@ if (substr($absImageUrl, 0, 4) !== 'http') {
                             </div>
 
                             <div class="upcoming-fight-card__action">
-                                <a href="<?php echo htmlspecialchars($ticketUrl ?: '#'); ?>"<?php echo $ticketUrl ? ' target="_blank" rel="noopener"' : ''; ?> class="btn btn-primary upcoming-tickets-btn">
+                                <a href="<?php echo htmlspecialchars($ticketUrl ?: '#'); ?>"<?php echo $ticketUrl ? ' target="_blank" rel="noopener"' : ''; ?> class="btn btn-primary upcoming-tickets-btn" data-ticket-source="upcoming_match_<?php echo htmlspecialchars($slug); ?>">
                                     <span class="lang-content active" data-lang="sr">🎟 Kupi Ulaznice</span>
                                     <span class="lang-content" data-lang="en">🎟 Buy Tickets</span>
                                 </a>

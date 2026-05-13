@@ -20,6 +20,7 @@ Security_Headers::apply();
     <meta property="og:image" content="https://bif.events/assets/images/logo/biflogo.png">
 
     <?php include __DIR__ . '/includes/google-analytics.php'; ?>
+    <script src="/js/ticket-tracker.js" defer></script>
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/favicon/favicon.ico">
@@ -351,7 +352,7 @@ Security_Headers::apply();
         </a>
 
         <!-- Tickets — primary CTA -->
-        <a href="https://ticketing.sajam.rs/catalog/dogadjaj/bif_2_46" target="_blank" rel="noopener" class="link-btn link-btn--tickets">
+        <a href="https://ticketing.sajam.rs/catalog/dogadjaj/bif_2_46" target="_blank" rel="noopener" class="link-btn link-btn--tickets" data-ticket-source="links_page">
             <span class="ico">
                 <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M3 7v3a2 2 0 0 1 0 4v3a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3a2 2 0 0 1 0-4V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z"/>

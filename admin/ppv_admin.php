@@ -187,6 +187,72 @@ class PPV_Admin {
     }
 
     /**
+     * Aggregates ticket click logs for admin dashboard.
+     */
+    public function getTicketClicksStats() {
+        $logFile = PPV_DATA_DIR . '/ticket_clicks.json';
+        if (!file_exists($logFile)) {
+            return [
+                'success' => true,
+                'total' => 0,
+                'today' => 0,
+                'week' => 0,
+                'by_source' => [],
+                'by_day' => [],
+                'recent' => [],
+            ];
+        }
+        $clicks = json_decode(file_get_contents($logFile), true);
+        if (!is_array($clicks)) $clicks = [];
+
+        $now = time();
+        $todayStart = strtotime('today');
+        $weekStart = strtotime('-7 days');
+
+        $today = 0;
+        $week = 0;
+        $bySource = [];
+        $byDay = [];
+
+        foreach ($clicks as $c) {
+            $ts = strtotime($c['ts'] ?? '');
+            if (!$ts) continue;
+            if ($ts >= $todayStart) $today++;
+            if ($ts >= $weekStart) $week++;
+
+            $src = $c['source'] ?? 'unknown';
+            if (!isset($bySource[$src])) $bySource[$src] = 0;
+            $bySource[$src]++;
+
+            $day = date('Y-m-d', $ts);
+            if (!isset($byDay[$day])) $byDay[$day] = 0;
+            $byDay[$day]++;
+        }
+
+        // Sort by_source desc
+        arsort($bySource);
+        // Sort by_day asc (chronological)
+        ksort($byDay);
+        // Keep only last 14 days
+        if (count($byDay) > 14) {
+            $byDay = array_slice($byDay, -14, null, true);
+        }
+
+        // Recent clicks (last 50, reversed)
+        $recent = array_slice(array_reverse($clicks), 0, 50);
+
+        return [
+            'success' => true,
+            'total' => count($clicks),
+            'today' => $today,
+            'week' => $week,
+            'by_source' => $bySource,
+            'by_day' => $byDay,
+            'recent' => $recent,
+        ];
+    }
+
+    /**
      * Handle cropped image upload from admin Cropper.js
      * Receives multipart form-data with image blob and target_path
      */
@@ -1619,6 +1685,9 @@ try {
                 break;
             case 'upload_cropped_image':
                 $admin->sendJsonResponse($admin->handleCroppedImageUpload());
+                break;
+            case 'get_ticket_clicks':
+                $admin->sendJsonResponse($admin->getTicketClicksStats());
                 break;
             case 'delete_fight':
                 $admin->sendJsonResponse($admin->deleteFight($input['fighter_id'] ?? '', $input['fight_id'] ?? ''));
