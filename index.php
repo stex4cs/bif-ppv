@@ -455,7 +455,7 @@ if (!$recaptchaSiteKey) {
     </div>
 
     <!-- Ticket button -->
-    <a href="#" class="btn btn-primary ticket-btn">
+    <a href="https://ticketing.sajam.rs/catalog/dogadjaj/bif_2_46" target="_blank" rel="noopener" class="btn btn-primary ticket-btn">
         <span class="lang-content active" data-lang="sr">🎟 Kupi Ulaznice</span>
         <span class="lang-content" data-lang="en">🎟 Buy Tickets</span>
     </a>
