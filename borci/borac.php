@@ -516,6 +516,13 @@ if (substr($absImageUrl, 0, 4) !== 'http') {
                         $poster = $matchedEvent['image_url'] ?? ($f['poster_url'] ?? '');
                         if ($poster && substr($poster, 0, 1) === '/') $poster = '..' . $poster;
                         $ticketUrl = $matchedEvent['ticket_url'] ?? '';
+                        // Smart fallback: if event has no ticket_url but mentions BIF 2, use the live ticket URL
+                        if (empty($ticketUrl)) {
+                            $eventName = $f['event'] ?? '';
+                            if (stripos($eventName, 'BIF 2') !== false) {
+                                $ticketUrl = 'https://ticketing.sajam.rs/catalog/dogadjaj/bif_2_46';
+                            }
+                        }
                         $eventTimeStr = $matchedEvent['time'] ?? '';
                         $eventLocSr = $matchedEvent['location_sr'] ?? $matchedEvent['location'] ?? '';
                         $eventLocEn = $matchedEvent['location_en'] ?? $matchedEvent['location'] ?? '';
