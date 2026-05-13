@@ -393,7 +393,7 @@ if (!$recaptchaSiteKey) {
                     </p>
 
                     <div class="hero-cta-group">
-                        <a href="#" class="btn btn-primary cta-button">
+                        <a href="https://ticketing.sajam.rs/catalog/dogadjaj/bif_2_46" target="_blank" rel="noopener" class="btn btn-primary cta-button">
                             <span class="lang-content active" data-lang="sr">🎟 Kupi Ulaznice za BIF 2</span>
                             <span class="lang-content" data-lang="en">🎟 Buy Tickets for BIF 2</span>
                         </a>

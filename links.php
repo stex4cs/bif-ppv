@@ -351,7 +351,7 @@ Security_Headers::apply();
         </a>
 
         <!-- Tickets — primary CTA -->
-        <a href="#" class="link-btn link-btn--tickets" rel="noopener">
+        <a href="https://ticketing.sajam.rs/catalog/dogadjaj/bif_2_46" target="_blank" rel="noopener" class="link-btn link-btn--tickets">
             <span class="ico">
                 <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M3 7v3a2 2 0 0 1 0 4v3a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3a2 2 0 0 1 0-4V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z"/>
