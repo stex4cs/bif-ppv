@@ -1757,6 +1757,9 @@ try {
             case 'get_website_events':
                 $admin->sendJsonResponse(['success' => true, 'events' => $admin->getWebsiteEvents()]);
                 break;
+            case 'get_ticket_clicks':
+                $admin->sendJsonResponse($admin->getTicketClicksStats());
+                break;
             case 'get_hero_settings':
                 $admin->sendJsonResponse(['success' => true, 'settings' => $admin->getHeroSettings()]);
                 break;
