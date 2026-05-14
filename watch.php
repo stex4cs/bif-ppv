@@ -52,27 +52,32 @@ Security_Headers::apply();
     <!-- HLS.js for streaming -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.12/dist/hls.min.js"></script>
     <?php
-// Load .env
-function loadEnvFile($path) {
-    if (!is_file($path)) return;
-    $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    foreach ($lines as $line) {
-        $t = trim($line);
-        if ($t === '' || strpos($t, '#') === 0 || strpos($t, '=') === false) continue;
-        list($k, $v) = explode('=', $line, 2);
-        putenv(trim($k) . '=' . trim($v, "\"' \t\r\n"));
+// Load .env (absolute path, soft fail)
+if (!function_exists('loadEnvFile')) {
+    function loadEnvFile($path) {
+        if (!is_file($path)) return false;
+        $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        foreach ($lines as $line) {
+            $t = trim($line);
+            if ($t === '' || strpos($t, '#') === 0 || strpos($t, '=') === false) continue;
+            list($k, $v) = explode('=', $line, 2);
+            putenv(trim($k) . '=' . trim($v, "\"' \t\r\n"));
+        }
+        return true;
     }
 }
-loadEnvFile('env/.env');
+foreach ([__DIR__.'/env/.env', __DIR__.'/.env'] as $p) { if (loadEnvFile($p)) break; }
 $recaptchaSiteKey = getenv('RECAPTCHA_SITE_KEY');
-if (!$recaptchaSiteKey) {
-    error_log('CRITICAL: RECAPTCHA_SITE_KEY not configured in .env file');
-    die('Configuration error: reCAPTCHA not configured. Please contact administrator.');
+$recaptchaEnabled = !empty($recaptchaSiteKey);
+if (!$recaptchaEnabled) {
+    error_log('WARNING: RECAPTCHA_SITE_KEY not set — watch.php loaded without reCAPTCHA');
 }
 ?>
 
+<?php if ($recaptchaEnabled): ?>
 <!-- reCAPTCHA v3 -->
 <script src="https://www.google.com/recaptcha/api.js?render=<?php echo htmlspecialchars($recaptchaSiteKey); ?>"></script>
+<?php endif; ?>
 
     
     <style>

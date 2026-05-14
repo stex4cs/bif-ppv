@@ -311,9 +311,9 @@ function formatNewsDate($dateString) {
     </script>
 
     <?php
-// Load .env
+// Load .env (use absolute path so it works regardless of CWD)
 function loadEnvFile($path) {
-    if (!is_file($path)) return;
+    if (!is_file($path)) return false;
     $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     foreach ($lines as $line) {
         $t = trim($line);
@@ -321,17 +321,28 @@ function loadEnvFile($path) {
         list($k, $v) = explode('=', $line, 2);
         putenv(trim($k) . '=' . trim($v, "\"' \t\r\n"));
     }
+    return true;
 }
-loadEnvFile('env/.env');
+// Try multiple possible locations
+$envCandidates = [
+    __DIR__ . '/env/.env',
+    __DIR__ . '/.env',
+    dirname(__DIR__) . '/env/.env',
+];
+foreach ($envCandidates as $envPath) {
+    if (loadEnvFile($envPath)) break;
+}
 $recaptchaSiteKey = getenv('RECAPTCHA_SITE_KEY');
-if (!$recaptchaSiteKey) {
-    error_log('CRITICAL: RECAPTCHA_SITE_KEY not configured in .env file');
-    die('Configuration error: reCAPTCHA not configured. Please contact administrator.');
+$recaptchaEnabled = !empty($recaptchaSiteKey);
+if (!$recaptchaEnabled) {
+    error_log('WARNING: RECAPTCHA_SITE_KEY not set — reCAPTCHA disabled, site continues to load');
 }
 ?>
 
 <!-- reCAPTCHA v3 -->
+<?php if ($recaptchaEnabled): ?>
 <script src="https://www.google.com/recaptcha/api.js?render=<?php echo htmlspecialchars($recaptchaSiteKey); ?>"></script>
+<?php endif; ?>
 
 </head>
 <body>
