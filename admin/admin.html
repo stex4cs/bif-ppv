@@ -534,25 +534,199 @@
         }
 
         /* RESPONSIVE */
+        /* ===================
+           MOBILE / RESPONSIVE
+           =================== */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            margin-right: 8px;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 32px;
+            height: 26px;
+        }
+        .mobile-menu-btn span {
+            display: block;
+            width: 100%;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        body.sidebar-open .mobile-menu-btn span:nth-child(1) {
+            transform: translateY(11px) rotate(45deg);
+        }
+        body.sidebar-open .mobile-menu-btn span:nth-child(2) {
+            opacity: 0;
+        }
+        body.sidebar-open .mobile-menu-btn span:nth-child(3) {
+            transform: translateY(-12px) rotate(-45deg);
+        }
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 200;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        body.sidebar-open .sidebar-overlay {
+            display: block;
+            opacity: 1;
+        }
+
         @media (max-width: 1024px) {
             .admin-container {
-                grid-template-areas: 
+                grid-template-areas:
                     "header"
                     "main";
                 grid-template-columns: 1fr;
-                grid-template-rows: 70px 1fr;
+                grid-template-rows: 60px 1fr;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
             }
 
             .sidebar {
+                display: block;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 280px;
+                max-width: 85vw;
+                height: 100vh;
+                z-index: 300;
+                transform: translateX(-100%);
+                transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+            }
+
+            body.sidebar-open .sidebar {
+                transform: translateX(0);
+            }
+
+            .header {
+                padding: 0 12px;
+                position: relative;
+                z-index: 100;
+            }
+
+            .header-title {
+                font-size: 16px;
+                flex: 1;
+                min-width: 0;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .header-actions {
+                gap: 8px;
+            }
+
+            .live-indicator {
+                padding: 4px 8px;
+                font-size: 10px;
+            }
+
+            .live-text {
                 display: none;
             }
 
-            .stats-grid {
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            .auth-status-text,
+            .current-time-text {
+                display: none;
             }
 
-            .form-grid {
+            .logout-btn {
+                padding: 6px 10px !important;
+                font-size: 11px !important;
+            }
+
+            .main-content {
+                padding: 16px 12px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .form-grid,
+            .form-row {
+                grid-template-columns: 1fr !important;
+                gap: 12px !important;
+            }
+
+            /* Responsive tables: horizontal scroll wrapper */
+            .data-table {
+                font-size: 13px;
+            }
+            .card,
+            .section-header,
+            .data-table {
+                overflow-x: auto;
+            }
+            table.data-table {
+                min-width: 600px;
+                display: table;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .section-header h2 {
+                font-size: 18px;
+            }
+
+            /* Modals: fullscreen on mobile */
+            .modal {
+                padding: 0 !important;
+                align-items: stretch !important;
+            }
+            .modal-content {
+                max-width: 100vw !important;
+                width: 100vw !important;
+                max-height: 100vh !important;
+                height: 100vh !important;
+                border-radius: 0 !important;
+                margin: 0 !important;
+                overflow-y: auto;
+            }
+
+            /* Notification narrower */
+            .notification {
+                left: 10px;
+                right: 10px;
+                top: 10px;
+                min-width: 0;
+                width: auto;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .stats-grid {
                 grid-template-columns: 1fr;
+            }
+            .header-title {
+                font-size: 14px;
+            }
+            .live-indicator {
+                display: none;
+            }
+            .main-content {
+                padding: 12px 8px;
+            }
+            .card {
+                padding: 12px;
             }
         }
 
@@ -660,17 +834,21 @@
 
         <!-- HEADER -->
         <div class="header">
-            <div class="header-title">BIF PPV Live Admin Panel</div>
+            <button class="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+            <div class="header-title">BIF PPV Live Admin</div>
             <div class="header-actions">
                 <div class="live-indicator">
                     <div class="live-dot"></div>
-                    <span>LIVE DATA</span>
+                    <span class="live-text">LIVE DATA</span>
                 </div>
-                <span id="auth-status" style="font-size:13px;color:#28a745;font-weight:600;">✓ Ulogovan</span>
-                <span id="current-time"></span>
-                <button onclick="adminLogout()" style="background:#dc3545;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600;font-size:13px;">Logout</button>
+                <span id="auth-status" class="auth-status-text" style="font-size:13px;color:#28a745;font-weight:600;">✓ Ulogovan</span>
+                <span id="current-time" class="current-time-text"></span>
+                <button onclick="adminLogout()" class="logout-btn" style="background:#dc3545;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600;font-size:13px;">Logout</button>
             </div>
         </div>
+        <div class="sidebar-overlay" onclick="closeSidebar()"></div>
 
         <!-- MAIN CONTENT -->
         <div class="main-content">
@@ -2962,6 +3140,32 @@ async function moveFighter(fighterId, direction) {
     }
 }
 window.moveFighter = moveFighter;
+
+/* ===========================
+   MOBILE SIDEBAR TOGGLE
+   =========================== */
+function toggleSidebar() {
+    document.body.classList.toggle('sidebar-open');
+}
+function closeSidebar() {
+    document.body.classList.remove('sidebar-open');
+}
+window.toggleSidebar = toggleSidebar;
+window.closeSidebar = closeSidebar;
+
+// Auto-close sidebar on mobile when nav item is clicked
+document.addEventListener('click', function(e) {
+    const navItem = e.target.closest('.nav-item');
+    if (navItem && window.innerWidth <= 1024) {
+        closeSidebar();
+    }
+});
+// Close on Escape
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && document.body.classList.contains('sidebar-open')) {
+        closeSidebar();
+    }
+});
 
 /* ===========================
    TICKET CLICKS DASHBOARD
