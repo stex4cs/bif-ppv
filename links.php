@@ -193,21 +193,26 @@ Security_Headers::apply();
         .link-btn--youtube:hover { border-color: rgba(255, 0, 0, 0.6); }
         .link-btn--kick:hover { border-color: rgba(83, 252, 24, 0.6); }
 
+        .link-btn--with-badge {
+            overflow: visible !important;
+            margin-top: 14px;
+        }
         .partner-badge {
             position: absolute;
-            top: -8px;
-            right: 14px;
+            top: -10px;
+            right: 12px;
             background: linear-gradient(135deg, #c41e3a, #8b0000);
             color: #fff;
             font-size: 0.6rem;
             font-weight: 800;
             letter-spacing: 1.5px;
-            padding: 3px 10px;
+            padding: 4px 10px;
             border-radius: 100px;
-            box-shadow: 0 4px 12px rgba(196, 30, 58, 0.4);
+            box-shadow: 0 4px 14px rgba(196, 30, 58, 0.5);
             white-space: nowrap;
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            z-index: 2;
         }
-        .link-btn { position: relative; }
 
         /* Tickets button — primary CTA, full red */
         .link-btn--tickets {
@@ -405,7 +410,7 @@ Security_Headers::apply();
         </a>
 
         <!-- Trajko Music Kick — Medijski Partner -->
-        <a href="https://kick.com/trajkomusic" target="_blank" rel="noopener" class="link-btn link-btn--kick">
+        <a href="https://kick.com/trajkomusic" target="_blank" rel="noopener" class="link-btn link-btn--kick link-btn--with-badge">
             <span class="partner-badge">MEDIJSKI PARTNER</span>
             <span class="ico">
                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 2h6v5h2V5h2V3h2v2h2V2h6v8h-2v2h-2v2h2v2h2v8h-6v-3h-2v-2h-2v-2h-2v2h-2v2H8v3H2V2zm6 7h2V7h2V5h2v2h-2v2h-2v2h2v2h2v2h-2v-2h-2v-2H8V9z"/></svg>
