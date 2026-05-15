@@ -3,9 +3,12 @@
 require_once 'includes/security-headers.php';
 Security_Headers::apply();
 
+// Centralized data path resolver (respects BIF_DATA_PATH env var)
+require_once __DIR__ . '/includes/data-path.php';
+
 // Load fighters from JSON
 function loadActiveFighters() {
-    $fightersFile = __DIR__ . '/data/fighters.json';
+    $fightersFile = bif_data_path('fighters.json');
     if (!file_exists($fightersFile)) {
         return [];
     }
@@ -35,7 +38,7 @@ $activeFighters = loadActiveFighters();
 
 // Load website events (featured upcoming event for "Uskoro" section)
 function loadFeaturedEvent() {
-    $file = __DIR__ . '/data/website_events.json';
+    $file = bif_data_path('website_events.json');
     if (!file_exists($file)) return null;
     $events = json_decode(file_get_contents($file), true);
     if (!is_array($events) || empty($events)) return null;
@@ -60,7 +63,7 @@ $featuredEvent = loadFeaturedEvent();
 
 // Helper to load all events for fighter pages, etc.
 function loadAllEvents() {
-    $file = __DIR__ . '/data/website_events.json';
+    $file = bif_data_path('website_events.json');
     if (!file_exists($file)) return [];
     return json_decode(file_get_contents($file), true) ?: [];
 }
@@ -109,7 +112,7 @@ function getFighterWeightClass($fighter) {
 
 // Load published news from JSON
 function loadPublishedNews($limit = 3) {
-    $newsFile = __DIR__ . '/data/news.json';
+    $newsFile = bif_data_path('news.json');
     if (!file_exists($newsFile)) {
         return [];
     }
@@ -137,7 +140,7 @@ $publishedNews = loadPublishedNews(3);
 
 // Load hero settings from JSON
 function loadHeroSettings() {
-    $settingsFile = __DIR__ . '/data/hero_settings.json';
+    $settingsFile = bif_data_path('hero_settings.json');
     if (!file_exists($settingsFile)) {
         return [
             'video_url' => 'https://www.youtube.com/embed/PwjZeFIpxvo?rel=0&controls=1&autoplay=0&modestbranding=1',

@@ -13,7 +13,8 @@ if (empty($slug)) {
 }
 
 // Učitaj fighters.json
-$fightersFile = dirname(__DIR__) . '/data/fighters.json';
+require_once dirname(__DIR__) . '/includes/data-path.php';
+$fightersFile = bif_data_path('fighters.json');
 if (!file_exists($fightersFile)) {
     http_response_code(404);
     echo '<!DOCTYPE html><html><head><title>404 Not Found</title></head><body><h1>404 - Fighter not found</h1></body></html>';
@@ -450,7 +451,7 @@ if (substr($absImageUrl, 0, 4) !== 'http') {
         });
 
         // Load events to enrich upcoming cards (poster, ticket URL)
-        $eventsFile = dirname(__DIR__) . '/data/website_events.json';
+        $eventsFile = bif_data_path('website_events.json');
         $allEvents = file_exists($eventsFile) ? (json_decode(file_get_contents($eventsFile), true) ?: []) : [];
         // Build lookup by lower-cased title (sr or en)
         $eventLookup = [];

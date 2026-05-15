@@ -15,10 +15,11 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $body = json_decode(file_get_contents('php://input'), true);
 if (!is_array($body)) $body = [];
 
-$logDir = dirname(__DIR__) . '/data';
+require_once dirname(__DIR__) . '/includes/data-path.php';
+$logDir = bif_data_dir();
 if (!is_dir($logDir)) @mkdir($logDir, 0755, true);
 
-$logFile = $logDir . '/ticket_clicks.json';
+$logFile = $logDir . DIRECTORY_SEPARATOR . 'ticket_clicks.json';
 $clicks = [];
 if (file_exists($logFile)) {
     $raw = file_get_contents($logFile);

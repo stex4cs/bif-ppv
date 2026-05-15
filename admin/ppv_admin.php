@@ -74,7 +74,8 @@ if (!empty($__allowed_ips)) {
 }
 
 /* ---------- Konstante i putanje - FIXED ---------- */
-define('PPV_DATA_DIR',        dirname(__DIR__) . '/data');
+require_once dirname(__DIR__) . '/includes/data-path.php';
+define('PPV_DATA_DIR',        bif_data_dir());
 define('PPV_EVENTS_FILE',     PPV_DATA_DIR . '/ppv_events.json');
 define('PPV_PURCHASES_FILE',  PPV_DATA_DIR . '/ppv_purchases.json');
 define('PPV_ACCESS_FILE',     PPV_DATA_DIR . '/ppv_access.json');

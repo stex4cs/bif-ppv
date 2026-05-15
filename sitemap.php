@@ -6,6 +6,8 @@
 
 header('Content-Type: application/xml; charset=UTF-8');
 
+require_once __DIR__ . '/includes/data-path.php';
+
 $base = 'https://bif.events';
 
 // Static URLs
@@ -17,7 +19,7 @@ $urls = [
 ];
 
 // Fighters
-$fightersFile = __DIR__ . '/data/fighters.json';
+$fightersFile = bif_data_path('fighters.json');
 if (file_exists($fightersFile)) {
     $fighters = json_decode(file_get_contents($fightersFile), true) ?: [];
     foreach ($fighters as $f) {
@@ -33,7 +35,7 @@ if (file_exists($fightersFile)) {
 }
 
 // News
-$newsFile = __DIR__ . '/data/news.json';
+$newsFile = bif_data_path('news.json');
 if (file_exists($newsFile)) {
     $news = json_decode(file_get_contents($newsFile), true) ?: [];
     foreach ($news as $n) {
