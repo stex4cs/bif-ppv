@@ -7,9 +7,9 @@
  * IMPORTANT: replace 'YOUR_PIXEL_ID_HERE' with the real BIF Meta Pixel ID
  * from Meta Events Manager -> Data Sources -> your pixel.
  */
-$BIF_META_PIXEL_ID = getenv('META_PIXEL_ID') ?: 'YOUR_PIXEL_ID_HERE';
+$BIF_META_PIXEL_ID = getenv('META_PIXEL_ID') ?: '2097706464136548';
 ?>
-<?php if ($BIF_META_PIXEL_ID && $BIF_META_PIXEL_ID !== 'YOUR_PIXEL_ID_HERE'): ?>
+<?php if ($BIF_META_PIXEL_ID): ?>
 <!-- Meta Pixel Code -->
 <script>
 !function(f,b,e,v,n,t,s)
