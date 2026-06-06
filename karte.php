@@ -528,18 +528,25 @@ $EVENT_NAME = 'BIF 2 — Beogradski Sajam';
             setInterval(tick, 1000);
         })();
 
+        // Average expected ticket value (Parter / VIP 2 / VIP 1 weighted average)
+        const BIF_TICKET_VALUE = 14;
+        const BIF_TICKET_CURRENCY = 'EUR';
+
         // Fire Meta Pixel InitiateCheckout + GA conversion when user clicks any ticket CTA
         document.addEventListener('click', function(e) {
             const link = e.target.closest('a[data-ticket-source]');
             if (!link) return;
-            // Meta Pixel InitiateCheckout
+            // Meta Pixel InitiateCheckout — value-based so Meta can optimize for ROAS
             if (typeof fbq === 'function') {
                 try {
                     fbq('track', 'InitiateCheckout', {
                         content_name: '<?php echo addslashes($EVENT_NAME); ?>',
                         content_category: 'Live Event Tickets',
-                        currency: 'EUR',
-                        value: 0,
+                        content_ids: ['bif-2-ticket'],
+                        content_type: 'product',
+                        currency: BIF_TICKET_CURRENCY,
+                        value: BIF_TICKET_VALUE,
+                        num_items: 1,
                         source: link.dataset.ticketSource
                     });
                 } catch (err) {}
@@ -548,11 +555,13 @@ $EVENT_NAME = 'BIF 2 — Beogradski Sajam';
             if (typeof gtag === 'function') {
                 try {
                     gtag('event', 'begin_checkout', {
-                        currency: 'EUR',
-                        value: 0,
+                        currency: BIF_TICKET_CURRENCY,
+                        value: BIF_TICKET_VALUE,
                         items: [{
                             item_id: 'bif-2-ticket',
-                            item_name: '<?php echo addslashes($EVENT_NAME); ?>'
+                            item_name: '<?php echo addslashes($EVENT_NAME); ?>',
+                            price: BIF_TICKET_VALUE,
+                            quantity: 1
                         }],
                         source: link.dataset.ticketSource
                     });
