@@ -127,12 +127,15 @@ function loadPublishedNews($limit = 3) {
         return isset($article['status']) && $article['status'] === 'published';
     });
 
-    // Sort by published_at (newest first)
+    // Sort: featured first, then by published_at (newest first within each group)
     usort($publishedNews, function($a, $b) {
+        $af = !empty($a['is_featured']) ? 1 : 0;
+        $bf = !empty($b['is_featured']) ? 1 : 0;
+        if ($af !== $bf) return $bf <=> $af; // featured wins
         return ($b['published_at'] ?? '') <=> ($a['published_at'] ?? '');
     });
 
-    // Limit results
+    // Limit results — pick up to $limit, featured at top, rest filled with newest
     return array_slice($publishedNews, 0, $limit);
 }
 

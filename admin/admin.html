@@ -1782,6 +1782,17 @@
                         </select>
                     </div>
                 </div>
+
+                <!-- FEATURED ON HOMEPAGE -->
+                <div style="margin-top:14px;padding:12px 14px;background:linear-gradient(135deg,#fffbea,#fef3c7);border:1px solid #fcd34d;border-radius:8px;">
+                    <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-weight:600;margin:0;">
+                        <input type="checkbox" id="news-is-featured" name="is_featured" style="width:auto;">
+                        <span>⭐ Istakni na početnoj stranici (sekcija "Vesti")</span>
+                    </label>
+                    <small style="color:#92400e;display:block;margin-top:6px;">
+                        Početna prikazuje max 3 vesti. Istaknute imaju prioritet; ako manje od 3 istaknutih, dopunjuju se najnovijim objavljenim.
+                    </small>
+                </div>
             </div>
 
             <!-- Language Tabs -->
@@ -3881,9 +3892,12 @@ function displayNews(news) {
 
     tbody.innerHTML = news.map(article => {
         // Display title - prefer bilingual format, fallback to old format
+        const featuredBadge = article.is_featured
+            ? '<span style="background:linear-gradient(135deg,#fcd34d,#f59e0b);color:#92400e;font-size:10px;font-weight:800;letter-spacing:1px;padding:2px 8px;border-radius:4px;margin-left:6px;vertical-align:middle;">⭐ HOME</span>'
+            : '';
         const titleDisplay = article.title_sr
-            ? `<strong>${article.title_sr}</strong><br><small style="color:#666;">EN: ${article.title_en || 'N/A'}</small>`
-            : `<strong>${article.title || 'No title'}</strong>`;
+            ? `<strong>${article.title_sr}</strong>${featuredBadge}<br><small style="color:#666;">EN: ${article.title_en || 'N/A'}</small>`
+            : `<strong>${article.title || 'No title'}</strong>${featuredBadge}`;
 
         return `
         <tr>
@@ -3905,6 +3919,7 @@ function openCreateNewsModal() {
     document.getElementById('news-modal-title').textContent = 'Dodaj Vest';
     document.getElementById('newsForm').reset();
     document.getElementById('news-id').value = '';
+    document.getElementById('news-is-featured').checked = false;
 
     // Reset TinyMCE editors
     if (typeof tinymce !== 'undefined') {
@@ -3955,6 +3970,7 @@ function editNews(article) {
     document.getElementById('news-image').value = article.image_url || '';
     updateImagePreview('news-image', 'news-image-preview');
     document.getElementById('news-status').value = article.status || 'published';
+    document.getElementById('news-is-featured').checked = !!article.is_featured;
 
     // Serbian content
     document.getElementById('news-title-sr').value = article.title_sr || article.title || '';
@@ -4023,6 +4039,8 @@ async function saveNews(event) {
 
     const formData = new FormData(form);
     const newsData = Object.fromEntries(formData.entries());
+    // Convert featured checkbox to boolean
+    newsData.is_featured = document.getElementById('news-is-featured').checked;
 
     // Validate required fields
     if (!newsData.content_sr || newsData.content_sr.trim() === '') {
