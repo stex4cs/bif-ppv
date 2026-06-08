@@ -410,6 +410,34 @@
 }
 
 /* Body paragraphs - big, readable, NO justify (justify creates ugly uneven spacing) */
+/* TinyMCE often wraps a stray empty <p> around tables/embeds — kill the gap */
+.article-content p:empty,
+.article-content p:has(> br:only-child) {
+  display: none;
+}
+
+/* Tables — tighter spacing under headings, full-width responsive */
+.article-content table {
+  width: 100%;
+  margin: 1rem 0 1.75rem;
+  border-collapse: collapse;
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.article-content h2 + table,
+.article-content h3 + table,
+.article-content h4 + table {
+  margin-top: 0.5rem;
+}
+
+.article-content table tbody,
+.article-content table thead,
+.article-content table tr {
+  width: 100%;
+}
+
 .article-content p {
   color: var(--light-text-primary);
   margin-bottom: 1.5rem;
