@@ -8,6 +8,12 @@ env/.env
 env/.env.*
 env/**
 
+# BIFTV — separate repo (github.com/stex4cs/biftv.git)
+# Lives inside this folder for editor convenience but must NEVER ship
+# to bif.events via Hostinger Git Deploy.
+/BIIFTV/
+BIIFTV/
+
 # Newsletter data
 /data/*.json
 /data/*.log
